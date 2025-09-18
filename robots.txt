@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://a3-niajunod-a25.onrender.com/
