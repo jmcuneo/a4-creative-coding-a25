@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>A4 – Creative Coding (Canvas + Web Audio)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Interactive Canvas + WebAudio visualizer with user controls." />
+
+    <!-- Bootstrap (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+    <!-- Tweakpane (CDN) control panel (may fail on some networks/CDNs; app.js now guards this) -->
+    <script src="https://cdn.jsdelivr.net/npm/tweakpane@4.0.3/dist/tweakpane.min.js" defer></script>
+
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="bg-dark text-light">
+<header class="py-3 border-bottom border-secondary">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <h1 class="h4 m-0">A4 — Creative Coding</h1>
+
+        <div class="d-flex flex-wrap gap-2">
+            <label class="btn btn-outline-light btn-sm mb-0" aria-label="Select audio file to visualize">
+                <input id="fileInput" type="file" accept="audio/*" hidden />
+                Load Audio File
+            </label>
+            <button id="micBtn" class="btn btn-outline-info btn-sm" aria-pressed="false" aria-label="Toggle microphone input">Use Microphone</button>
+            <button id="playBtn" class="btn btn-success btn-sm" aria-label="Play visualization">Play</button>
+            <button id="pauseBtn" class="btn btn-warning btn-sm" aria-label="Pause visualization">Pause</button>
+            <button id="helpBtn" class="btn btn-secondary btn-sm" aria-label="Show help">Help</button>
+        </div>
+    </div>
+</header>
+
+<main class="container-fluid p-0">
+    <canvas id="viz" aria-label="Audio visualization canvas" role="img"></canvas>
+
+    <!-- Controls panel (right) -->
+    <div id="controls" class="pane-container" aria-label="Visualization controls" role="region"></div>
+
+    <!-- On-load instructions (start hidden to avoid covering canvas if something errors) -->
+    <div id="helpOverlay" class="help-overlay" role="dialog" aria-modal="true" aria-labelledby="helpTitle" style="display:none;">
+        <div class="help-card">
+            <h2 id="helpTitle" class="h5">How to Use</h2>
+            <ul>
+                <li>Click <b>Load Audio File</b> to visualize a song (mp3, wav, etc.).</li>
+                <li>Or click <b>Use Microphone</b> to visualize live audio (HTTPS or localhost required).</li>
+                <li>Use controls on the right (Bars, Sensitivity, Smoothing, Line, Mirror, Color).</li>
+                <li>Move your mouse/touch to rotate & swirl the bars. Resize window to fit.</li>
+                <li><kbd>H</kbd> toggles this help; <kbd>Space</kbd> pauses/resumes.</li>
+            </ul>
+            <button id="closeHelp" class="btn btn-primary btn-sm mt-2">Got it</button>
+        </div>
+    </div>
+</main>
+
+<footer class="text-center text-secondary small py-3 border-top border-secondary">
+    Built with Canvas + Web Audio • © 2025
+</footer>
+
+<script src="./app.js" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,48 @@
+:root { --pane-width: 320px; }
+html, body { height: 100%; }
+
+#viz {
+    display: block;
+    width: 100vw;
+    height: calc(100vh - 120px);
+    background: radial-gradient(1200px 800px at 10% 10%, #202532, #0a0c12);
+}
+
+/* Controls panel (right) */
+.pane-container {
+    position: fixed;
+    top: 88px; /* below header */
+    right: 16px;
+    width: var(--pane-width);
+    max-width: 95vw;
+    z-index: 5;
+}
+
+.help-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    display: grid;
+    place-items: center;
+    z-index: 10;
+}
+
+.help-card {
+    width: min(560px, 92vw);
+    background: #141722;
+    color: #e9eefc;
+    border: 1px solid #263049;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 12px 42px rgba(0,0,0,.45);
+}
+.help-card ul { margin: .5rem 0; }
+
+kbd {
+    background: #232836;
+    border: 1px solid #3a4058;
+    border-radius: 4px;
+    padding: 0 .35rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .9em;
+}

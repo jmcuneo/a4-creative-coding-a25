@@ -18,8 +18,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static('public'));
-
+app.use(express.static("public"));
 
 // MongoDB connection
 mongoose
@@ -45,7 +44,12 @@ mongoose
 // Routes
 app.use("/api", apiRoutes);
 
-// Catch-all: serve index.html
+// A4 Creative Coding page
+app.get("/a4", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "a4", "index.html"));
+});
+
+// Catch-all: serve A3 index.html
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
