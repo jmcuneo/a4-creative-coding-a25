@@ -1,25 +1,37 @@
+// A4 Visualizer with real Play/Pause audio control (files + mic) and viz sync
+
 const canvas = document.getElementById('viz');
 const ctx = canvas.getContext('2d', { alpha: false });
 
 const state = {
-    running: true,
+    running: true,             // visualization on/off
     pointer: { x: 0, y: 0 },
     angleBase: 0,
     audioReady: false,
-    useMic: false
+    mode: 'none',              // 'none' | 'file' | 'mic'
+    isPlaying: false           // audio playing
 };
 
 const params = {
-    barCount: 96,
-    sensitivity: 2.0,
+    barCount: 128,
+    sensitivity: 2.2,
     smoothing: 0.75,
     colorScheme: 'neon',
     lineWidth: 2,
     mirror: true
 };
 
-let audioCtx, analyser, dataArray, sourceNode, micStream, preGain;
+let audioCtx, analyser, dataArray;
+let preGain, outGain;        // preGain feeds analyser; outGain feeds speakers (for files)
+let sourceNode = null;       // current AudioBufferSourceNode (file) or MediaStreamSource (mic)
+let micStream = null;
 
+// File playback state
+let currentBuffer = null;    // AudioBuffer for the loaded file
+let fileStartTime = 0;       // audioCtx time when (re)started
+let pausedAt = 0;            // seconds into buffer where we paused
+
+// ---------- Layout ----------
 function resize() {
     const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
     const w = Math.max(1, Math.floor(window.innerWidth));
@@ -33,7 +45,7 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-// Pointer / touch
+// ---------- Pointer ----------
 function setPointer(e) {
     if (e.touches?.length) {
         state.pointer.x = e.touches[0].clientX;
@@ -46,126 +58,203 @@ function setPointer(e) {
 window.addEventListener('pointermove', setPointer, { passive: true });
 window.addEventListener('touchmove', setPointer, { passive: true });
 
-// UI elements
-const helpOverlay = document.getElementById('helpOverlay');
-const closeHelp = document.getElementById('closeHelp');
-const helpBtn = document.getElementById('helpBtn');
+// ---------- UI Elements ----------
 const fileInput = document.getElementById('fileInput');
 const micBtn = document.getElementById('micBtn');
 const playBtn = document.getElementById('playBtn');
 const pauseBtn = document.getElementById('pauseBtn');
+const helpOverlay = document.getElementById('helpOverlay');
+const helpBtn = document.getElementById('helpBtn');
+const closeHelp = document.getElementById('closeHelp');
 
-if (closeHelp) closeHelp.addEventListener('click', () => helpOverlay.style.display = 'none');
 if (helpBtn) helpBtn.addEventListener('click', () => helpOverlay.style.display = 'grid');
+if (closeHelp) closeHelp.addEventListener('click', () => helpOverlay.style.display = 'none');
 
-window.addEventListener('keydown', (e) => {
+window.addEventListener('keydown', async (e) => {
     if (e.key?.toLowerCase() === 'h') {
         helpOverlay.style.display = (helpOverlay.style.display === 'none') ? 'grid' : 'none';
     }
     if (e.code === 'Space') {
-        state.running = !state.running;
-    }
-});
-
-if (playBtn) playBtn.addEventListener('click', async () => {
-    state.running = true;
-    if (audioCtx && audioCtx.state === 'suspended') {
-        await audioCtx.resume();
-    }
-});
-if (pauseBtn) pauseBtn.addEventListener('click', () => {
-    state.running = false;
-});
-
-// File input + mic
-fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try {
-        stopAudio();
-        await initAudio('file');
-        const arr = await file.arrayBuffer();
-        const buf = await audioCtx.decodeAudioData(arr);
-        const src = audioCtx.createBufferSource();
-        src.buffer = buf;
-        connectSource(src, { toOutput: true }); // play through speakers
-        await audioCtx.resume();
-        src.start(0);
-        console.log('[A4] File playback started. ctx=', audioCtx.state);
-    } catch (err) {
-        console.error('[A4] File error:', err);
-    }
-});
-
-micBtn.addEventListener('click', async () => {
-    try {
-        stopAudio();
-        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-            alert('Microphone requires HTTPS or localhost.');
-            return;
+        e.preventDefault();
+        if (state.isPlaying) {
+            await pauseAll();
+        } else {
+            await playAll();
         }
-        await initAudio('mic');
-        micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-        const mediaSrc = audioCtx.createMediaStreamSource(micStream);
-        connectSource(mediaSrc, { toOutput: false }); // avoid feedback
-        await audioCtx.resume();
-        state.useMic = true;
-        micBtn.setAttribute('aria-pressed', 'true');
-        console.log('[A4] Mic started. ctx=', audioCtx.state);
-    } catch (err) {
-        console.error('[A4] Mic error:', err);
-        micBtn.setAttribute('aria-pressed', 'false');
     }
 });
 
-function stopAudio() {
-    state.useMic = false;
-    if (sourceNode?.stop) { try { sourceNode.stop(); } catch {} }
-    if (micStream) {
-        micStream.getTracks().forEach(t => t.stop());
-        micStream = null;
-    }
-    sourceNode = null;
-    console.log('[A4] Stopped any previous audio source');
-}
-
-async function initAudio(mode = 'file') {
+// ---------- Audio Graph Setup ----------
+async function ensureAudioCtx() {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
     if (audioCtx.state === 'suspended') {
         await audioCtx.resume();
     }
-
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 2048;
-    analyser.smoothingTimeConstant = params.smoothing;
-    analyser.minDecibels = -90;
-    analyser.maxDecibels = -10;
-
-    preGain = audioCtx.createGain();
-    preGain.gain.value = 1.0;
-
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
+    if (!analyser) {
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 2048;
+        analyser.smoothingTimeConstant = params.smoothing;
+        analyser.minDecibels = -90;
+        analyser.maxDecibels = -10;
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
+    }
+    if (!preGain) {
+        preGain = audioCtx.createGain();
+        preGain.gain.value = 1.0;
+    }
+    if (!outGain) {
+        outGain = audioCtx.createGain();
+        outGain.gain.value = 1.0; // master volume for files
+    }
     state.audioReady = true;
-
-    console.log(`[A4] initAudio(${mode}) ok. fftSize=${analyser.fftSize} smoothing=${analyser.smoothingTimeConstant}`);
 }
 
-function connectSource(src, { toOutput }) {
-    sourceNode = src;
+// Connect chain depending on whether we want audible output
+function connectNodes(src, { toOutput }) {
+    // src -> preGain -> analyser -> (outGain -> destination?) for files
     src.connect(preGain);
     preGain.connect(analyser);
     if (toOutput) {
-        analyser.connect(audioCtx.destination);
+        analyser.connect(outGain);
+        outGain.connect(audioCtx.destination);
+    } else {
+        // mic: do not connect to destination (avoid feedback)
+        // (analyser is still fed so visualization works)
     }
 }
 
-// Safe Tweakpane: if CDN fails, skip
-function setupPane() {
+// ---------- File Handling ----------
+fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    await stopAll();
+
+    try {
+        await ensureAudioCtx();
+        const arr = await file.arrayBuffer();
+        currentBuffer = await audioCtx.decodeAudioData(arr);
+        pausedAt = 0;
+        state.mode = 'file';
+        await playAll(); // auto-start after selecting file
+        console.log('[A4] File loaded and playing.');
+    } catch (err) {
+        console.error('[A4] File load error:', err);
+    }
+});
+
+// Start file playback from pausedAt
+async function startFilePlayback() {
+    if (!currentBuffer) return;
+    if (sourceNode?.stop) { try { sourceNode.stop(); } catch {} }
+
+    const src = audioCtx.createBufferSource();
+    src.buffer = currentBuffer;
+    sourceNode = src;
+    connectNodes(src, { toOutput: true });
+    await audioCtx.resume();
+    fileStartTime = audioCtx.currentTime - pausedAt;
+    src.start(0, pausedAt);
+    src.onended = () => {
+        // if it naturally ended (not a manual pause), reset state
+        if (state.isPlaying) {
+            state.isPlaying = false;
+            pausedAt = 0;
+            state.running = false;
+        }
+    };
+}
+
+// ---------- Mic Handling ----------
+micBtn.addEventListener('click', async () => {
+    try {
+        await stopAll();
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+            alert('Microphone requires HTTPS or localhost.');
+            return;
+        }
+        await ensureAudioCtx();
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        const mediaSrc = audioCtx.createMediaStreamSource(micStream);
+        sourceNode = mediaSrc;
+        connectNodes(mediaSrc, { toOutput: false }); // no speakers (no feedback)
+        state.mode = 'mic';
+        await playAll(); // "play" means unmute + animate
+        console.log('[A4] Mic stream started.');
+    } catch (err) {
+        console.error('[A4] Mic error:', err);
+    }
+});
+
+// ---------- Play/Pause Control (Audio + Viz) ----------
+async function playAll() {
+    await ensureAudioCtx();
+
+    // Visualization on
+    state.running = true;
+
+    if (state.mode === 'file') {
+        // Resume / start buffer source
+        await startFilePlayback();
+        state.isPlaying = true;
+    } else if (state.mode === 'mic') {
+        // Unmute mic into analyser
+        if (preGain) preGain.gain.value = 1.0;
+        state.isPlaying = true;
+    } else {
+        // No source selected; nothing to play, but keep viz running (idle rings)
+        state.isPlaying = false;
+    }
+}
+
+async function pauseAll() {
+    // Visualization off
+    state.running = false;
+
+    if (state.mode === 'file') {
+        // Stop current BufferSource and remember position
+        if (sourceNode?.stop) {
+            try { sourceNode.stop(); } catch {}
+        }
+        if (audioCtx) {
+            pausedAt = Math.max(0, audioCtx.currentTime - fileStartTime);
+        }
+        state.isPlaying = false;
+    } else if (state.mode === 'mic') {
+        // Mute mic into analyser
+        if (preGain) preGain.gain.value = 0.0;
+        state.isPlaying = false;
+    }
+}
+
+async function stopAll() {
+    // Stop audio and reset state
+    if (sourceNode?.stop) {
+        try { sourceNode.stop(); } catch {}
+    }
+    if (micStream) {
+        micStream.getTracks().forEach(t => t.stop());
+        micStream = null;
+    }
+    sourceNode = null;
+    currentBuffer = null;
+    pausedAt = 0;
+    state.mode = 'none';
+    state.isPlaying = false;
+    // Visualization keeps running; you can set state.running=false if you prefer.
+}
+
+// Wire buttons
+if (playBtn) playBtn.addEventListener('click', playAll);
+if (pauseBtn) pauseBtn.addEventListener('click', pauseAll);
+
+// ---------- Optional Controls via Tweakpane (safe if CDN fails) ----------
+(function setupPaneSafe() {
     try {
         if (typeof Tweakpane === 'undefined') {
-            console.warn('[A4] Tweakpane not available; controls panel disabled.');
+            console.warn('[A4] Tweakpane not available; skipping control panel.');
             return;
         }
         const pane = new Tweakpane.Pane({ container: document.getElementById('controls') });
@@ -181,12 +270,11 @@ function setupPane() {
             label: 'Color'
         });
     } catch (err) {
-        console.warn('[A4] Controls init failed:', err);
+        console.warn('[A4] Controls error:', err);
     }
-}
-setupPane();
+})();
 
-// Color helpers
+// ---------- Drawing ----------
 function lerp(a, b, t) { return a + (b - a) * t; }
 function colorFor(i, n) {
     const t = i / Math.max(1, n - 1);
@@ -241,49 +329,8 @@ function render() {
     const dy = (state.pointer.y - cy) / Math.max(1, h);
     state.angleBase += (dx + dy) * 0.01;
 
-    let firstBin = 0;
-
-    if (state.audioReady) {
-        analyser.getByteFrequencyData(dataArray);
-        firstBin = dataArray[0] | 0;
-
-        const N = params.barCount;
-        const step = Math.max(1, Math.floor(dataArray.length / N));
-        const radius = Math.min(w, h) * 0.28;
-
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(state.angleBase);
-        ctx.lineCap = 'round';
-        ctx.lineWidth = params.lineWidth;
-
-        for (let i = 0; i < N; i++) {
-            const v = dataArray[i * step] / 255;                     // 0..1
-            const amp = Math.max(0.03, Math.pow(v, 1.25) * params.sensitivity); // ensure visible
-            const len = radius * (0.20 + amp);                       // base length so it always shows
-
-            const theta = (i / N) * Math.PI * 2;
-            const x0 = Math.cos(theta) * radius;
-            const y0 = Math.sin(theta) * radius;
-            const x1 = Math.cos(theta) * (radius + len);
-            const y1 = Math.sin(theta) * (radius + len);
-
-            ctx.strokeStyle = colorFor(i, N);
-            ctx.beginPath();
-            ctx.moveTo(x0, y0);
-            ctx.lineTo(x1, y1);
-            ctx.stroke();
-
-            if (params.mirror) {
-                ctx.beginPath();
-                ctx.moveTo(-x0, -y0);
-                ctx.lineTo(-x1, -y1);
-                ctx.stroke();
-            }
-        }
-        ctx.restore();
-    } else {
-        // idle rings if no audio yet
+    if (!state.audioReady) {
+        // idle rings
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(state.angleBase);
@@ -295,14 +342,46 @@ function render() {
             ctx.stroke();
         }
         ctx.restore();
+        return;
     }
 
-    // HUD
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.font = '12px ui-monospace, Menlo, Consolas, monospace';
-    ctx.fillText(`size: ${w}x${h}`, 10, 20);
-    ctx.fillText(`audioReady: ${state.audioReady}`, 10, 36);
-    ctx.fillText(`ctx: ${audioCtx ? audioCtx.state : 'n/a'}`, 10, 52);
-    ctx.fillText(`firstBin: ${firstBin}`, 10, 68);
+    analyser.getByteFrequencyData(dataArray);
+
+    const N = params.barCount;
+    const step = Math.max(1, Math.floor(dataArray.length / N));
+    const radius = Math.min(w, h) * 0.28;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(state.angleBase);
+    ctx.lineCap = 'round';
+    ctx.lineWidth = params.lineWidth;
+
+    for (let i = 0; i < N; i++) {
+        const v = dataArray[i * step] / 255; // 0..1
+        const amp = Math.max(0.03, Math.pow(v, 1.25) * params.sensitivity);
+        const len = radius * (0.20 + amp);
+
+        const theta = (i / N) * Math.PI * 2;
+        const x0 = Math.cos(theta) * radius;
+        const y0 = Math.sin(theta) * radius;
+        const x1 = Math.cos(theta) * (radius + len);
+        const y1 = Math.sin(theta) * (radius + len);
+
+        ctx.strokeStyle = colorFor(i, N);
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+
+        if (params.mirror) {
+            ctx.beginPath();
+            ctx.moveTo(-x0, -y0);
+            ctx.lineTo(-x1, -y1);
+            ctx.stroke();
+        }
+    }
+
+    ctx.restore();
 }
 render();
