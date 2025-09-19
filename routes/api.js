@@ -5,7 +5,7 @@ const Shift = require("../models/Shift");
 
 const router = express.Router();
 
-// Temporary "session" variable for current user
+
 let currentUser = null;
 
 // --- LOGIN / LOGOUT ---

@@ -1,4 +1,3 @@
-// Handle login form
 document.querySelector('#login-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.querySelector('#username').value;
@@ -18,7 +17,7 @@ document.querySelector('#login-form')?.addEventListener('submit', async (e) => {
     }
 });
 
-// Fetch and display shifts for logged in user
+
 async function loadShifts() {
     const res = await fetch('/api/shifts');
     const shifts = await res.json();
@@ -39,7 +38,6 @@ async function loadShifts() {
     });
 }
 
-// Add shift form
 document.querySelector('#shift-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const date = document.querySelector('#date').value;
@@ -57,7 +55,7 @@ document.querySelector('#shift-form')?.addEventListener('submit', async (e) => {
     }
 });
 
-// Delete shift
+
 async function deleteShift(id) {
     await fetch(`/api/shifts/${id}`, { method: 'DELETE' });
     loadShifts();

@@ -1,25 +1,22 @@
-/* styles.css */
-
-/* Color palette */
 :root {
     --pink: #E29EFA;
-    --pink-dark: #C77DFF;  /* darker for accessibility */
+    --pink-dark: #C77DFF;
     --blue: #649EE0;
-    --blue-dark: #1D4E89;  /* darker for accessibility */
+    --blue-dark: #1D4E89;
     --white: #FFFFFF;
     --accent: #8F9EE1;
     --dark: #2D4A1B;
     --light-gray: #f9faff;
 }
 
-/* Body and font */
+
 body {
     background-color: var(--white);
     color: #222;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* Navbar */
+
 .navbar {
     background-color: var(--white);
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
@@ -36,7 +33,7 @@ body {
     color: var(--blue-dark);
 }
 
-/* Buttons */
+
 .btn-primary {
     background-color: var(--blue-dark);
     border-color: var(--blue-dark);
@@ -70,7 +67,7 @@ body {
     color: var(--white);
 }
 
-/* Cards */
+
 .card {
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     border-radius: 12px;
@@ -78,7 +75,7 @@ body {
     background-color: var(--white);
 }
 
-/* Forms */
+
 .form-control {
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -89,7 +86,7 @@ body {
     box-shadow: 0 0 5px var(--blue-dark);
 }
 
-/* Tables */
+
 .table {
     border-radius: 8px;
     overflow: hidden;
@@ -112,7 +109,7 @@ body {
     background-color: rgba(100, 158, 224, 0.2);
 }
 
-/* Stats list */
+
 .list-group-item {
     border: none;
     background-color: var(--light-gray);
@@ -123,7 +120,7 @@ body {
     color: var(--blue-dark);
 }
 
-/* Small responsive tweaks */
+
 @media (max-width: 768px) {
     .card {
         margin: 1rem;
