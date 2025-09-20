@@ -1,173 +1,75 @@
-Shift Tracker — A3
+Here is the link I used to download All I do is win by DJ Khaled:
+https://www.reverbnation.com/rickrossricktheruler/song/3651360-all-i-do-is-win-ft-dj-khaled-ludacris
 
-Render Link: https://a3-niajunod-a25.onrender.com/
-Vercel Link: https://a3-nia-junod-a25-klzz3zxrk-niajunods-projects.vercel.app/
+# Shift Tracker (A3) + Side Work Party (A4)
 
-I did some research to find another web service hosting platform. And Vercel is similar to Render. At least I tried AWS, but I got confused; and it was complex. So I put both Render and Vercel link to be safe. 
+(Render):** https://a4-niajunod-a25.onrender.com/  
+- A3: Shift Tracker → `/`  
+- A4: Side Work Party (Creative Coding demo) → `/a4`
 
+---
 
-Project Summary
+## Assignment 4 — Creative Coding: “Side Work Party”
 
-Shift Tracker is a two-tier web application that helps restaurant workers log their shifts, calculate tips, and track hourly pay. The application includes authentication, persistent data storage, and a polished UI powered by Bootstrap.
+Summary
+“Side Work Party” is an interactive **audio visualizer** built with **HTML5 Canvas** and the **Web Audio API**. Users can load an audio file or use their microphone (HTTPS required) and explore a reactive ring of bars that rotate with the pointer. A right-side control panel lets you customize the visuals live. I called it side work party because me and the other servers usually go in the polish and side work room and listen to music anyway. It can get boring at times, but the visualizer would add ambience. 
 
-Goals of the application:
+Goal
+- Demonstrate browser multimedia capabilities using at least one approved framework.  
+- Provide an interactive visualization with at least four parameters for user control.  
+- Display clear documentation when the app first loads.  
 
-Provide a lightweight tool for tracking work shifts and calculating earnings.
+Technologies
+- **Express** (server)  
+- **HTML5 Canvas** (visual rendering)  
+- **Web Audio API** (FFT/analyser, mic & file input)  
+- **Tweakpane** (control panel for parameters)  
 
-Allow users to log in, create accounts, and manage their personal shift data securely.
+### User Controls (6 total, 4+ required)
+- **Bars** (16–256): number of visual bars  
+- **Sensitivity** (0.5–6): audio responsiveness  
+- **Smoothing** (0–0.95): analyser smoothing constant  
+- **Line Width** (1–6): bar stroke thickness  
+- **Mirror** (on/off): symmetric visualization  
+- **Color Scheme** (neon, plasma, cool, mono)  
 
-Persist user data across sessions using MongoDB.
+Instructions
+- On your first visit, a **help overlay** appears explaining usage. Press **H** or click **Help** to show it again.  
+- **Load Audio File**: choose an mp3/wav file to visualize.  
+- **Use Microphone**: works only on **HTTPS** or `localhost`. Bars react live to mic input.  
+- **Play / Pause**: controls both audio playback and the visualization loop.  
+- Adjust parameters using the **Tweakpane panel** on the right.  
+- Move your **mouse/touch** to rotate the ring of bars.  
+- Resize the window to fit the visualization.  
 
-I will most likely give this website to where I work at the Pridwin Hotel, it would be useful for FOH staff. 
+Challenges Faced
+- Handling **autoplay restrictions**: AudioContext resumes only after user interaction.  
+- Implementing **true pause/resume** for audio file playback (AudioBufferSourceNode recreation + offset tracking).  
+- Preventing **feedback** when using microphone input by analysing without routing audio to speakers.  
+- Ensuring resilience if the **Tweakpane CDN** is blocked — visualization still runs without controls.  
 
-Challenges faced:
+Notes
+- **Microphone input** requires HTTPS (browser security policy).  
+- If the **control panel** does not appear, try a different network or refresh — the visualizer itself still works.  
 
-Implementing authentication logic (login vs. create account) in Express.
+Files (A4)
 
-Configuring MongoDB and managing persistent storage.
+---
 
-Debugging accessibility and SEO issues to push Lighthouse scores above 90%.
+Run Locally
 
-Authentication strategy:
-
-Simple username/password login (accounts are created automatically if they do not exist).
-
-This was chosen because it aligns with the assignment requirements and keeps the focus on core persistence features.
-
-CSS framework:
-
-Bootstrap 5
- was chosen for its professional styling, responsive grid system, and accessibility support.
-
-Custom CSS (/css/styles.css) was added for branding (colors, spacing, typography). Example modifications:
-
-White background with accent colors for buttons.
-
-Improved table readability with striped rows.
-
-Accessible contrast for primary buttons.
-
-Express middleware packages used:
-
-express.json() — parses JSON request bodies.
-
-express.urlencoded() — parses URL-encoded request bodies from forms.
-
-express.static() — serves static files such as CSS and JavaScript.
-
-mongodb — database client for persistent storage of user shift data.
-
-(Custom middleware) — authentication logic that checks session user and routes accordingly.
-
-Features
-
-Login / Create Account
-
-Users log in with a username and password. If the account does not exist, it is automatically created.
-
-Shift Management
-
-Add, edit, and delete shifts (restaurant name, hours, and tips).
-
-Results / Data Display
-
-Logged-in users can view all their past shifts in a responsive Bootstrap table.
-
-Stats Section
-
-Average hourly rate, total tips, and total number of shifts.
-
-Persistent Data
-
-All data is stored in MongoDB and persists across server restarts.
-
-Installation & Setup
-
-Clone the repository:
-
-git clone https://github.com/yourusername/a3-NiaJunod.git
-cd a3-NiaJunod
-
-
-Install dependencies:
-
+```bash
+# install
 npm install
 
+# configure environment
+# create a .env file (see .env.example)
+# .env:
+# MONGO_URI=your-mongodb-uri
+# PORT=3000
 
-Configure environment variables:
-
-Create a .env file with your MongoDB connection string:
-
-MONGO_URI=mongodb+srv://...
-SESSION_SECRET=yourSecret
-
-
-Run the server:
-
+# run
 npm start
+# open http://localhost:3000  (A3)
+# open http://localhost:3000/a4  (A4)
 
-
-
-
-Testing & Lighthouse Results
-
-Performance: 100
-
-Accessibility: 100
-
-Best Practices: 100
-
-SEO: 100
-I put it in a private browser since my extentions on chrome kept messing it up I guess. When I did in the regular browser it was like 90. So I put the image in the files here. 
-
-
-
-Technical Achievements
-
-Lighthouse Optimization (5 pts): Achieved 98–100 scores across categories by reducing unused CSS, fixing accessibility contrast, and optimizing load order.
-
-Deployed on Render (baseline requirement).
-
-Design Achievements
-
-Accessibility Improvements (10 pts):
-Followed W3C accessibility tips including:
-
-ARIA labels on navigation and live regions.
-
-Sufficient color contrast on buttons and inputs.
-
-Semantic HTML (<main>, <nav>, <section>).
-
-Form validation feedback with invalid-feedback.
-
-Responsive design via Bootstrap grid.
-
-Clear button text for screen readers (“Login / Create” instead of ambiguous labels).
-(and more, up to 12 tips to fully claim points).
-
-CRAP Principles (5 pts):
-
-Contrast: Login button emphasized with Bootstrap primary color.
-
-Repetition: Consistent use of typography and card layouts.
-
-Alignment: Tables, forms, and buttons aligned using Bootstrap grid.
-
-Proximity: Related form fields grouped with clear labels and spacing.
-
-Known Issues / Future Work
-
-Currently sessions are not stored in MongoDB — future work could integrate connect-mongo for scalable session persistence.
-
-Could extend with OAuth (GitHub login) as an advanced feature.
-
-Credits / Acknowledgements
-
-Professor’s CS4241 Assignment 3 instructions.
-
-Bootstrap 5 for CSS framework.
-
-MongoDB Atlas for database hosting.
-
-Render for deployment.
