@@ -113,10 +113,18 @@ class Note{
     //makes the note numOctaves octave lower
     downOctave(numOctaves){
         this.frequency/=(2*numOctaves);
+        if(this.osc){
+            this.stop();
+            this.play();
+        }
     }
     //makes the note numOctaves octave higher
     upOctave(numOctaves){
         this.frequency*=(2*numOctaves);
+        if(this.osc){
+            this.stop();
+            this.play();
+        }
     }
     //changes the volume
     changeVolume(newVolume){
