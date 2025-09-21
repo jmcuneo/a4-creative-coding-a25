@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>CS4241 Assignment 4</title>
+    <meta charset="utf-8">
+    <script src="nexus.js"></script>
+    <script src="index.js"></script>
+    <link href="tailwind.min.css" type = "text/css" rel="stylesheet" />
+    <!-- get rid of favicon error -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+    <body>
+    <div class="min-h-fit min-w-fit flex flex-col justify-center items-center">
+        <div class="min-h-fit min-w-fit flex flex-row justify-center items-center">
+            <div id="instrument" class="max-h-fit max-w-fit min-h-max min-w-max h-10em grid grid-cols-4 gap-6 bg-gray-400 m-4 p-4 border-2 border-gray-800">
+                <div class="min-h-fit min-w-fit grid grid-cols-3 border-2 border-gray-800">
+                    <h3 class="col-span-3 text-sm text-center font-bold">Current Octave</h3>
+                    <label for="lower" class="text-xs text-center">Lower</label>
+                    <label for="base" class="text-xs text-center">Middle</label>
+                    <label for="upper" class="text-xs text-center">Upper</label>
+                    <input type="radio" name="octave" id="lower" onchange="changeOctave(-1)"/>
+                    <input type="radio" name="octave" id="base" checked="checked" onchange="changeOctave(0)"/>
+                    <input type="radio" name="octave" id="upper" onchange="changeOctave(1)"/>
+                </div>
+                <div class="min-h-fit min-w-fit flex flex-col justify-center border-2 border-gray-800">
+                    <label for="volume" class="text-s text-center font-bold">Volume</label>
+                    <input type="range" value="50" max="100" min="0" step="1" id="volume" list="volumes"/>
+                    <datalist id="volumes">
+                        <option value="0"></option>
+                        <option value="20"></option>
+                        <option value="40"></option>
+                        <option value="60"></option>
+                        <option value="80"></option>
+                        <option value="100"></option>
+                    </datalist>
+                </div>
+                <div id="piano" class="col-span-4 min-h-fit min-w-fit"></div>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
