@@ -158,7 +158,7 @@ class Note{
         this.gainNode.gain.value = newVolume;
     }
     //changes the wave type
-    changeSmoothness(newType){
+    changeSmoothness(){
         //only need to stop and start since smoothness is universal among notes
         if(this.osc){
             this.stop();
