@@ -2,6 +2,11 @@
 const notes = [];
 //current octave
 let currentOctave = 0;
+//the type of wave used for sound
+let currentWaveType = 'sine';
+//"scale of smoothness"
+//sawtooth, sine, triangle, square
+
 
 window.onload = () => {
     //the minimum and maximum notes
@@ -13,7 +18,13 @@ window.onload = () => {
     const downKeys = []
     //Keyboard keys that map to keys on the piano
     const keyMap = ['`','1','2','3','4','5','6','7','8','9','0','-','=','q','w','e','r','t','y','u','i','o','p','[',']','\\','a','s','d','f','g','h','j','k','l',';','\''];
-
+    //types of waves, determines "smoothness"
+    const waves = {
+        0: 'sawtooth',
+        1: 'square',
+        2: 'triangle',
+        3: 'sine',
+    }
 
     const volume = document.getElementById('volume');
     if(volume){
@@ -27,6 +38,22 @@ window.onload = () => {
         });
     }
 
+    const smoothness = document.getElementById('smoothness');
+    if(smoothness){
+        console.log(volume);
+        smoothness.addEventListener('change',(v)=>{
+            try {
+                //sets new wave type (i.e. smoothness)
+                console.log(v);
+                currentWaveType = waves[parseInt(v.target.value, 10)];
+                notes.forEach((note) => {
+                    note.changeSmoothness()
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        });
+    }
 
     for(let i = -12; i+12 < Object.keys(keyMap).length; i++) {
         //calculates the frequencies of the tones; using the following equation
@@ -82,7 +109,7 @@ window.onload = () => {
 
     })
 }
-
+//Represents a note that can be played
 class Note{
     static audioCtx = new AudioContext();
 
@@ -98,7 +125,7 @@ class Note{
             // console.log(this.frequency);
             this.osc = Note.audioCtx.createOscillator();
             this.osc.frequency.value = this.frequency;
-            this.osc.type='square'
+            this.osc.type=currentWaveType
             this.osc.connect(this.gainNode);
             this.osc.start();
         }
@@ -129,6 +156,14 @@ class Note{
     //changes the volume
     changeVolume(newVolume){
         this.gainNode.gain.value = newVolume;
+    }
+    //changes the wave type
+    changeSmoothness(newType){
+        //only need to stop and start since smoothness is universal among notes
+        if(this.osc){
+            this.stop();
+            this.play();
+        }
     }
 
 }

@@ -34,6 +34,16 @@
                         <option value="100"></option>
                     </datalist>
                 </div>
+                <div class="min-h-fit min-w-fit flex flex-col justify-center border-2 border-gray-800">
+                    <label for="smoothness" class="text-s text-center font-bold">Smoothness</label>
+                    <input type="range" value="3" max="3" min="0" step="1" id="smoothness" list="smoothness-values"/>
+                    <datalist id="smoothness-values">
+                        <option value="0"></option>
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                    </datalist>
+                </div>
                 <div id="piano" class="col-span-4 min-h-fit min-w-fit"></div>
             </div>
         </div>
