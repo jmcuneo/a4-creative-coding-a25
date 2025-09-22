@@ -187,3 +187,25 @@ const changeOctave = (newOctave) => {
     currentOctave = newOctave;
 }
 
+/*
+//Modify this for metronome code
+clearInterval(id);
+    id = setInterval(() => {
+        try {
+            let temp1 = setAxis([xPos, xVel]); //returns new x-position and x-velocity
+            let temp2 = setAxis([yPos, yVel]); //returns new y-position and y-velocity
+            xPos = temp1[0]; //updates x-position
+            yPos = temp2[0]; //updates y-position
+            xVel = temp1[1]; //updates x-velocity
+            yVel = temp2[1]; //updates y-velocity
+            element.style.left = xPos + "%"; //updates position of element on webpage
+            element.style.top = yPos + "%"; //updates position of element on webpage
+        }
+        catch(err){
+            console.log(err);
+            clearInterval(id); //ends animation if error occurs
+        }
+    }, 100)
+
+ */
+

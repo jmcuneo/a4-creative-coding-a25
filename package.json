@@ -1,0 +1,15 @@
+{
+  "name": "a2-aaronwaller-a25",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Aaron Waller",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mime-types": "^3.0.1",
+    "path": "^0.12.7"
+  }
+}
