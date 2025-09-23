@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>CS4241 Assignment 4</title>
+    <meta charset="utf-8">
+    <script src="public/js/nexus.js"></script>
+    <script src="public/js/index.js"></script>
+    <link href="public/css/tailwind.min.css" type = "text/css" rel="stylesheet" />
+    <!-- get rid of favicon error -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+    <body class="bg-red-200">
+    <h1 class="text-4xl font-bold text-center m-4">Basic Keyboard Web Application</h1>
+    <div class="min-w-fit min-h-fit flex flex-col justify-center items-center justify-self-space-around mt-20">
+        <article class="max-w-2xl mx-auto">
+            <h2 class="text-xl font-bold">Instructions:</h2>
+            <p class="text-wrap text-lg mt-1">
+                <strong>Changing the octave:</strong> Click on the option for the desired octave in the octave box.
+            </p>
+            <p class="text-wrap text-lg mt-1">
+                <strong>Changing the smoothness:</strong> Change the position of the slider in the smoothness box. The leftmost position is least smooth, and the rightmost position is most smooth.
+                <strong>NOTE: On the most smooth setting certain notes may not be audible in lower octaves due to them being difficult to perceive.</strong>
+            </p>
+            <p class="text-wrap text-lg mt-1">
+                <strong>Changing the volume:</strong> Change the position of the slider in the volume box. The leftmost position is mute, and the rightmost position is the max volume.
+            </p>
+            <p class="text-wrap text-lg mt-1">
+                <strong>Playing the piano:</strong> Either click on the keys to play them or use the keybinds provided.
+            </p>
+            <div class="p-2">
+                <label for="mappings" class="text-l font-bold">Keybinds for Keyboard</label>
+                <img src="public/img/keymappings.png" class="min-h-fit min-w-fit" width="700px" height="700px" alt="keyboard mappings" id="mappings"/>
+
+            </div>
+        </article>
+        <div class="min-h-fit min-w-fit flex flex-row justify-center items-center">
+            <div id="instrument" class="max-h-fit max-w-fit min-h-max min-w-max h-10em grid grid-cols-3 gap-6 bg-gray-400 m-4 p-4 border-2 border-gray-800">
+                <div class="min-h-fit min-w-fit grid grid-cols-3 border-2 border-gray-800">
+                    <h3 class="col-span-3 text-sm text-center font-bold">Current Octave</h3>
+                    <label for="lower" class="text-xs text-center">Lower</label>
+                    <label for="middle" class="text-xs text-center">Middle</label>
+                    <label for="upper" class="text-xs text-center">Upper</label>
+                    <input type="radio" name="octave" id="lower"/>
+                    <input type="radio" name="octave" id="middle" checked="checked"/>
+                    <input type="radio" name="octave" id="upper"/>
+                </div>
+                <div class="min-h-fit min-w-fit flex flex-col justify-center border-2 border-gray-800">
+                    <label for="volume" class="text-s text-center font-bold">Volume</label>
+                    <input type="range" value="100" max="100" min="0" step="1" id="volume" list="volumes"/>
+                    <datalist id="volumes">
+                        <option value="0"></option>
+                        <option value="20"></option>
+                        <option value="40"></option>
+                        <option value="60"></option>
+                        <option value="80"></option>
+                        <option value="100"></option>
+                    </datalist>
+                </div>
+                <div class="min-h-fit min-w-fit flex flex-col justify-center border-2 border-gray-800">
+                    <label for="smoothness" class="text-s text-center font-bold">Smoothness</label>
+                    <input type="range" value="3" max="3" min="0" step="1" id="smoothness" list="smoothness-values"/>
+                    <datalist id="smoothness-values">
+                        <option value="0"></option>
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                    </datalist>
+                </div>
+                <div id="piano" class="col-span-3 min-h-fit min-w-fit"></div>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
