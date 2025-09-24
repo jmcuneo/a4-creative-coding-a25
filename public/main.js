@@ -12,7 +12,8 @@ class Agent {
         // use initial energy for predators
         this.energy = type === "predator" ? params.predatorInitialEnergy : 0;
         // speed
-        this.speed = type === "predator" ? params.predatorSpeed : params.preySpeed;
+        this.speed =
+            type === "predator" ? params.predatorSpeed : params.preySpeed;
         // set random position
         this.position = new THREE.Vector3(
             (Math.random() - 0.5) * 80,
@@ -27,12 +28,13 @@ class Agent {
             12
         );
         const material = new THREE.MeshPhongMaterial({
-            color: type === "prey" ? 0x00ff00 : 0xff0000,
+            color: type === "prey" ? 0x2350a8 : 0xff4df9,
             shininess: 2000,
         });
 
         // mesh class is geometry + material (like the final object)
         this.mesh = new THREE.Mesh(geometry, material);
+
         // give the mesh the random position
         this.mesh.position.copy(this.position);
         scene.add(this.mesh);
@@ -58,6 +60,13 @@ class Agent {
             this.energy -= delta;
             // if energy reaches 0, remove from scene
             if (this.energy <= 0) this.die(agents);
+
+            // shrinks as it starves
+            const minScale = 0.5;
+            const maxScale = 1.5;
+            const scaleFactor = this.energy / params.predatorInitialEnergy;
+            const scale = minScale + (maxScale - minScale) * scaleFactor;
+            this.mesh.scale.set(scale, scale, scale);
         }
 
         this.mesh.position.copy(this.position);
@@ -83,7 +92,7 @@ class Agent {
             if (predDist < fleeRadius) {
                 const away = new THREE.Vector3()
                     .subVectors(this.position, pred.position) // sets a vector  in the dircetion from predator to the prey (the direction we want to move in)
-                    .normalize() // just the direction
+                    .normalize(); // just the direction
                 fleeVector.add(away);
             }
         });
@@ -95,28 +104,29 @@ class Agent {
         this.position.addScaledVector(this.direction, params.preySpeed * delta);
 
         // bounce off edges
-        const bounds = 40;
-        if (this.position.x > bounds) {
-            this.position.x = bounds;
+        const boundsX = app.boundsX;
+        const boundsY = app.boundsY;
+        if (this.position.x > boundsX) {
+            this.position.x = boundsX;
             this.direction.x *= -1;
         }
-        if (this.position.x < -bounds) {
-            this.position.x = -bounds;
+        if (this.position.x < -boundsX) {
+            this.position.x = -boundsX;
             this.direction.x *= -1;
         }
-        if (this.position.y > bounds) {
-            this.position.y = bounds;
+        if (this.position.y > boundsY) {
+            this.position.y = boundsY;
             this.direction.y *= -1;
         }
-        if (this.position.y < -bounds) {
-            this.position.y = -bounds;
+        if (this.position.y < -boundsY) {
+            this.position.y = -boundsY;
             this.direction.y *= -1;
         }
 
         // occasionally randomize direction slightly
         if (Math.random() < 0.03) {
-            this.direction.x += (Math.random() - 0.5);
-            this.direction.y += (Math.random() - 0.5);
+            this.direction.x += Math.random() - 0.5;
+            this.direction.y += Math.random() - 0.5;
             this.direction.normalize();
         }
     }
@@ -164,6 +174,7 @@ const app = {
     init() {
         // Starting object. Will be populated with camera, lighting objects, etc.
         this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x87ceeb);
 
         // Create a new camera
         this.camera = new THREE.PerspectiveCamera(
@@ -188,16 +199,29 @@ const app = {
         // agents array holds all living objects in sim
         this.agents = [];
         this.params = {
-            preyCount: 30,
-            predatorCount: 3,
+            preyCount: 20,
+            predatorCount: 5,
             preySpeed: 20, // percentage
             predatorSpeed: 30, // percentage
             reproductionRate: 5, // in seconds
             predatorInitialEnergy: 10, // in seconds
         };
 
+        // set bounds
+        this.boundsX = window.innerWidth / 20;
+        this.boundsY = window.innerHeight / 20;
+
+        window.addEventListener("resize", () => {
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+            this.boundsX = window.innerWidth / 20;
+            this.boundsY = window.innerHeight / 20;
+        });
+
         // Create GUI
-        this.createGUI()
+        this.createGUI();
 
         // clock to track real time for updates
         this.clock = new THREE.Clock();
@@ -212,14 +236,10 @@ const app = {
     createGUI() {
         const container = document.createElement("div");
         container.id = "guiContainer";
-        container.style.width = "320px";
-        container.style.position = "fixed";
-        container.style.top = "10px";
-        container.style.right = "10px";
-        container.style.zIndex = 1000;
         document.body.appendChild(container);
 
         const pane = new Pane({ container: container });
+        // pane.element.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
 
         // Info folder
         const infoFolder = pane.addFolder({ title: "Parameter Info" });
@@ -231,7 +251,7 @@ const app = {
         infoFolder.addBinding(
             { preySpeedInfo: "How fast the prey move" },
             "preySpeedInfo",
-            { view: "text", label: "Prey Speed"}
+            { view: "text", label: "Prey Speed" }
         );
         infoFolder.addBinding(
             {
@@ -263,19 +283,19 @@ const app = {
             min: 0,
             max: 100,
             step: 1,
-            label: "Initial Prey Count"
+            label: "Initial Prey Count",
         });
         preyFolder.addBinding(this.params, "preySpeed", {
             min: 1,
             max: 100,
             step: 1,
-            label: "Prey Speed"
+            label: "Prey Speed",
         });
         preyFolder.addBinding(this.params, "reproductionRate", {
             min: 1,
             max: 60,
             step: 1,
-            label: "Prey Reproduction Rate (seconds)"
+            label: "Prey Reproduction Rate (seconds)",
         });
 
         // Predator folder
@@ -284,19 +304,19 @@ const app = {
             min: 0,
             max: 50,
             step: 1,
-            label: "Predator Count"
+            label: "Predator Count",
         });
         predatorFolder.addBinding(this.params, "predatorSpeed", {
             min: 1,
             max: 100,
             step: 1,
-            label: "Predator Speed"
+            label: "Predator Speed",
         });
         predatorFolder.addBinding(this.params, "predatorInitialEnergy", {
             min: 1,
             max: 60,
             step: 1,
-            label: "Predator Max Energy (seconds)"
+            label: "Predator Max Energy (seconds)",
         });
 
         // Buttons
@@ -320,6 +340,9 @@ const app = {
     },
 
     startSim() {
+        const overlay = document.getElementById("overlay");
+        if (overlay) overlay.style.display = "none";
+
         // Spawn initial prey
         for (let i = 0; i < this.params.preyCount; i++) {
             this.agents.push(new Agent("prey", this.scene, this.params));
@@ -337,7 +360,7 @@ const app = {
 
     endSim() {
         // Remove all agents from the scene
-        this.agents.forEach(agent => this.scene.remove(agent.mesh));
+        this.agents.forEach((agent) => this.scene.remove(agent.mesh));
 
         // Clear the agents array
         this.agents = [];
@@ -350,7 +373,9 @@ const app = {
         const delta = this.clock.getDelta(); // get time passed since last frame
 
         // update the agents
-        this.agents.forEach((agent) => agent.update(this.params, this.agents, delta));
+        this.agents.forEach((agent) =>
+            agent.update(this.params, this.agents, delta)
+        );
 
         // Render using the scene and camera specified earlier
         this.renderer.render(this.scene, this.camera);
