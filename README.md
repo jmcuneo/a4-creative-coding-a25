@@ -54,6 +54,30 @@ your hosting link e.g. http://a4-charlieroberts.glitch.me
 
 Include a very brief summary of your project here. Images are encouraged when needed, along with concise, high-level text. Be sure to include the following:
 
+Ecosystem Simulator
+Controls:
+- initial prey count
+- initial predator count
+- prey reproduction rate
+- predator speed
+- prey speed
+- predator initial energy
+
+
+Prey moves randomly
+Prey reproduce based on set reproduction rate
+Predators find the nearest prey
+Predators gain energy from catching prey
+Predators lose energy the longer they go without catching prey
+- If energy hits 0, they die
+
+
+Note on AI Use: I used ChatGPT to debug problems I faced like the "prey" not moving as anticipated or the "prey" not reproducing according to real time.
+
+Main Challenge: Since there's so much information in Three.js's documentation, I had to Google a lot of what I wanted to do and see if anything came up that could help. 
+For example, I had to Google things like how to set a random position for an object, how to move towards another object, how to add random movements to objects, how to integrate a GUI, how to add buttons to the GUI, etc. From there, I would look at the documentation for specific functions that would come up to understand them.
+I also had to work a lot with vectors to set the direction and movement of the prey and predators, so I had to refresh my mind on concepts like normalization.
+
 - the goal of the application
 - challenges you faced in realizing the application
 - the instructions you present in the website should be clear enough to use the application, but if you feel any need to provide additional instructions please do so here.
