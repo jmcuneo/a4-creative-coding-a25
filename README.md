@@ -3,9 +3,9 @@ Assignment 4 - Creative Coding: Interactive Multimedia Experiences
 
 For this assignment we will focus on client-side development using popular audio/graphics/visualization technologies. The goal of this assignment is to refine our JavaScript knowledge while exploring the multimedia capabilities of the browser.
 
-[Three.js Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/master/using.three.md)
-[WebAudio / Canvas Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.webaudio_and_canvas.md)  
-[SVG + D3 tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.svg_and_d3.md)  
+- [Three.js Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/master/using.three.md)
+- [WebAudio / Canvas Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.webaudio_and_canvas.md)  
+- [SVG + D3 tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.svg_and_d3.md)  
 
 Baseline Requirements
 ---
