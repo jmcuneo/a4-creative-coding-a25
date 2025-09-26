@@ -1,0 +1,25 @@
+{
+  "name": "a4",
+  "version": "1.0.0",
+  "description": "Assignment 4 - Creative Coding: Interactive Multimedia Experiences\r ===",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Benadudeee/a4-creative-coding-a25.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Benadudeee/a4-creative-coding-a25/issues"
+  },
+  "homepage": "https://github.com/Benadudeee/a4-creative-coding-a25#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "three": "^0.180.0"
+  }
+}
