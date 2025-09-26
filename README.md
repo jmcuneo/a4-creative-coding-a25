@@ -11,6 +11,8 @@ The goal of this project is to simulate a simple ecosystem with just predators a
 ![Simulation showing "predators" and "prey"](images/sim.png)
 
 #### Parameters
+<img src="images/gui.png" alt="Tweakpane GUI" width="300"/>
+
 The parameters to this simulation are:
 - Initial Prey Count: the number of prey initally spawned
 - Prey Speed: the speed at which prey move
@@ -18,8 +20,6 @@ The parameters to this simulation are:
 - Predator Count: the number of predators
 - Predator Speed: the speed at which predators move
 - Predator Max Energy: the amount of time (in seconds) predators have to find prey
-
-<img src="images/gui.png" alt="Tweakpane GUI" width="300"/>
 
 Note on AI Use: I used ChatGPT to debug problems I faced like the "prey" not moving as anticipated or the "prey" not reproducing according to real time.
 
