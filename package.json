@@ -1,0 +1,12 @@
+{
+  "name": "a4-owenhart",
+  "version": "1.0.0",
+  "description": "Fourth assignment of CS4241",
+  "author": "Owen Hart",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

@@ -1,0 +1,15 @@
+body {
+    background: grey;
+}
+
+canvas {
+    background: black;
+    width: 80vmin;
+    height: 80vmin;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
