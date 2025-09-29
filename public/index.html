@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>D3 Creative — Interactive Visualization</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+  <header>
+    <h1>D3 Creative — Interactive Scatter / Force Visualization</h1>
+  </header>
+
+  <main>
+    <div id="ui" class="ui-panel"></div>
+    <div id="vis-container">
+      <svg id="vis"></svg>
+    </div>
+
+    <div id="info" class="info-box">
+      <p>Hover points for details. Use controls (left) to change visualization parameters.</p>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
