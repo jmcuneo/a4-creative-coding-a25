@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Audio Visualizer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            min-width: 300px;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        input[type="color"] {
+            width: 50px;
+            height: 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        #instructions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 300px;
+            z-index: 100;
+        }
+
+        #instructions h3 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+
+        #instructions ul {
+            padding-left: 20px;
+        }
+
+        #instructions li {
+            margin-bottom: 5px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: none;
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+        }
+
+        #audioFile {
+            margin-bottom: 10px;
+        }
+
+        .value-display {
+            font-size: 12px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="controls">
+            <h3>Audio Visualizer Controls</h3>
+            
+            <div class="control-group">
+                <label for="audioFile">Load Audio File:</label>
+                <input type="file" id="audioFile" accept="audio/*">
+                <button id="playBtn">Play</button>
+                <button id="pauseBtn">Pause</button>
+            </div>
+
+            <div class="control-group">
+                <label for="sensitivity">Sensitivity: <span id="sensitivityValue" class="value-display">1.0</span></label>
+                <input type="range" id="sensitivity" min="0.1" max="3.0" step="0.1" value="1.0">
+            </div>
+
+            <div class="control-group">
+                <label for="particleCount">Particle Count: <span id="particleCountValue" class="value-display">100</span></label>
+                <input type="range" id="particleCount" min="50" max="500" step="10" value="100">
+            </div>
+
+            <div class="control-group">
+                <label for="rotationSpeed">Rotation Speed: <span id="rotationSpeedValue" class="value-display">0.5</span></label>
+                <input type="range" id="rotationSpeed" min="0" max="2" step="0.1" value="0.5">
+            </div>
+
+            <div class="control-group">
+                <label for="colorScheme">Color Scheme:</label>
+                <input type="color" id="colorScheme" value="#ff0066">
+            </div>
+
+            <button id="generateTone">Generate Test Tone</button>
+        </div>
+
+        <div id="instructions">
+            <button class="close-btn" id="closeInstructions">&times;</button>
+            <h3>Instructions</h3>
+            <ul>
+                <li><strong>Load Audio:</strong> Click "Load Audio File" to upload your music</li>
+                <li><strong>Play Controls:</strong> Use Play/Pause buttons to control audio</li>
+                <li><strong>Sensitivity:</strong> Adjusts how responsive the visualization is to audio</li>
+                <li><strong>Particle Count:</strong> Changes the number of visual elements</li>
+                <li><strong>Rotation Speed:</strong> Controls how fast the visualization rotates</li>
+                <li><strong>Color Scheme:</strong> Click to change the primary color</li>
+                <li><strong>Test Tone:</strong> Generates a test tone if you don't have audio files</li>
+                <li><strong>Mouse:</strong> Move mouse to control camera angle</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        class AudioVisualizer {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.particles = [];
+                this.audioContext = null;
+                this.analyser = null;
+                this.source = null;
+                this.audio = null;
+                this.oscillator = null;
+                this.gainNode = null;
+                
+                // Control parameters
+                this.sensitivity = 1.0;
+                this.particleCount = 100;
+                this.rotationSpeed = 0.5;
+                this.baseColor = new THREE.Color(0xff0066);
+                
+                // Mouse tracking
+                this.mouse = { x: 0, y: 0 };
+                
+                this.init();
+                this.setupControls();
+                this.animate();
+            }
+
+            init() {
+                // Scene setup
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x0a0a0a);
+
+                // Camera setup
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                this.camera.position.z = 30;
+
+                // Renderer setup
+                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                document.getElementById('container').appendChild(this.renderer.domElement);
+
+                // Create particle system
+                this.createParticles();
+
+                // Add ambient lighting
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+                this.scene.add(ambientLight);
+
+                // Add point light
+                const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+                pointLight.position.set(10, 10, 10);
+                this.scene.add(pointLight);
+
+                // Mouse tracking
+                window.addEventListener('mousemove', (event) => {
+                    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                });
+
+                // Window resize handling
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            createParticles() {
+                // Clear existing particles
+                this.particles.forEach(particle => {
+                    this.scene.remove(particle);
+                });
+                this.particles = [];
+
+                // Create new particles
+                for (let i = 0; i < this.particleCount; i++) {
+                    const geometry = new THREE.SphereGeometry(0.1, 8, 8);
+                    const material = new THREE.MeshLambertMaterial({ 
+                        color: this.baseColor.clone(),
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const particle = new THREE.Mesh(geometry, material);
+
+                    // Position particles in a sphere
+                    const phi = Math.acos(-1 + (2 * i) / this.particleCount);
+                    const theta = Math.sqrt(this.particleCount * Math.PI) * phi;
+                    
+                    particle.position.x = Math.cos(theta) * Math.sin(phi) * 10;
+                    particle.position.y = Math.sin(theta) * Math.sin(phi) * 10;
+                    particle.position.z = Math.cos(phi) * 10;
+
+                    particle.userData = {
+                        originalPosition: particle.position.clone(),
+                        phase: i * 0.1
+                    };
+
+                    this.particles.push(particle);
+                    this.scene.add(particle);
+                }
+            }
+
+            setupAudio() {
+                if (!this.audioContext) {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.analyser = this.audioContext.createAnalyser();
+                    this.analyser.fftSize = 256;
+                    this.gainNode = this.audioContext.createGain();
+                    this.gainNode.connect(this.audioContext.destination);
+                }
+            }
+
+            loadAudioFile(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.setupAudio();
+                    
+                    this.audioContext.decodeAudioData(e.target.result)
+                        .then((buffer) => {
+                            this.audio = buffer;
+                            console.log('Audio loaded successfully');
+                        })
+                        .catch((err) => console.error('Error decoding audio:', err));
+                };
+                reader.readAsArrayBuffer(file);
+            }
+
+            playAudio() {
+                if (!this.audio || !this.audioContext) return;
+
+                this.setupAudio();
+                
+                if (this.source) {
+                    this.source.stop();
+                }
+
+                this.source = this.audioContext.createBufferSource();
+                this.source.buffer = this.audio;
+                this.source.connect(this.analyser);
+                this.analyser.connect(this.gainNode);
+                
+                this.source.start(0);
+            }
+
+            pauseAudio() {
+                if (this.source) {
+                    this.source.stop();
+                    this.source = null;
+                }
+            }
+
+            generateTestTone() {
+                this.setupAudio();
+                
+                if (this.oscillator) {
+                    this.oscillator.stop();
+                }
+
+                this.oscillator = this.audioContext.createOscillator();
+                const testGain = this.audioContext.createGain();
+                
+                this.oscillator.connect(this.analyser);
+                this.oscillator.connect(testGain);
+                this.analyser.connect(this.gainNode);
+                testGain.connect(this.gainNode);
+                
+                this.oscillator.frequency.setValueAtTime(220, this.audioContext.currentTime);
+                this.oscillator.type = 'sine';
+                testGain.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                
+                this.oscillator.start();
+                
+                // Sweep frequency for more interesting visualization
+                setInterval(() => {
+                    if (this.oscillator && this.audioContext) {
+                        const freq = 220 + Math.sin(Date.now() * 0.001) * 200;
+                        this.oscillator.frequency.setValueAtTime(freq, this.audioContext.currentTime);
+                    }
+                }, 100);
+            }
+
+            setupControls() {
+                // Audio file loading
+                document.getElementById('audioFile').addEventListener('change', (e) => {
+                    if (e.target.files[0]) {
+                        this.loadAudioFile(e.target.files[0]);
+                    }
+                });
+
+                // Play/Pause controls
+                document.getElementById('playBtn').addEventListener('click', () => {
+                    this.playAudio();
+                });
+
+                document.getElementById('pauseBtn').addEventListener('click', () => {
+                    this.pauseAudio();
+                });
+
+                // Generate test tone
+                document.getElementById('generateTone').addEventListener('click', () => {
+                    this.generateTestTone();
+                });
+
+                // Sensitivity control
+                const sensitivitySlider = document.getElementById('sensitivity');
+                const sensitivityValue = document.getElementById('sensitivityValue');
+                sensitivitySlider.addEventListener('input', (e) => {
+                    this.sensitivity = parseFloat(e.target.value);
+                    sensitivityValue.textContent = this.sensitivity.toFixed(1);
+                });
+
+                // Particle count control
+                const particleSlider = document.getElementById('particleCount');
+                const particleValue = document.getElementById('particleCountValue');
+                particleSlider.addEventListener('input', (e) => {
+                    this.particleCount = parseInt(e.target.value);
+                    particleValue.textContent = this.particleCount;
+                    this.createParticles();
+                });
+
+                // Rotation speed control
+                const rotationSlider = document.getElementById('rotationSpeed');
+                const rotationValue = document.getElementById('rotationSpeedValue');
+                rotationSlider.addEventListener('input', (e) => {
+                    this.rotationSpeed = parseFloat(e.target.value);
+                    rotationValue.textContent = this.rotationSpeed.toFixed(1);
+                });
+
+                // Color scheme control
+                document.getElementById('colorScheme').addEventListener('change', (e) => {
+                    this.baseColor.setHex(e.target.value.replace('#', '0x'));
+                    this.particles.forEach(particle => {
+                        particle.material.color.copy(this.baseColor);
+                    });
+                });
+
+                // Close instructions
+                document.getElementById('closeInstructions').addEventListener('click', () => {
+                    document.getElementById('instructions').style.display = 'none';
+                });
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+
+                const time = Date.now() * 0.001;
+
+                // Get audio data
+                let audioData = null;
+                if (this.analyser) {
+                    const bufferLength = this.analyser.frequencyBinCount;
+                    audioData = new Uint8Array(bufferLength);
+                    this.analyser.getByteFrequencyData(audioData);
+                }
+
+                // Update particles
+                this.particles.forEach((particle, index) => {
+                    const originalPos = particle.userData.originalPosition;
+                    const phase = particle.userData.phase;
+
+                    // Base animation
+                    const waveOffset = Math.sin(time + phase) * 2;
+                    
+                    // Audio-reactive scaling
+                    let audioScale = 1;
+                    if (audioData) {
+                        const audioIndex = Math.floor((index / this.particles.length) * audioData.length);
+                        audioScale = 1 + (audioData[audioIndex] / 255) * this.sensitivity;
+                    }
+
+                    // Update position
+                    particle.position.x = originalPos.x * audioScale + Math.cos(time + phase) * waveOffset;
+                    particle.position.y = originalPos.y * audioScale + Math.sin(time + phase * 2) * waveOffset;
+                    particle.position.z = originalPos.z * audioScale + Math.sin(time + phase * 3) * waveOffset;
+
+                    // Update scale
+                    const scale = 0.5 + audioScale * 0.5;
+                    particle.scale.setScalar(scale);
+
+                    // Update color intensity
+                    const intensity = audioData ? (audioData[Math.floor((index / this.particles.length) * audioData.length)] / 255) : 0.5;
+                    particle.material.emissive.copy(this.baseColor).multiplyScalar(intensity * 0.3);
+                });
+
+                // Camera movement based on mouse
+                this.camera.position.x += (this.mouse.x * 5 - this.camera.position.x) * 0.05;
+                this.camera.position.y += (-this.mouse.y * 5 - this.camera.position.y) * 0.05;
+                this.camera.lookAt(this.scene.position);
+
+                // Scene rotation
+                this.scene.rotation.y += this.rotationSpeed * 0.01;
+                this.scene.rotation.x += this.rotationSpeed * 0.005;
+
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        // Initialize the visualizer when the page loads
+        window.addEventListener('load', () => {
+            new AudioVisualizer();
+        });
+    </script>
+</body>
+</html>
