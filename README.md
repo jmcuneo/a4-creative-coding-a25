@@ -1,6 +1,6 @@
 # 3D Audio Visualizer - Interactive Multimedia Experience
 
-**Live Demo:** 
+**Live Demo:** https://a4-ethanknorring.onrender.com/
 
 ## Project Overview
 
