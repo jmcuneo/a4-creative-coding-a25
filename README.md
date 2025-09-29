@@ -1,6 +1,5 @@
 Digital Cosmic Audio Art:
-Live Demo: http://localhost:3000
- (replace with hosted link if deployed)
+Render Link: https://a4-amandachavarriapleitez.onrender.com
 
 Project Summary:
 Generative Audio Art is an interactive web application that visualizes music as a dynamic starfield with orbiting, pulsating planets. Users can upload any audio file, and the planets respond to the volume and bass of the music, creating a unique audiovisual experience. The interface also allows users to customize the number of planets, rotation speed, sensitivity to audio, and color palette.
@@ -23,9 +22,7 @@ Challenges Faced:
 - Designing gradients and shadows for planets that visually respond to audio without breaking.
 
 How to Use:
-- Clone or download the repository.
-- Run the server with: node server.js
-- Open your browser and navigate to http://localhost:3000.
+- Open Render link at the top of this file.
 - Upload an audio file using the file input in the top-left panel.
 - Adjust the sliders at the bottom-left panel to customize the experience.
 - Enjoy the interactive, music-driven starfield and orbiting planets!
