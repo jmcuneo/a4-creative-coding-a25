@@ -1,9 +1,11 @@
 {
-  "name": "amanda longo a4",
+  "name": "amanda-longo-a4",
   "version": "1.0.0",
   "description": "",
   "main": "scripts.js",
   "scripts": {
+    "start": "parcel src/index.html --open",
+    "serve": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,16 +13,13 @@
   "license": "ISC",
   "dependencies": {
     "dat.gui": "^0.7.9",
+    "express": "^4.18.2",
     "three": "^0.158.0"
   },
   "devDependencies": {
     "@parcel/config-default": "^2.4.0",
     "@parcel/transformer-glsl": "^2.16.0",
     "@parcel/transformer-inline-string": "^2.16.0",
-    "parcel": "^2.7.0",
-    "parcel-reporter-static-files-copy": "^1.3.4"
-  },
-  "staticFiles": {
-    "staticOutPath": "assets"
+    "parcel": "^2.7.0"
   }
 }
