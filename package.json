@@ -4,7 +4,6 @@
   "description": "",
   "main": "scripts.js",
   "scripts": {
-    "start": "parcel src/index.html --open",
     "serve": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,11 +14,5 @@
     "dat.gui": "^0.7.9",
     "express": "^4.18.2",
     "three": "^0.158.0"
-  },
-  "devDependencies": {
-    "@parcel/config-default": "^2.4.0",
-    "@parcel/transformer-glsl": "^2.16.0",
-    "@parcel/transformer-inline-string": "^2.16.0",
-    "parcel": "^2.7.0"
   }
 }
