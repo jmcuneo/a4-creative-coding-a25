@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Digital Cosmic Audio Art</title>
+    <style>
+      /* Global */
+      body {
+        margin: 0;
+        background: radial-gradient(circle at center, #000000, #0b0b0b);
+        color: #ffffff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+      }
+
+      /* Documentation panel */
+      #docs {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(20, 20, 30, 0.85);
+        padding: 15px 20px;
+        border-radius: 12px;
+        max-width: 280px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+      }
+
+      #docs h3 {
+        margin: 0 0 10px 0;
+        font-size: 1.3rem;
+        color: #ffeaa7;
+        text-shadow: 0 0 8px #ffeaa7;
+      }
+
+      #docs p {
+        margin: 0 0 10px 0;
+        font-size: 0.9rem;
+        line-height: 1.3;
+        color: #dfe6e9;
+      }
+
+      #docs input[type="file"] {
+        display: block;
+        margin-top: 8px;
+        padding: 6px;
+        border-radius: 6px;
+        border: none;
+        background: #2d3436;
+        color: #ffffff;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+
+      /* Controls panel */
+      #controls {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(20, 20, 30, 0.85);
+        padding: 15px 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+      }
+
+      #controls label {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+        color: #ffffff;
+      }
+
+      #controls input[type="range"] {
+        margin-top: 6px;
+        width: 180px;
+        accent-color: #ffeaa7; /* slider color */
+        height: 6px;
+        border-radius: 5px;
+      }
+
+      #controls select {
+        margin-top: 6px;
+        padding: 6px 8px;
+        border-radius: 6px;
+        border: none;
+        background: #2d3436;
+        color: #ffffff;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+
+      /* Sliders and buttons hover/focus */
+      #controls input[type="range"]:hover,
+      #controls select:hover,
+      #docs input[type="file"]:hover {
+        filter: brightness(1.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="docs">
+      <h3>Welcome :)</h3>
+      <p>
+        Upload an audio file and watch the planets sing and dance across the night sky! Feel free to customize this art by adjusting the sliders and changing the color palette below. 
+      </p>
+      <input type="file" id="audioFile" accept="audio/*" />
+    </div>
+
+    <div id="controls">
+      <label>
+        Number of Planets:
+        <input type="range" id="depth" min="2" max="15" value="7" />
+      </label>
+      <label>
+        Rotation Speed:
+        <input type="range" id="speed" min="0" max="0.2" step="0.01" value="0.05" />
+      </label>
+      <label>
+        Sensitivity:
+        <input type="range" id="sensitivity" min="1" max="15" value="6" />
+      </label>
+      <label>
+        Color Palette:
+        <select id="palette">
+          <option value="warm">Warm</option>
+          <option value="cool">Cool</option>
+          <option value="neon">Neon</option>
+          <option value="pastel">Pastel</option>
+        </select>
+      </label>
+      
+    </div>
+
+    <canvas id="canvas"></canvas>
+    <script src="./main.js" type="module"></script>
+  </body>
+</html>
