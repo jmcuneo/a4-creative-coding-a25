@@ -1,0 +1,24 @@
+{
+  "name": "a4-colinlemire",
+  "version": "1.0.0",
+  "description": "Assignment 4 - Creative Coding: Interactive Multimedia Experiences\r ===",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinl13/a4-ColinLemire.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/colinl13/a4-ColinLemire/issues"
+  },
+  "homepage": "https://github.com/colinl13/a4-ColinLemire#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
