@@ -10,47 +10,14 @@
     </style> -->
   </head>
   <body>
-    <h1>Web Audio + Canvas Visualizer</h1>
+    <h1 id="header">Web Audio + Canvas Visualizer</h1>
+    <h1 id="header2" style="display:none;">Black Cow - Steely Dan</h1>
     <button>Start Visualizer</button>
-    <script>
-      const start = function() {
-        document.body.innerHTML = '';
-        const canvas = document.createElement('canvas');
-        document.body.appendChild(canvas);
-        canvas.width = canvas.height = 512;
-        const ctx = canvas.getContext('2d');
-
-        // audio init
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        osc.type = 'sawtooth';
-        osc.frequency.value = 220;
-        osc.start();
-
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0.1;
-        osc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-
-        const analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 1024;
-        osc.connect(analyser);
-
-        const results = new Uint8Array(analyser.frequencyBinCount);
-
-        function draw() {
-          window.requestAnimationFrame(draw);
-          ctx.fillStyle = 'black';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = 'lime';
-          analyser.getByteFrequencyData(results);
-          for (let i = 0; i < analyser.frequencyBinCount; i++) {
-            ctx.fillRect(i, canvas.height - results[i], 1, results[i]);
-          }
-        }
-        draw();
-      };
-      window.onload = () => document.querySelector('button').onclick = start;
-    </script>
+    <div id="audio-visualizer">
+      <script src="main.js">
+        // Load audio visualizer
+      </script>
+    </div>
+    <button style="display:none;" id="color-randomizer">Change Color</button>
   </body>
 </html>
