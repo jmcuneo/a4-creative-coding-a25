@@ -2,29 +2,48 @@
 <html lang='en'>
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Web Audio Visualizer</title>
-    <!-- <style>
-      body { background: #222; color: #fff; text-align: center; }
-      canvas { display: block; margin: 2em auto; background: #000; }
-      button { font-size: 1.2em; margin-top: 2em; }
-    </style> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   </head>
-  <body>
-    <h1 id="header">Web Audio + Canvas Visualizer</h1>
-    <h1 id="header2" style="display:none;">Black Cow - Steely Dan</h1>
-    <p id="warning">Warning - Starting the Visualizer will also automatically start the audio</p>
-    <button>Start Visualizer</button>
-    <div id="audio-visualizer">
-      <script src="main.js">
-        // Load audio visualizer
-      </script>
+  <body class="bg-dark text-light">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+          <div class="text-center py-5">
+            <h1 id="header" class="display-4 mb-4">Web Audio + Canvas Visualizer</h1>
+            <h1 id="header2" class="display-5 mb-4" style="display:none;">Black Cow - Steely Dan</h1>
+            <div class="alert alert-warning" role="alert" id="warning">
+              <p id="warning" class="mb-0">Warning - Starting the Visualizer will also automatically start the audio</p>
+            </div>
+            <button class="btn btn-primary btn-lg mb-4">Start Visualizer</button>
+          </div>
+          
+          <div id="audio-visualizer" class="text-center">
+            <script src="main.js">
+              // Load audio visualizer
+            </script>
+          </div>
+
+          <!-- Randomize Color Button -->
+          <div class="text-center mt-4">
+            <button class="btn btn-secondary" style="display:none;" id="color-randomizer">Randomize Color</button>
+          </div>
+
+          <!-- Visual Style Dropdown -->
+          <div class="d-flex justify-content-center" id="visual-style" style="display:none;"></div>
+          
+          <!-- Bar Controls -->
+          <div class="bar-controls text-center mt-4 d-flex justify-content-center">
+            <div class="btn-group" role="group" id="bar-controls" style="display:none;">
+              <button class="btn btn-outline-light" id="decrease-bars">-</button>
+              <div class="btn btn-outline-light" id="bar-count">Bars: </div>
+              <button class="btn btn-outline-light" id="increase-bars">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <button style="display:none;" id="color-randomizer">Randomize Color</button>
-    <div id="visual-style"></div>
-    <div class="bar-controls" style="display:none;">
-      <button id="decrease-bars">-</button>
-      <div id="bar-count"></div>
-      <button id="increase-bars">+</button>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

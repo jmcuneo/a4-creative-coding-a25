@@ -24,6 +24,7 @@ const start = function() {
 
   // Visualization mode UI
   const visualStyleHost = document.getElementById('visual-style');
+  visualStyleHost.style.display = 'inline';
   let mode = 'bars'; // mode set to bars by default
   const modeSelect = document.createElement('select');
   // Options map to algorithms implemented below in draw()
@@ -72,7 +73,7 @@ const start = function() {
   });
 
   // Buttons to increase/decrease bar size
-  const barControls = document.querySelector('.bar-controls');
+  const barControls = document.getElementById('bar-controls');
   barControls.style.display = 'inline';
   var barCountDisplay = document.getElementById('bar-count');
   let barSize = 2.0; // Initial bar width
@@ -81,7 +82,7 @@ const start = function() {
     if (barSize < 5.0) {
       barSize += .25;
       barCountDisplay.textContent = `Visual Size: ${barSize}`;
-      console.log("barSize is " + barSize);
+      // console.log("barSize is " + barSize);
     }
   };
   const decreaseBarsButton = document.getElementById('decrease-bars');
@@ -89,7 +90,7 @@ const start = function() {
     if (barSize >= 0.25) {
       barSize -= .25;
       barCountDisplay.textContent = `Visual Size: ${barSize}`;
-      console.log("barSize is " + barSize);
+      // console.log("barSize is " + barSize);
     }
   };
   barCountDisplay.textContent = `Bar Width: ${barSize}`;
