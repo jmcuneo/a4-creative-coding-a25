@@ -1,6 +1,6 @@
 # A4 - Simple Audio Visualizer
 
-**Deployment** [Audio Visualizer - A4](https://github.com/jmcuneo/cs4241-guides/blob/master/using.three.md)
+**Deployment** [Audio Visualizer - A4](https://a4-utku-yakar.vercel.app/)
 
 ## What this is 
 A tiny Canvas + Web Audio API visualizer with a clean, minimal UI and a bottom player (play/pause/stop + seek bar). You load an audio file and tweak a few sliders to change the look/feel of the bars.
