@@ -93,7 +93,7 @@ const start = function() {
       // console.log("barSize is " + barSize);
     }
   };
-  barCountDisplay.textContent = `Bar Width: ${barSize}`;
+  barCountDisplay.textContent = `Visual Size: ${barSize}`;
   
 
   // Helper function to generate random color
