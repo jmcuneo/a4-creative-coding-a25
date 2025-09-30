@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Walking in Street - Three.js</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #87CEEB;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .control-group {
+            margin-bottom: 10px;
+        }
+
+        .control-group label {
+            display: inline-block;
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        .control-group input[type="range"] {
+            width: 150px;
+        }
+
+        .control-group button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .control-group button:hover {
+            background: #45a049;
+        }
+
+        .info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<div class="controls">
+    <h3>🚶‍♂️ Human Walking Simulator</h3>
+
+    <div class="control-group">
+        <label>Walk Speed:</label>
+        <input type="range" id="walkSpeed" min="0.1" max="3" step="0.1" value="1">
+        <span id="speedValue">1.0</span>
+    </div>
+
+    <div class="control-group">
+        <label>Human Size:</label>
+        <input type="range" id="humanSize" min="0.5" max="2" step="0.1" value="1">
+        <span id="sizeValue">1.0</span>
+    </div>
+
+    <div class="control-group">
+        <button onclick="changeDirection()">Turn Around</button>
+        <button onclick="randomizeColors()">Random Colors</button>
+    </div>
+
+    <div class="control-group">
+        <button onclick="addHuman()">Add Human</button>
+        <button onclick="removeHuman()">Remove Human</button>
+    </div>
+
+    <div class="control-group">
+        <label>Camera:</label>
+        <button onclick="setCamera('follow')">Follow</button>
+        <button onclick="setCamera('overview')">Overview</button>
+        <button onclick="setCamera('street')">Street View</button>
+    </div>
+</div>
+
+<div class="info">
+    <div>👥 Humans: <span id="humanCount">1</span></div>
+    <div>🎥 Camera: <span id="cameraMode">Follow</span></div>
+    <div>⚡ FPS: <span id="fps">60</span></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+    // Global variables
+    let scene, camera, renderer;
+    let humans = [];
+    let street, buildings = [];
+    let walkSpeed = 1;
+    let humanSize = 1;
+    let cameraMode = 'follow';
+    let clock = new Date();
+    let frameCount = 0;
+
+    // Initialize the scene
+    function init() {
+        // Create scene
+        scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x87CEEB, 100, 1000);
+
+        // Create camera
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(0, 10, 20);
+
+        // Create renderer
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x87CEEB);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        // Add lights
+        setupLights();
+
+        // Create street environment
+        createStreet();
+        createBuildings();
+
+        // Create initial human
+        createHuman(0, 0, 5);
+
+        // Setup controls
+        setupControls();
+
+        // Start animation loop
+        animate();
+    }
+
+    function setupLights() {
+        // Ambient light
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+
+        // Directional light (sun)
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(50, 100, 50);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        directionalLight.shadow.camera.near = 0.1;
+        directionalLight.shadow.camera.far = 500;
+        directionalLight.shadow.camera.left = -100;
+        directionalLight.shadow.camera.right = 100;
+        directionalLight.shadow.camera.top = 100;
+        directionalLight.shadow.camera.bottom = -100;
+        scene.add(directionalLight);
+    }
+
+    function createStreet() {
+        // Street surface
+        const streetGeometry = new THREE.PlaneGeometry(50, 1000);
+        const streetMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+        street = new THREE.Mesh(streetGeometry, streetMaterial);
+        street.rotation.x = -Math.PI / 2;
+        street.receiveShadow = true;
+        scene.add(street);
+
+        // Sidewalks
+        const sidewalkGeometry = new THREE.PlaneGeometry(10, 1000);
+        const sidewalkMaterial = new THREE.MeshLambertMaterial({ color: 0x888888 });
+
+        const leftSidewalk = new THREE.Mesh(sidewalkGeometry, sidewalkMaterial);
+        leftSidewalk.rotation.x = -Math.PI / 2;
+        leftSidewalk.position.set(-30, 0.01, 0);
+        leftSidewalk.receiveShadow = true;
+        scene.add(leftSidewalk);
+
+        const rightSidewalk = new THREE.Mesh(sidewalkGeometry, sidewalkMaterial);
+        rightSidewalk.rotation.x = -Math.PI / 2;
+        rightSidewalk.position.set(30, 0.01, 0);
+        rightSidewalk.receiveShadow = true;
+        scene.add(rightSidewalk);
+
+        // Street lines
+        for (let i = -400; i < 400; i += 20) {
+            const lineGeometry = new THREE.PlaneGeometry(2, 8);
+            const lineMaterial = new THREE.MeshLambertMaterial({ color: 0xffff00 });
+            const line = new THREE.Mesh(lineGeometry, lineMaterial);
+            line.rotation.x = -Math.PI / 2;
+            line.position.set(0, 0.02, i);
+            scene.add(line);
+        }
+    }
+
+    function createBuildings() {
+        const buildingColors = [0x8B4513, 0x696969, 0x2F4F4F, 0x556B2F, 0x800080];
+
+        // Create buildings on both sides
+        for (let i = -400; i < 400; i += 60) {
+            // Left side buildings
+            const leftHeight = 20 + Math.random() * 30;
+            const leftBuilding = createBuilding(leftHeight, buildingColors[Math.floor(Math.random() * buildingColors.length)]);
+            leftBuilding.position.set(-50 - Math.random() * 20, leftHeight / 2, i + Math.random() * 40);
+            scene.add(leftBuilding);
+            buildings.push(leftBuilding);
+
+            // Right side buildings
+            const rightHeight = 20 + Math.random() * 30;
+            const rightBuilding = createBuilding(rightHeight, buildingColors[Math.floor(Math.random() * buildingColors.length)]);
+            rightBuilding.position.set(50 + Math.random() * 20, rightHeight / 2, i + Math.random() * 40);
+            scene.add(rightBuilding);
+            buildings.push(rightBuilding);
+        }
+    }
+
+    function createBuilding(height, color) {
+        const buildingGeometry = new THREE.BoxGeometry(15 + Math.random() * 10, height, 15 + Math.random() * 10);
+        const buildingMaterial = new THREE.MeshLambertMaterial({ color: color });
+        const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+        building.castShadow = true;
+        building.receiveShadow = true;
+
+        // Add some windows
+        const windowGeometry = new THREE.PlaneGeometry(1, 1);
+        const windowMaterial = new THREE.MeshLambertMaterial({
+            color: Math.random() > 0.3 ? 0xffff99 : 0x000033
+        });
+
+        for (let i = 0; i < 10; i++) {
+            const window = new THREE.Mesh(windowGeometry, windowMaterial);
+            window.position.set(
+                (Math.random() - 0.5) * 12,
+                (Math.random() - 0.2) * height,
+                7.6
+            );
+            building.add(window);
+        }
+
+        return building;
+    }
+
+    function createHuman(x, y, z) {
+        const human = new THREE.Group();
+
+        // Generate random colors for clothing
+        const shirtColor = new THREE.Color().setHSL(Math.random(), 0.7, 0.5);
+        const pantsColor = new THREE.Color().setHSL(Math.random(), 0.6, 0.3);
+        const skinColor = new THREE.Color(0xffdbac);
+
+        // Body parts
+        const bodyGeometry = new THREE.CylinderGeometry(0.8, 1, 3);
+        const bodyMaterial = new THREE.MeshLambertMaterial({ color: shirtColor });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        body.position.y = 3;
+        body.castShadow = true;
+        human.add(body);
+
+        // Head
+        const headGeometry = new THREE.SphereGeometry(0.7);
+        const headMaterial = new THREE.MeshLambertMaterial({ color: skinColor });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.y = 5.2;
+        head.castShadow = true;
+        human.add(head);
+
+        // Arms
+        const armGeometry = new THREE.CylinderGeometry(0.3, 0.3, 2.5);
+        const armMaterial = new THREE.MeshLambertMaterial({ color: shirtColor });
+
+        const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+        leftArm.position.set(-1.3, 3, 0);
+        leftArm.castShadow = true;
+        human.add(leftArm);
+
+        const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+        rightArm.position.set(1.3, 3, 0);
+        rightArm.castShadow = true;
+        human.add(rightArm);
+
+        // Legs
+        const legGeometry = new THREE.CylinderGeometry(0.4, 0.4, 3);
+        const legMaterial = new THREE.MeshLambertMaterial({ color: pantsColor });
+
+        const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+        leftLeg.position.set(-0.5, 0, 0);
+        leftLeg.castShadow = true;
+        human.add(leftLeg);
+
+        const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+        rightLeg.position.set(0.5, 0, 0);
+        rightLeg.castShadow = true;
+        human.add(rightLeg);
+
+        // Store references for animation
+        human.userData = {
+            body: body,
+            head: head,
+            leftArm: leftArm,
+            rightArm: rightArm,
+            leftLeg: leftLeg,
+            rightLeg: rightLeg,
+            walkCycle: 0,
+            direction: 1,
+            speed: 0.5 + Math.random() * 0.5,
+            baseY: y
+        };
+
+        human.position.set(x, y, z);
+        human.scale.set(humanSize, humanSize, humanSize);
+        scene.add(human);
+        humans.push(human);
+
+        return human;
+    }
+
+    function animateHuman(human, deltaTime) {
+        const userData = human.userData;
+        userData.walkCycle += deltaTime * walkSpeed * userData.speed * 5;
+
+        // Move forward
+        human.position.z += userData.direction * walkSpeed * userData.speed * deltaTime * 30;
+
+        // Walking animation
+        const legSwing = Math.sin(userData.walkCycle) * 0.5;
+        const armSwing = Math.sin(userData.walkCycle) * 0.3;
+
+        userData.leftLeg.rotation.x = legSwing;
+        userData.rightLeg.rotation.x = -legSwing;
+        userData.leftArm.rotation.x = -armSwing;
+        userData.rightArm.rotation.x = armSwing;
+
+        // Slight body bob
+        userData.body.position.y = 3 + Math.sin(userData.walkCycle * 2) * 0.1;
+        userData.head.position.y = 5.2 + Math.sin(userData.walkCycle * 2) * 0.1;
+
+        // Turn around at street ends
+        if (human.position.z > 400) {
+            userData.direction = -1;
+            human.rotation.y = Math.PI;
+        } else if (human.position.z < -400) {
+            userData.direction = 1;
+            human.rotation.y = 0;
+        }
+    }
+
+    function setupControls() {
+        const walkSpeedSlider = document.getElementById('walkSpeed');
+        const humanSizeSlider = document.getElementById('humanSize');
+
+        walkSpeedSlider.addEventListener('input', (e) => {
+            walkSpeed = parseFloat(e.target.value);
+            document.getElementById('speedValue').textContent = walkSpeed.toFixed(1);
+        });
+
+        humanSizeSlider.addEventListener('input', (e) => {
+            humanSize = parseFloat(e.target.value);
+            document.getElementById('sizeValue').textContent = humanSize.toFixed(1);
+            humans.forEach(human => {
+                human.scale.set(humanSize, humanSize, humanSize);
+            });
+        });
+    }
+
+    function changeDirection() {
+        humans.forEach(human => {
+            human.userData.direction *= -1;
+            human.rotation.y = human.userData.direction === 1 ? 0 : Math.PI;
+        });
+    }
+
+    function randomizeColors() {
+        humans.forEach(human => {
+            const shirtColor = new THREE.Color().setHSL(Math.random(), 0.7, 0.5);
+            const pantsColor = new THREE.Color().setHSL(Math.random(), 0.6, 0.3);
+
+            human.userData.body.material.color = shirtColor;
+            human.userData.leftArm.material.color = shirtColor;
+            human.userData.rightArm.material.color = shirtColor;
+            human.userData.leftLeg.material.color = pantsColor;
+            human.userData.rightLeg.material.color = pantsColor;
+        });
+    }
+
+    function addHuman() {
+        const x = (Math.random() - 0.5) * 20;
+        const z = (Math.random() - 0.5) * 400;
+        createHuman(x, 1.5, z);
+        document.getElementById('humanCount').textContent = humans.length;
+    }
+
+    function removeHuman() {
+        if (humans.length > 1) {
+            const human = humans.pop();
+            scene.remove(human);
+            document.getElementById('humanCount').textContent = humans.length;
+        }
+    }
+
+    function setCamera(mode) {
+        cameraMode = mode;
+        document.getElementById('cameraMode').textContent = mode;
+    }
+
+    function updateCamera() {
+        if (humans.length === 0) return;
+
+        const mainHuman = humans[0];
+
+        switch (cameraMode) {
+            case 'follow':
+                camera.position.x = mainHuman.position.x + Math.sin(Date.now() * 0.001) * 5;
+                camera.position.y = mainHuman.position.y + 8;
+                camera.position.z = mainHuman.position.z - 15 * mainHuman.userData.direction;
+                camera.lookAt(mainHuman.position);
+                break;
+
+            case 'overview':
+                camera.position.set(0, 80, 0);
+                camera.lookAt(0, 0, 0);
+                break;
+
+            case 'street':
+                camera.position.x = mainHuman.position.x + 20;
+                camera.position.y = 5;
+                camera.position.z = mainHuman.position.z;
+                camera.lookAt(mainHuman.position);
+                break;
+        }
+    }
+
+    function updateFPS() {
+        frameCount++;
+        const now = new Date();
+        if (now - clock >= 1000) {
+            document.getElementById('fps').textContent = frameCount;
+            frameCount = 0;
+            clock = now;
+        }
+    }
+
+    let lastTime = performance.now();
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        const currentTime = performance.now();
+        const deltaTime = (currentTime - lastTime) * 0.001; // Convert to seconds
+        lastTime = currentTime;
+
+        // Animate all humans
+        humans.forEach(human => {
+            animateHuman(human, deltaTime);
+        });
+
+        // Update camera
+        updateCamera();
+
+        // Update FPS counter
+        updateFPS();
+
+        // Render scene
+        renderer.render(scene, camera);
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Initialize the scene
+    init();
+</script>
+</body>
+</html>

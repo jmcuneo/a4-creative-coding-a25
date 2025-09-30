@@ -1,0 +1,292 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+}
+
+#gameContainer {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#ui {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    color: white;
+    font-size: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+#gameOver {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    color: white;
+    text-align: center;
+    background: rgba(0,0,0,0.8);
+    padding: 30px;
+    border-radius: 10px;
+    display: none;
+}
+
+#instructions {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+    color: white;
+    font-size: 14px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+#leaderboard{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    color: blue;
+    font-size: 14px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+#pausegame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 150;
+    color: white;
+    text-align: center;
+    background: rgba(0,0,0,0.8);
+    padding: 30px;
+    border-radius: 10px;
+    display: none;
+    font-size: 24px;
+}
+
+button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+#slider-box {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    min-width: 200px;
+}
+
+.slider-row {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slider-row:last-child {
+    margin-bottom: 0;
+}
+
+.slider-label {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.slider-value {
+    min-width: 40px;
+    text-align: right;
+    margin-left: 5px;
+}
+
+input[type="range"] {
+    flex: 2;
+    margin: 0 8px;
+}
+
+
+
+/* Leaderboard container */
+#leaderboard-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    max-height: 500px;
+    background: #1e1e2f;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    overflow-y: auto; /* scroll if too many entries */
+    padding: 15px;
+    display: none; /* start hidden */
+    z-index: 1000;
+}
+
+/* Header row */
+.leaderboard-header {
+    display: flex;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px;
+    border-bottom: 2px solid #444;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Header columns */
+.leaderboard-header > div {
+    flex: 1;
+    text-align: center;
+}
+
+/* Each entry */
+.leaderboard-entry {
+    display: flex;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s, background 0.2s;
+}
+
+/* Columns in entry */
+.leaderboard-entry > div {
+    flex: 1;
+    text-align: center;
+}
+
+/* Hover effect */
+.leaderboard-entry:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+/* Special styling for top ranks */
+.leaderboard-entry:nth-child(2) { /* first entry after header */
+    font-weight: bold;
+    background: rgba(255, 215, 0, 0.2); /* gold highlight for 1st place */
+}
+
+.leaderboard-entry:nth-child(3) {
+    background: rgba(192,192,192,0.2); /* silver highlight 2nd */
+}
+
+.leaderboard-entry:nth-child(4) {
+    background: rgba(205, 127, 50, 0.2); /* bronze highlight 3rd */
+}
+
+/* Scrollbar style */
+#leaderboard-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#leaderboard-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+#leaderboard-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+
+
+
+
+
+
+
+
+/* Transparent fullscreen overlay */
+#login-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0); /* fully transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+
+/* Header */
+.login-box h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+/* Solid login box */
+.login-box {
+    background: #1e1e2f; /* solid box color */
+    border-radius: 12px;
+    padding: 30px 20px; /* smaller side padding for better proportion */
+    text-align: center;
+    color: #fff;
+    width: 300px;       /* fixed width */
+    font-family: Arial, sans-serif;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5); /* subtle shadow */
+}
+
+/* Input field */
+.login-box input {
+    width: 100%;          /* fill full box width */
+    box-sizing: border-box; /* include padding in width */
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #2a2a3a;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Button */
+.login-box button {
+    width: 100%;          /* fill full box width */
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #444;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s;
+}
+
+.login-box button:hover {
+    transform: scale(1.05);
+    background: #555;
+}
+
