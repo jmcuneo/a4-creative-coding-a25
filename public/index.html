@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A4 - Simple Audio Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>A4: Simple Audio Visualizer</h1>
+    <div class="controls">
+      <div class="control">
+        <label for="file">Load audio</label>
+        <input type="file" id="file" accept="audio/*"/>
+      </div>
+
+      <div class="control">
+        <label for="bars">Bar / Point Count <span class="sp" id="barsVal">150</span></label>
+        <input type="range" id="bars" min="16" max="512" value="150" />
+      </div>
+
+      <div class="control">
+        <label for="sensitivity">Sensitivity <span class="sp" id="sensVal">1</span></label>
+        <input type="range" id="sensitivity" min="0.5" max="3" step="0.1" value="1" />
+      </div>
+
+      <div class="control">
+        <label for="smoothing">Smoothing <span class="sp" id="smoothVal">0.92</span></label>
+        <input type="range" id="smoothing" min="0" max="0.98" step="0.01" value="0.92" />
+      </div>
+
+      <div class="control">
+        <label for="fft">FFT Size</label>
+        <select id="fft">
+          <option>512</option>
+          <option>1024</option>
+          <option selected>2048</option>
+          <option>4096</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <label for="color">Colors</label>
+        <select id="color">
+          <option value="rainbow" selected>Rainbow</option>
+          <option value="mono">Monochrome</option>
+          <option value="cool">Cool</option>
+          <option value="warm">Warm</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <section class="help">
+    <details open>
+      <summary>How to use (click to toggle)</summary>
+      <ul>
+        <li>Pick a song with <b>Load audio</b>, then use the player at the bottom to <b>Play/Pause/Stop</b> or scrub with the <b>progress bar</b>.</li>
+        <li>Tweak <b>Bar/Point Count</b>, <b>Sensitivity</b>, <b>Smoothing</b>, <b>FFT Size</b>, and <b>Colors</b>.</li>
+        <li>Tip: bigger FFT sizes = more detail, higher smoothing = calmer motion. Spacebar toggles play/pause.</li>
+      </ul>
+    </details>
+  </section>
+
+  <main id="stage-wrap">
+    <canvas id="stage"></canvas>
+    <div id="drop">Drop an audio file to load!</div>
+  </main>
+
+  <!-- bottom player -->
+  <footer class="player">
+    <div class="player-left">
+      <button class="btn" id="play" title="Play">▶</button>
+      <button class="btn" id="pause" title="Pause">⏸</button>
+      <button class="btn" id="stop" title="Stop">⏹</button>
+    </div>
+    <div class="player-mid">
+      <span id="curTime">0:00</span>
+      <input type="range" id="progress" min="0" max="1000" value="0" />
+      <span id="durTime">0:00</span>
+    </div>
+    <div class="player-right">
+      <!-- todo add volume -->
+    </div>
+  </footer>
+
+  <script src="script.js" type="module"></script>
+</body>
+</html>
