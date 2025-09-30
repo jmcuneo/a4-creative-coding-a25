@@ -9,12 +9,21 @@
     <script type="module" src="./main.js"></script>
 </head>
 <body>
-    <div class="center">
-        <h1>Missile Command</h1>
-        <p>An interpretation of the Atari classic</p>
-        <p>Don't let the missiles hit the ground!</p>
-        <button id="start">Start</button>
-        <canvas id="canvas" width="600" height="600"></canvas>
+    <div class="row">
+        <div class="center">
+            <h1>Missile Command</h1>
+            <p>An interpretation of the Atari classic</p>
+            <p>Don't let the missiles hit the ground!</p>
+            <button id="start">Start</button>
+            <canvas id="canvas" width="600" height="600"></canvas>
+        </div>
+        <div class="center">
+            <p>Game Settings</p>
+            <label for="level">Wave to start on:</label>
+            <input type="text" value="1" id="level">
+            <label for="frames">Browser framerate (affects game speed)</label>
+            <input type="text" value="60" id="frames">
+        </div>
     </div>
 </body>
 </html>

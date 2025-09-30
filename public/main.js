@@ -123,7 +123,15 @@ window.onload = () => {
 
 function startGame() {
     if (!gameRunning) {
-        level = 1;
+        const levelInput = document.getElementById("level");
+        level = parseInt(levelInput.value);
+        if(level <= 0) {
+            level = 1;
+        }
+
+        const frameInput = document.getElementById("frames");
+        frameRate = parseInt(frameInput.value);
+
         score = 0;
         init()
         gameRunning = true;
