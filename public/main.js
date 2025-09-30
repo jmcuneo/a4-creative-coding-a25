@@ -10,6 +10,8 @@ const start = function() {
   const header2 = document.getElementById('header2');
   header2.style.display = 'inline';
 
+  
+
   const canvas = document.createElement('canvas');
   document.getElementById("audio-visualizer").appendChild(canvas);
   var br = document.createElement("br");
@@ -69,6 +71,30 @@ const start = function() {
     rectColor = getRandomColor();
   });
 
+  // Buttons to increase/decrease bar size
+  const barControls = document.querySelector('.bar-controls');
+  barControls.style.display = 'inline';
+  var barCountDisplay = document.getElementById('bar-count');
+  let barSize = 2.0; // Initial bar width
+  const increaseBarsButton = document.getElementById('increase-bars');
+  increaseBarsButton.onclick = function() {
+    if (barSize < 5.0) {
+      barSize += .25;
+      barCountDisplay.textContent = `Visual Size: ${barSize}`;
+      console.log("barSize is " + barSize);
+    }
+  };
+  const decreaseBarsButton = document.getElementById('decrease-bars');
+  decreaseBarsButton.onclick = function() {
+    if (barSize >= 0.25) {
+      barSize -= .25;
+      barCountDisplay.textContent = `Visual Size: ${barSize}`;
+      console.log("barSize is " + barSize);
+    }
+  };
+  barCountDisplay.textContent = `Bar Width: ${barSize}`;
+  
+
   // Helper function to generate random color
   function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -91,7 +117,7 @@ const start = function() {
       analyser.getByteFrequencyData(results);
       ctx.fillStyle = rectColor;
       for (let i = 0; i < analyser.frequencyBinCount; i++) {
-        ctx.fillRect(i*1.5, canvas.height - (2*results[i]), 1.5, 2*results[i]);
+        ctx.fillRect(i*1.5, canvas.height - (barSize*results[i]), 1.5, barSize*results[i]);
       }
     } else if (mode === 'waveform') {
       analyser.getByteTimeDomainData(timeData);
@@ -118,7 +144,7 @@ const start = function() {
       ctx.strokeStyle = rectColor;
       ctx.lineWidth = 1;
       for (let i = 0; i < analyser.frequencyBinCount; i++) {
-        const angle = (i / analyser.frequencyBinCount) * Math.PI * 3.14;
+        const angle = (i / analyser.frequencyBinCount) * Math.PI * (1.52*barSize);
         const magnitude = results[i] / 255;
         const r = magnitude * maxRadius;
         const x = cx + Math.cos(angle) * r;
