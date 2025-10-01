@@ -67,7 +67,7 @@ function playSound({ type, freq }) {
 
 const click = new THREE.Raycaster()
 const position = new THREE.Vector2()
-function clickingShape(e) {
+function clickingShape(event) {
     audio()
     audioCtx.resume()
     const rect = renderer.domElement.getBoundingClientRect()
