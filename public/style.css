@@ -1,0 +1,95 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #0b0f14;
+  color: #e7edf3;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+  display: block;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 10;
+}
+
+.overlay-card {
+  width: min(560px, 92vw);
+  background: #121821;
+  border: 1px solid #273244;
+  border-radius: 16px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+}
+
+.overlay-card h1 {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+}
+
+.overlay-card p {
+  margin: 8px 0;
+  line-height: 1.5;
+  color: #cbd6e2;
+}
+
+.overlay-card ul {
+  margin: 10px 0 16px 22px;
+  color: #cbd6e2;
+}
+
+.overlay-card button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.overlay-card button:hover { filter: brightness(1.08); }
+
+.credit {
+  position: fixed;
+  right: 12px;
+  bottom: 10px;
+  font-size: 12px;
+  opacity: 0.7;
+  user-select: none;
+}
+
+.fallback-ui {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 220px;
+  background: #121821;
+  border: 1px solid #273244;
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #e7edf3;
+  z-index: 9; 
+  font-size: 12px;
+}
+.fallback-ui .title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+.fallback-ui label {
+  display: block;
+  margin: 6px 0;
+}
+.fallback-ui input[type="range"], .fallback-ui select {
+  width: 100%;
+}
