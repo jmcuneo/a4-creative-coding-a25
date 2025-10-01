@@ -8,6 +8,7 @@ app.use( express.urlencoded({ extended:true }) )
 const appdata = []
 
 app.post( '/go', async (req, res) => {
+    
     for(let i = 0; i < 100; i++){
       appdata[i] = []
       for(let j = 0; j < 100; j++){
