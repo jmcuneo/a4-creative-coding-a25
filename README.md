@@ -34,3 +34,6 @@ Instructions
 - The score (tracked in seconds) is displayed in the top left.
 - There is a slider in the top right to be able to control the ground size, player speed, block speed, and spawn rate.
 - The leaderboard, located in the bottom-right, can be toggled on and off with a click. It ranks all of your attempts from best to worst. The game does not pause automatically when the leaderboard is open, giving players the choice to pause before viewing. To close the leaderboard, simply click anywhere outside of the table or press the leaderboard button again.
+![Falling Bricks](welcomefallingbricks.png)
+![Game](thegame.png)
+
