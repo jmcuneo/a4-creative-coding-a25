@@ -55,7 +55,7 @@ function playSound({ type, freq }) {
     const ramp = 0.01
     const down = 0.05
     const hold = 0.6
-    const fade = Math.max(0.05, state.note - ramp - down)
+    const fade = Math.max(0.05, state.length - ramp - down)
     gainNode.gain.setValueAtTime(0.0001, current)
     gainNode.gain.exponentialRampToValueAtTime(state.volume, current + ramp)
     gainNode.gain.linearRampToValueAtTime(state.volume * hold, current + ramp + down)
@@ -89,13 +89,13 @@ function clickingShape(e) {
 renderer.domElement.addEventListener('pointerdown', clickingShape)
 const state = {
     volume: 0.2,
-    note: 0.35,
+    length: 0.35,
     expand: 0.35,
     pigment: 0.8
 }
 const pane = new Pane({ title: 'Controls' })
 pane.addBinding(state, 'volume', {min: 0, max: 1, step: 0.01}).on('change', e => loudness && (loudness.gain.value = e.value))
-pane.addBinding(state, 'note', {min: 0.1, max: 1.2, step: 0.01})
+pane.addBinding(state, 'length', {min: 0.1, max: 1.2, step: 0.01})
 pane.addBinding(state, 'expand', {min: 0.1, max: 1, step: 0.01})
 pane.addBinding(state, 'pigment', {label: 'pigment', min: 0, max: 1, step: 0.01})
 
