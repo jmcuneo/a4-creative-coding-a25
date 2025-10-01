@@ -196,11 +196,10 @@ revEl.addEventListener('input', e => {
   if (!convolver || !masterGain) return;
   // simple crossfade between dry and wet (using an extra gain might be cleaner)
   const mix = (+e.target.value)/100;
-  // We’ll treat convolver output as “wet” already in chain; to implement wet/dry,
-  // we also route a parallel dry path:
+  // treat convolver output as “wet” already in chain; to implement wet/dry,
+  // also route a parallel dry path:
   // biquad -> masterGain (dry)
   // biquad -> convolver -> masterGain (wet)
-  // Since our existing chain is biquad->convolver->master->..., we add a parallel:
   if (!biquad.__dry) {
     const dryGain = audioCtx.createGain();
     dryGain.gain.value = 1.0;
@@ -208,11 +207,9 @@ revEl.addEventListener('input', e => {
     dryGain.connect(masterGain);
     biquad.__dry = dryGain;
   }
-  // Wet scaled by mix, dry by (1-mix)
   masterGain.gain.setValueAtTime(1.0, audioCtx.currentTime);
   biquad.__dry.gain.value = 1.0 - mix;
-  // For a true wet control, we’d place gain after convolver; to keep this basic,
-  // we approximate by attenuating dry only.
+  // I approximate by attenuating dry only.
 });
 
 // Spectrum visualizer
@@ -240,7 +237,6 @@ function drawSpectrum(){
 // Nexus Piano → trigger oscillators
 function makePiano(){
   const piano = new Nexus.Piano('#piano', { size: [600, 80] });
-  // MIDI numbers 48–72 (C3..C5) are typical; Nexus default is 24 keys (C..)
   piano.on('change', ({ note, state }) => {
     if (!audioCtx) return;
     if (state){ startNote(note); } else { stopNote(note); }
@@ -285,7 +281,7 @@ function stopNote(midi){
 // Song controls (Twenty One Pilots - Stressed Out)
 document.getElementById('song-load').addEventListener('click', () => {
   if (!audioCtx) return;
-  player.src = './media/stressed_out.mp3'; // <- place your mp3 here
+  player.src = './media/stressed_out.mp3'; 
   player.play();
 });
 document.getElementById('song-stop').addEventListener('click', () => {
