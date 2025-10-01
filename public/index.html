@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>CS4241 Assignment 4</title>
+    <meta charset="utf-8">
+    <script src="js/main.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    
+    <!-- get rid of favicon error -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  </head>
+  <body>
+    <h1>Game of Life</h1>
+    <h2>How to use</h2>
+    <p>Click on the board to create cells</p>
+    <p></p>
+    <div>
+      <canvas id="cells" width="1000" height="1000" style="border:1px solid #7f7f7f;">
+      </canvas>
+      <div class="Controls">
+        <h2>Cell Color Control</h2>
+        <div>
+        <label for="redValue">Red Value</label>
+        <input type="range" id="redValue" name="Red" min="0" max="255" value="255">
+        </div>
+        <div>
+        <label for="greenValue">Green Value</label>
+        <input type="range" id="greenValue" name="Green" min="0" max="255" value="255">
+        </div>
+        <div>
+        <label for="blueValue">Blue Value</label>
+        <input type="range" id="blueValue" name="Blue" min="0" max="255" value="255">
+        </div>
+        <h2>Controls</h2>
+        <div>
+          <button id="startButton" style="color: green">Start</button>
+          <button id="pauseButton" style="color: red">Pause</button>
+        </div>
+        <h2>Speed</h2>
+        <input type="range" id="speedValue" name="Speed" min="100" max="1090" value="500">
+        <h2>Rules of the game</h2>
+        <p>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</p>
+        <p>Any live cell with two or three live neighbours lives on to the next generation.</p>
+        <p>Any live cell with more than three live neighbours dies, as if by overpopulation.</p>
+        <p>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</p>
+      </div>
+    </div>
+  </body>
+</html>

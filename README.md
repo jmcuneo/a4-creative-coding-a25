@@ -1,64 +1,17 @@
-Assignment 4 - Creative Coding: Interactive Multimedia Experiences
-===
+Lucas Marble colorful version of Conway's Game of Life
 
-For this assignment we will focus on client-side development using popular audio/graphics/visualization technologies. The goal of this assignment is to refine our JavaScript knowledge while exploring the multimedia capabilities of the browser.
+Hosting link: https://a4-lucasmarble-a25.onrender.com/
 
-- [Three.js Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/master/using.three.md)
-- [WebAudio / Canvas Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.webaudio_and_canvas.md)  
-- [SVG + D3 tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.svg_and_d3.md)  
+My project is a simple version of Conway's Game of Life. The game's instructions and rules are displayed on the page at all times for anyone unfamiliar with it. Thegoal of the application is to provide a replica of the famous 0-player game. One can change the colors of the cells at any time by adjusting the red, green, and blue sliders to directly change the rgb values. The cells colors update in real time. You can start or stop the program by clicking on the start or pause buttons. And you can adjust the speed of how frequently the next generation shows up by adjusting the speed slider.
 
-Baseline Requirements
----
+Some challenges I faced.
 
-Your application is required to implement the following functionalities:
+1. It did take a while to figure out exactly how to make the canvas create squares based off of the mouse's position. What I did was that I basically did a floor function to the nearest ten, so that no matter where you clicked in a spot, the spot would always make the same square at the same position.
 
-- A server created using Express. This server can be as simple as needed.
-- A client-side interactive experience using at least one of the following web technologies frameworks.
-  - [Three.js](https://threejs.org/): A library for 3D graphics / VR experiences
-  - [D3.js](https://d3js.org): A library that is primarily used for interactive data visualizations
-  - [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API): A 2D raster drawing API included in all modern browsers
-  - [SVG](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API): A 2D vector drawing framework that enables shapes to be defined via XML.
-  - [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API): An API for audio synthesis, analysis, processing, and file playback.
-- A user interface for interaction with your project, which must expose at least four parameters for user control. [tweakpane](https://cocopon.github.io/tweakpane/) is highly recommended for this, but you can also use regular HTML `<input>` tags (the `range` type is useful to create sliders). You might also explore interaction by tracking mouse movement via the `window.onmousemove` event handler in tandem with the `event.clientX` and `event.clientY` properties. Consider using the [Pointer Events API](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) to ensure that that both mouse and touch events will both be supported in your app.
-- Your application should display basic documentation for the user interface when the application first loads.
+2. It did take a bit to figure out exactly how to execute the program to create the next generation. You have to go through every single spot, check all of its valid neighbors while ignoring anything outside of the canvas, and calculate how many of its neighbors are alive.
 
-The interactive experience should possess a reasonable level of complexity. Some examples:
-### Three.js
-- A generative algorithm creates simple agents that move through a virtual world. Your interface controls the behavior / appearance of these agents.
-- A simple 3D game. You really want this to be a simple as possible or it will be outside the scope of this assignment.
-- An 3D audio visualization of a song of your choosing. User interaction should control aspects of the visualization. 
-### Canvas
-- Implement a generative algorithm such as [Conway's Game of Life](https://bitstorm.org/gameoflife/) (or 1D cellular automata) and provide interactive controls. Note that the Game of Life has been created by 100s of people using `<canvas>`; we'll be checking to ensure that your implementation is not a copy of these.
-- Design a 2D audio visualizer of a song of your choosing. User interaction should control visual aspects of the experience. 
-### Web Audio API
-- Create a screen-based musical instrument using the Web Audio API. You can use projects such as [Interface.js](http://charlie-roberts.com/interface/) or [Nexus UI](https://nexus-js.github.io/ui/api/#Piano) to provide common musical interface elements, or use dat.GUI in combination with mouse/touch events (use the Pointer Events API). Your GUI should enable users to control aspects of sound synthesis. If you want to use higher-level instruments instead of the raw WebAudio API sounds, consider trying the instruments provided by [Tone.js]() or [Gibber](https://github.com/charlieroberts/gibber.audio.lib).
-### D3.js
-- Create visualizations using the datasets found at [Awesome JSON Datasets](https://github.com/jdorfman/Awesome-JSON-Datasets). Experiment with providing different visualizations of the same data set, and providing users interactive control over visualization parameters and/or data filtering. Alternatively, create a single visualization with using one of the more complicated techniques shown at [d3js.org](d3js.org) and provide meaningful points of interaction for users.
+3. The colors did take a little bit to figure out, but it was a lot of fun to allow complete customization of the colors. I just had to make sure that every time the slider was adjusted, it would update the board to display the new colors.
 
-Deliverables
----
+4. The speed was definitely the hardest part to crack down because I wanted to make it so that it would automatically display the next generation without going to fast and potentially crashing the program. I originally wanted to calculate the new board on the server side, but this ended up causing performance issues, especially considering the fact I was using a free deployment from render, so I ended up doing it on the client side instead.
 
-Do the following to complete this assignment:
 
-1. Implement your project with the above requirements.
-1. Test your project to make sure that when someone goes to your main page on Render, etc., it displays correctly.
-1. Ensure that your project has the proper naming scheme `a4-firstname-lastname` so we can find it.
-1. Fork this repository and modify the README to the specifications below. 
-1. Create and submit a Pull Request to the original repo. Name the pull request using the following template: `a4-firstname-lastname`.
-
-Grading
----
-Unlike previous assignments, this assignment will be solely graded on whether or not you successfully complete it. Partial credit will be generously given.
-
-Sample Readme (delete the above when you're ready to submit, and modify the below so with your links and descriptions)
----
-
-## Your Web Application Title
-
-your hosting link e.g. http://a4-charlieroberts.glitch.me
-
-Include a very brief summary of your project here. Images are encouraged when needed, along with concise, high-level text. Be sure to include the following:
-
-- the goal of the application
-- challenges you faced in realizing the application
-- the instructions you present in the website should be clear enough to use the application, but if you feel any need to provide additional instructions please do so here.
