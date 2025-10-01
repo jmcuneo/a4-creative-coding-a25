@@ -1,0 +1,13 @@
+{
+  "name": "a4-Rayyan-Syed",
+  "version": "1.0.0",
+  "description": "Assignment 4 - Creative Coding: Kaleidoscope Drawing Tool",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "NODE_ENV=development node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

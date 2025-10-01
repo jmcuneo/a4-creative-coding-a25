@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>A4 – Kaleidoscope Drawer (Canvas)</title>
+  <link rel="stylesheet" href="style.css" />
+
+
+  <script defer
+    src="https://cdn.jsdelivr.net/npm/tweakpane@4.0.4/dist/tweakpane.min.js"
+    onerror="(function(){var s=document.createElement('script');s.defer=true;s.src='https://unpkg.com/tweakpane@4.0.4/dist/tweakpane.min.js';document.head.appendChild(s);}())">
+  </script>
+
+
+  <script defer src="main.js"></script>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+ 
+  <div id="overlay">
+    <div class="overlay-card">
+      <h1>Kaleidoscope Drawer — How to Use</h1>
+      <p>
+        Draw on the canvas with your mouse (or touch). Your strokes are mirrored
+        into multiple radial segments to create kaleidoscopic patterns.
+      </p>
+      <ul>
+        <li>Use the <b>Controls</b> panel (top-left) to adjust: segments, stroke width, jitter, trail fade, color mode, hue speed.</li>
+        <li>Press <kbd>C</kbd> to clear the canvas.</li>
+        <li>Resize the window to change the drawing area.</li>
+      </ul>
+      <button id="startBtn">Start Drawing</button>
+    </div>
+  </div>
+
+  <div class="credit">A4 • Canvas • Express • Tweakpane</div>
+</body>
+</html>
