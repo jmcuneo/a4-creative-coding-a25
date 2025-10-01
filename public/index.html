@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three Js Experience</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- <canvas class="simulation"></canvas> -->
+
+    <form class="sim--controls">
+        <div>
+            <label for="numblocks">Number of Blocks</label>
+            <input id="blocks" type="text">
+        </div>
+        <div>
+            <label for="theme">Theme</label>
+            <select id="theme" name="theme">
+                <option value="default">Default</option>
+                <option value="blues">Moody Blues</option>
+                <option value="mary">Bloody Mary</option>
+                <option value="blacknwhite">Black and White</option>
+            </select>
+        </div>
+        <div>
+            <label for="behavior">Behavior</label>
+            <select id="behavior" name="behavior">
+                <option value="default">Default</option>
+                <option value="superspin">Super Spin</option>
+                <option value="wave">Wave</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
