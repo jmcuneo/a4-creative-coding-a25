@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>A4 — Game of Life + Web Audio (NexusUI)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Canvas and a Web Audio instrument with NexusUI Piano. Sliders control simulation and synth parameters." />
+  <link rel="stylesheet" href="style.css" />
+  <!-- NexusUI (CDN) -->
+  <script src="https://unpkg.com/nexusui/dist/NexusUI.js"></script>
+  <script defer src="main.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Creative Coding — Canvas + Web Audio</h1>
+    <p class="doc">
+      <strong>How to use:</strong>
+      <ul>
+        <li>Click <em>Start Audio</em> once (browser policy) to enable sound.</li>
+        <li><strong>Game of Life:</strong> Use sliders (speed, cell size, random seed density). Click “Randomize” or “Clear”. Press <em>Play/Pause</em>.</li>
+        <li><strong>Instrument:</strong> Click keys on the Piano. Adjust Volume, Filter Cutoff/Q, Reverb Mix. (Visualizer bars show audio.)</li>
+        <li><strong>Song:</strong> Click “Load Song” to play your local MP3 (e.g., Twenty One Pilots — Stressed Out).</li>
+      </ul>
+    </p>
+  </header>
+
+  <main class="grid">
+    <section class="panel">
+      <h2>Canvas</h2>
+      <div class="controls">
+        <label>Speed <input id="life-speed" type="range" min="1" max="60" value="12" /> <span id="life-speed-val">12</span> FPS</label>
+        <label>Cell Size <input id="life-cell" type="range" min="4" max="24" value="10" /> <span id="life-cell-val">10</span> px</label>
+        <label>Seed Density <input id="life-density" type="range" min="0" max="100" value="30" /> <span id="life-density-val">30</span>%</label>
+        <div class="btnrow">
+          <button id="life-play">▶ Play</button>
+          <button id="life-step">Step</button>
+          <button id="life-rand">Randomize</button>
+          <button id="life-clear">Clear</button>
+        </div>
+      </div>
+      <canvas id="life-canvas" width="640" height="480"></canvas>
+      <p class="hint">Rules: neighbors cause cells to live/die; see <a href="https://playgameoflife.com" target="_blank" rel="noopener">Game of Life</a> for reference.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Web Audio Instrument (NexusUI)</h2>
+      <div class="controls">
+        <button id="audio-start">Start Audio</button>
+        <div id="piano" class="piano"></div>
+        <label>Volume <input id="gain" type="range" min="0" max="100" value="20" /> <span id="gain-val">20</span>%</label>
+        <label>Filter Cutoff <input id="cutoff" type="range" min="100" max="8000" value="1200" /> <span id="cutoff-val">1200</span> Hz</label>
+        <label>Filter Q <input id="q" type="range" min="0.1" max="20" value="1.0" step="0.1" /> <span id="q-val">1.0</span></label>
+        <label>Reverb Mix <input id="reverb" type="range" min="0" max="100" value="15" /> <span id="reverb-val">15</span>%</label>
+        <div class="btnrow">
+          <button id="song-load">Load Song (Stressed Out)</button>
+          <button id="song-stop">Stop Song</button>
+        </div>
+      </div>
+      <canvas id="viz" width="640" height="120"></canvas>
+      <audio id="player" crossorigin="anonymous"></audio>
+      <p class="hint">Web Audio tips: create AudioContext on user gesture; wire nodes: Osc/Media → Gain → Biquad → Convolver → Analyser → destination. :contentReference[oaicite:5]{index=5}</p>
+    </section>
+  </main>
+
+  <footer>
+    <small>Built for A4 (Express + Canvas + Web Audio). Range sliders used (no tweakpane). NexusUI Piano for musical input.</small>
+  </footer>
+</body>
+</html>
