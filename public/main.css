@@ -1,0 +1,16 @@
+.container {
+    text-align: center;
+}
+
+#visual {
+    display: flex;
+    justify-content: center;
+}
+
+canvas {
+    display: block;
+}
+
+body {
+    background-color: rgb(174, 243, 243);
+}
