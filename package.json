@@ -1,0 +1,12 @@
+{
+  "name": "a4-creative",
+  "description": "A4 Creative Coding - Canvas Game of Life + Web Audio instrument (NexusUI)",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
