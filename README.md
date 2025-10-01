@@ -1,64 +1,114 @@
-Assignment 4 - Creative Coding: Interactive Multimedia Experiences
-===
+# 3D Audio Visualizer - Interactive Multimedia Experience
 
-For this assignment we will focus on client-side development using popular audio/graphics/visualization technologies. The goal of this assignment is to refine our JavaScript knowledge while exploring the multimedia capabilities of the browser.
+**Live Demo:** https://a4-ethanknorring.onrender.com/
 
-- [Three.js Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/master/using.three.md)
-- [WebAudio / Canvas Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.webaudio_and_canvas.md)  
-- [SVG + D3 tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.svg_and_d3.md)  
+## Project Overview
 
-Baseline Requirements
+This project is a 3D audio visualizer that combines Three.js 3D graphics with the Web Audio API to create an immersive, interactive multimedia experience. The application responds dynamically to audio input, creating beautiful particle-based visualizations that dance and morph in real time with the music.
+
+### Goals of the Application
+
+- Create an engaging 3D audio-reactive visualization using modern web technologies
+- Provide intuitive user controls for customizing the visual experience
+- Demonstrate the power of combining Three.js with Web Audio API
+- Offer both file-based audio input and generated test tones for accessibility
+
+## Features
+
+### Core Technologies Used
+- **Three.js**: 3D graphics rendering and particle system
+- **Web Audio API**: Real-time audio analysis and processing
+- **Express.js**: Simple server for hosting the application
+
+### Interactive Controls (4+ Parameters)
+1. **Sensitivity Control**: Adjusts how responsive the visualization is to audio frequency data
+2. **Particle Count**: Dynamically changes the number of visual particles (50-500)
+3. **Rotation Speed**: Controls the speed of scene rotation (0-2x speed)
+4. **Color Scheme**: Color picker to change the primary visualization color
+5. **Mouse Interaction**: Move mouse to control camera angle and perspective
+
+### Audio Features
+- Load custom audio files (MP3, WAV, etc.)
+- Play/pause controls for loaded audio
+- Generate test tone for immediate visualization without audio files
+- Real-time frequency analysis with 256-point FFT
+
+### Visual Features
+- 3D particle system with spherical distribution
+- Audio-reactive scaling and movement
+- Dynamic color intensity based on frequency data
+- Smooth camera controls with mouse interaction
+- Ambient and point lighting for enhanced 3D effect
+
+## Technical Implementation
+
+### Challenges Faced
+
+1. **Web Audio API Context Management**: Handling browser autoplay policies and audio context states required careful initialization timing and user interaction triggers.
+
+2. **Performance Optimization**: Managing 100-500 particles with real-time audio analysis while maintaining smooth 60fps required optimized rendering and efficient data structures.
+
+3. **Cross-browser Compatibility**: Ensuring Web Audio API compatibility across different browsers, especially handling webkit prefixes and different audio context implementations.
+
+4. **Real-time Synchronization**: Synchronizing audio analysis with visual updates required careful frame timing and buffer management.
+
+5. **User Experience Design**: Creating intuitive controls that provide meaningful visual changes without overwhelming users with complexity.
+
+## Instructions for Use
+
+### Getting Started
+1. Load the application in a modern web browser
+2. Review the instruction panel on the right side of the screen
+3. Either upload an audio file or generate a test tone to begin
+
+### Controls
+- **Load Audio File**: Click to upload MP3, WAV, or other audio files
+- **Play/Pause**: Control audio playback
+- **Sensitivity**: Adjust how dramatically the visualization responds to audio
+- **Particle Count**: Increase/decrease the number of visual elements
+- **Rotation Speed**: Control scene rotation speed
+- **Color Scheme**: Click the color picker to change visualization colors
+- **Generate Test Tone**: Create a sine wave with frequency sweeps for testing
+- **Mouse Movement**: Move mouse around the screen to control camera angle
+
+### Tips for Best Experience
+- Use audio files with dynamic range (varied volume/frequency) for best visual effects
+- Start with default settings and adjust sensitivity based on your audio
+- Try different color schemes to match the mood of your music
+- The visualization responds differently to different frequency ranges
+
+## Installation and Setup
+
+1. Clone or download the project files
+2. Install dependencies: `npm install`
+3. Start the server: `npm start`
+4. Open browser to `http://localhost:3000`
+
+## Browser Requirements
+
+- Modern browser with Web Audio API support (Chrome, Firefox, Safari, Edge)
+- WebGL support for Three.js rendering
+- File API support for audio file loading
+
+## Educational Value
+
+This project demonstrates several important web development concepts:
+- Client-side multimedia programming
+- Real-time data visualization
+- 3D graphics programming
+- Audio processing and analysis
+- User interface design for creative applications
+- Performance optimization for real-time applications
+
+## AI Statement
+
+ChatGPT was used as a resource similar to Google, StackOverflow, and other online documentation. Specifically, it was used to ask for
+
+- Clarification of the assignment requirements.
+- Examples of how Three.js is used
+- Ideas for how to implement the technical and design achievement
+- Readme formatting
+
 ---
 
-Your application is required to implement the following functionalities:
-
-- A server created using Express. This server can be as simple as needed.
-- A client-side interactive experience using at least one of the following web technologies frameworks.
-  - [Three.js](https://threejs.org/): A library for 3D graphics / VR experiences
-  - [D3.js](https://d3js.org): A library that is primarily used for interactive data visualizations
-  - [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API): A 2D raster drawing API included in all modern browsers
-  - [SVG](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API): A 2D vector drawing framework that enables shapes to be defined via XML.
-  - [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API): An API for audio synthesis, analysis, processing, and file playback.
-- A user interface for interaction with your project, which must expose at least four parameters for user control. [tweakpane](https://cocopon.github.io/tweakpane/) is highly recommended for this, but you can also use regular HTML `<input>` tags (the `range` type is useful to create sliders). You might also explore interaction by tracking mouse movement via the `window.onmousemove` event handler in tandem with the `event.clientX` and `event.clientY` properties. Consider using the [Pointer Events API](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) to ensure that that both mouse and touch events will both be supported in your app.
-- Your application should display basic documentation for the user interface when the application first loads.
-
-The interactive experience should possess a reasonable level of complexity. Some examples:
-### Three.js
-- A generative algorithm creates simple agents that move through a virtual world. Your interface controls the behavior / appearance of these agents.
-- A simple 3D game. You really want this to be a simple as possible or it will be outside the scope of this assignment.
-- An 3D audio visualization of a song of your choosing. User interaction should control aspects of the visualization. 
-### Canvas
-- Implement a generative algorithm such as [Conway's Game of Life](https://bitstorm.org/gameoflife/) (or 1D cellular automata) and provide interactive controls. Note that the Game of Life has been created by 100s of people using `<canvas>`; we'll be checking to ensure that your implementation is not a copy of these.
-- Design a 2D audio visualizer of a song of your choosing. User interaction should control visual aspects of the experience. 
-### Web Audio API
-- Create a screen-based musical instrument using the Web Audio API. You can use projects such as [Interface.js](http://charlie-roberts.com/interface/) or [Nexus UI](https://nexus-js.github.io/ui/api/#Piano) to provide common musical interface elements, or use dat.GUI in combination with mouse/touch events (use the Pointer Events API). Your GUI should enable users to control aspects of sound synthesis. If you want to use higher-level instruments instead of the raw WebAudio API sounds, consider trying the instruments provided by [Tone.js]() or [Gibber](https://github.com/charlieroberts/gibber.audio.lib).
-### D3.js
-- Create visualizations using the datasets found at [Awesome JSON Datasets](https://github.com/jdorfman/Awesome-JSON-Datasets). Experiment with providing different visualizations of the same data set, and providing users interactive control over visualization parameters and/or data filtering. Alternatively, create a single visualization with using one of the more complicated techniques shown at [d3js.org](d3js.org) and provide meaningful points of interaction for users.
-
-Deliverables
----
-
-Do the following to complete this assignment:
-
-1. Implement your project with the above requirements.
-1. Test your project to make sure that when someone goes to your main page on Render, etc., it displays correctly.
-1. Ensure that your project has the proper naming scheme `a4-firstname-lastname` so we can find it.
-1. Fork this repository and modify the README to the specifications below. 
-1. Create and submit a Pull Request to the original repo. Name the pull request using the following template: `a4-firstname-lastname`.
-
-Grading
----
-Unlike previous assignments, this assignment will be solely graded on whether or not you successfully complete it. Partial credit will be generously given.
-
-Sample Readme (delete the above when you're ready to submit, and modify the below so with your links and descriptions)
----
-
-## Your Web Application Title
-
-your hosting link e.g. http://a4-charlieroberts.glitch.me
-
-Include a very brief summary of your project here. Images are encouraged when needed, along with concise, high-level text. Be sure to include the following:
-
-- the goal of the application
-- challenges you faced in realizing the application
-- the instructions you present in the website should be clear enough to use the application, but if you feel any need to provide additional instructions please do so here.
+*Developed as part of CS4241 Assignment 4 - Creative Coding: Interactive Multimedia Experiences*
