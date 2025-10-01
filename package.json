@@ -1,4 +1,8 @@
 {
+  "name": "",
+  "version": "",
+  "description": "",
+  "author": "",
   "scripts": {
     "start": "node server.js"
   },
