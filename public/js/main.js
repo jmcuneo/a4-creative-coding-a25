@@ -4,13 +4,60 @@ alivecolor = ''
 deadcolor = '#000000'
 speed = 500
 
+
+
 const board = []
-  for (let i = 0; i < 100; i++){
-    board[i] = []
-    for (let j = 0; j < 100; j++) {
-      board[i][j] = false;
+const appdata = []
+for (let i = 0; i < 100; i++){
+  board[i] = []
+  for (let j = 0; j < 100; j++) {
+    board[i][j] = false;
+  }
+}
+
+const generation = async function(){
+  for(let i = 0; i < 100; i++){
+    appdata[i] = []
+    for(let j = 0; j < 100; j++){
+      let count = 0
+      if(board[i][j]){
+        for(let ii = i-1; ii <= i+1; ii++){
+          for(let jj = j-1; jj <= j+1; jj++){
+            if(((ii !== i || jj !== j) && (ii >= 0 && ii < 100 && jj >= 0 && jj < 100))){
+              if(board[ii][jj]){
+                count++
+              }
+            }
+          }
+        }
+        if (count < 2 || count > 3){
+          appdata[i][j] = false
+        }
+        else{
+          appdata[i][j] = true
+        }
+      }
+      else{
+        for(let ii = i-1; ii <= i+1; ii++){
+          for(let jj = j-1; jj <= j+1; jj++){
+            if(((ii != i || jj != j) && (ii >= 0 && ii < 100 && jj >= 0 && jj < 100))){
+              if(board[ii][jj]){
+                count++
+              }
+            }
+          }
+        }
+        if (count == 3){
+          appdata[i][j] = true
+        }
+        else{
+          appdata[i][j] = false
+        }
+
+      }
     }
   }
+}
 
 const update = async function() {
   let red = document.getElementById("redValue")
@@ -53,26 +100,15 @@ function delay(ms) {
 
 const go = async function() {
 
-  const data = {
-    Board: board
+  await generation()
+
+  for (let i = 0; i < 100; i++){
+    for (let j = 0; j < 100; j++){
+      board[i][j] = appdata[i][j]
+    }
   }
 
-  fetch( '/go', {
-    method:"POST",
-      headers: { 'Content-Type': 'application/json' },
-      body:JSON.stringify(data)
-  }).then(function(response) {return response.json();}).then(function(json) {
-
-      let row = -1
-      json.forEach( item => {
-        row++
-        for(let j = 0; j < 100; j++){
-          board[row][j] = item[j]
-        }
-      })
-      update()
-    }
-  )
+  await update()
 
   await delay(speed);
 

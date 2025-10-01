@@ -38,7 +38,12 @@
           <button id="pauseButton" style="color: red">Pause</button>
         </div>
         <h2>Speed</h2>
-        <input type="range" id="speedValue" name="Speed" min="100" max="960" value="500">
+        <input type="range" id="speedValue" name="Speed" min="100" max="1090" value="500">
+        <h2>Rules of the game</h2>
+        <p>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</p>
+        <p>Any live cell with two or three live neighbours lives on to the next generation.</p>
+        <p>Any live cell with more than three live neighbours dies, as if by overpopulation.</p>
+        <p>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</p>
       </div>
     </div>
   </body>
