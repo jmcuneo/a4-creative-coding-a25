@@ -41,6 +41,7 @@ function initUI() {
     pane.dispose();
     initUI();
     render();
+    svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity);
   });
 }
 function render() {
@@ -91,3 +92,10 @@ function fillFor(d) {
   const v = d.value;
   return d3.scaleLinear().domain([0, 100]).range(['#60a5fa', '#6ee7b7', '#fca5a5'])(v);
 }
+const zoom = d3.zoom()
+  .scaleExtent([0.5, 10])
+  .translateExtent([[0, 0], [width, height]])
+  .on('zoom', (event) => {
+    container.attr('transform', event.transform);
+  });
+svg.call(zoom);
