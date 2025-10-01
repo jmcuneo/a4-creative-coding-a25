@@ -1,0 +1,25 @@
+{
+  "name": "a4-grace-robinson",
+  "description": "Assignment 4 - Creative Coding: Interactive Multimedia Experiences ===",
+  "author": "",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glrobinson/a4-grace-robinson.git"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/glrobinson/a4-grace-robinson/issues"
+  },
+  "homepage": "https://github.com/glrobinson/a4-grace-robinson#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
