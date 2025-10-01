@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Particles - 3D Visualization</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Instructions Modal -->
+    <div id="instructionsModal" class="modal">
+        <div class="modal-content">
+            <h2>Audio Particles Visualization</h2>
+            <p>Welcome! This is an interactive 3D audio-reactive particle system.</p>
+            
+            <h3>How to Use:</h3>
+            <ul>
+                <li><strong>Upload Audio:</strong> Click "Choose File" to load your own music (MP3, WAV)</li>
+                <li><strong>Play/Pause:</strong> Control audio playback with the button</li>
+                <li><strong>Particle Count:</strong> Adjust how many particles appear (100-5000)</li>
+                <li><strong>Movement Speed:</strong> Control how fast particles move</li>
+                <li><strong>Audio Sensitivity:</strong> Change how much particles react to music</li>
+                <li><strong>Color Scheme:</strong> Choose different color modes</li>
+                <li><strong>Mouse:</strong> Drag to rotate the camera view</li>
+            </ul>
+            
+            <p class="note">Note: For best experience, use a song with good bass and variety!</p>
+            
+            <button id="closeModal" class="close-btn">Got it, Let's Go!</button>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div id="controls">
+        <h3>Controls</h3>
+        
+        <div class="control-group">
+            <label>Audio File:</label>
+            <input type="file" id="audioFile" accept="audio/*">
+        </div>
+
+        <div class="control-group">
+            <button id="playPause" disabled>Play</button>
+        </div>
+
+        <div class="control-group">
+            <label for="particleCount">Particle Count: <span id="particleCountValue">2000</span></label>
+            <input type="range" id="particleCount" min="100" max="5000" value="2000" step="100">
+        </div>
+
+        <div class="control-group">
+            <label for="speed">Movement Speed: <span id="speedValue">1.0</span></label>
+            <input type="range" id="speed" min="0.1" max="3.0" value="1.0" step="0.1">
+        </div>
+
+        <div class="control-group">
+            <label for="sensitivity">Audio Sensitivity: <span id="sensitivityValue">1.5</span></label>
+            <input type="range" id="sensitivity" min="0.5" max="3.0" value="1.5" step="0.1">
+        </div>
+
+        <div class="control-group">
+            <label for="colorScheme">Color Scheme:</label>
+            <select id="colorScheme">
+                <option value="rainbow">Rainbow</option>
+                <option value="fire">Fire</option>
+                <option value="ocean">Ocean</option>
+                <option value="purple">Purple Haze</option>
+                <option value="green">Matrix Green</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Three.js Canvas Container -->
+    <div id="container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
