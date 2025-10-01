@@ -70,7 +70,7 @@ const start = function() {
       if (inputFile) {
         audioElement.src = URL.createObjectURL(inputFile)
       } else {
-        audioElement.src = '/media/Over_The_Horizon.mp3'
+        audioElement.src = '/media/Over_the_Horizon.mp3'
       }
 
     audioElement.play()
