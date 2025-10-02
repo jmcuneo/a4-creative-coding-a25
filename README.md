@@ -1,11 +1,16 @@
 # Interactive 3D Physics Sandbox
 
+**url:**
+https://a4-nathanielschneiders.onrender.com/
+
 ## Summary
 This project is an interactive 3D physics simulation created with Three.js for Assignment 4.
 The goal was to make a way for you to watch a ball bounce using real physics given a random starting speed and direction. You can control different aspects of the simulation.
 
 Users can launch the ball with a random trajectory and watch it obey the laws of gravity, bouncing off the walls and floor. A user interface, built with Tweakpane, allows for real-time control over the simulation's camera and physical properties. The project is built on a simple Express.js server to satisfy the assignment requirements.
 
+**Issues**
+For some reason the bounces are less consistent on render than running it locally, not sure why that is but run it a couple times just incase.
 
 ## Challenges Faced:
 1. Physics Simulation, using the projectile motion formulas, to constantly update the balls position was the least difficult aspect. I also kept confusing the y and z axes, which was a big headache of some strange ball behavior. Getting the physics to look right and have friction and gravity and bouncing correct took a lot of research and soo long to make the formulas work correctly with the code.
