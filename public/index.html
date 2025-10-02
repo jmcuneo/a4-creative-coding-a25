@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <style> 
+      body { 
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #overlay {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        width: 75%;
+        height: 75%;
+        background-color: rgb(0, 0, 0, 0.7);
+        z-index: 2;
+      } 
+      #center {
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+    <script src='./main.js' type="module"></script>
+  </head>
+  <body>
+    <div id="overlay">
+      <h2>How to play: </h2>
+      <p>Use the arrow keys to move the box. The left/right arrow keys move the box sideways, while the up/down arrow keys move the box forward and backward</p>
+      <p>Additionally, the mouse can be used to play. Hold down the the left button on the mouse and drag forward, backward, left, and right to move the basket</p>
+      <p>Catching the balls will increase your score, while missing one will reset it! Try to get the highest score!</p>
+      <p>The sliders on the top right of the page can be used to adjust the games settings</p>
+      <p>1. basketSize will increase the size of the basket</p>
+      <p>2. speed will increase the speed of the falling objects and basket movement proportionally</p>
+      <p>3. basketColor will change the color of the basket</p>
+      <p>4. objectSize will change the size of the falling objects</p>
+      <h2>Have Fun</h2>
+      <h3>Created by Ayush Kulkarni</h3>
+      <button onclick="this.parentElement.style.display='none'">Start Game</button>
+    </div>
+  </body>
+</html>
