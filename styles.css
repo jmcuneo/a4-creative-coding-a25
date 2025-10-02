@@ -3,8 +3,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   margin: 0;
   padding: 0;
+}
+
+h1 {
+  margin-top: 20px;
+  margin-bottom: 5px;
 }
 
 #controls {
@@ -14,4 +20,9 @@ body {
 #grid {
   border: 1px solid black;
   display: block;
+}
+
+#generation {
+  margin-top: 10px;
+  font-weight: bold;
 }

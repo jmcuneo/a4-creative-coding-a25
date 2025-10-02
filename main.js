@@ -121,12 +121,14 @@ document.getElementById('stepBtn').onclick = () => {
 };
 
 document.getElementById('randomBtn').onclick = () => {
+    document.getElementById('stopBtn').click(); // stop if running
     randomizeGrid();
     drawGrid();
     resetGen();
 };
 
 document.getElementById('clearBtn').onclick = () => {
+    document.getElementById('stopBtn').click(); // stop if running
     grid = createEmptyGrid();
     drawGrid();
     resetGen();
