@@ -1,0 +1,24 @@
+  #canvas-container {
+    width:100%;
+    height:100vh;
+    background-color: #A6C875;
+    position:relative;
+    overflow:hidden;
+  }
+  
+  .overlay {
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    top: 20%;
+    transform: translateX(-50%);
+    max-width:720px;
+    padding:18px;
+    border-radius:12px;
+    background: #FFE6EE;
+    color: #2E6F40;
+  }
+  
+  .small { font-size:0.9rem; opacity:0.85; }
+  
+  

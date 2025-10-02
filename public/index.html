@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Flower Shower — a4-AditriThakur</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- tweakpane -->
+  <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.min.js"></script>
+  <!-- three.js -->
+  <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
+</head>
+<body>
+  <div id="instructions" class="overlay">
+    <h1>Flower Shower— Instructions</h1>
+    <p>This project shows A generative algorithm the creates simple flower agents that move through a virtual world. The GUI allows users to control their behavior count, size, speed, and direction.</p>
+    <ol>
+      <li>Use the GUI at the top to change the behavior and appearance of the flowers in real time.</li>
+      <li>Controls:
+        <ul>
+          <li><strong>Number of agents:</strong> how many flowers appear</li>
+          <li><strong>Agent size:</strong> how big each flower is</li>
+          <li><strong>Agent speed:</strong> how fast the flowers move</li>
+          <li><strong>Agent direction:</strong> what direction the flowers move in</li>
+        </ul>
+      </li>
+      <li>Press X on the keyboard to close these instructions.</li>
+    </ol>
+  </div>
+
+  <div id="guiContainer"></div>
+  <div id="canvas-container"></div>
+
+  <script src="main.js"></script>
+</body>
+</html>
