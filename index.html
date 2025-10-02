@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cellular Automata</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Cellular Automata Simulation</h1>
+    
+    <div id="controls">
+        <button id="startBtn">Begin</button>
+        <button id="stopBtn">Halt</button>
+        <button id="stepBtn">Step</button>
+        <button id="randomBtn">Randomize</button>
+        <button id="clearBtn">Clear</button>
+        <label>
+            Speed: <input id="speed" type="range" min="0" max="1000" value="300">
+        </label>
+    </div>
+
+    <canvas id="grid"></canvas>
+
+    <div id="generation">Generation: 0</div>
+
+    <script src="main.js"></script>
+</body>
+</html>

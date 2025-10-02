@@ -1,0 +1,17 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+#controls {
+  margin: 15px;
+}
+
+#grid {
+  border: 1px solid black;
+  display: block;
+}
