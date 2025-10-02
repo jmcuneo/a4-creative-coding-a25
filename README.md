@@ -1,64 +1,43 @@
-Assignment 4 - Creative Coding: Interactive Multimedia Experiences
-===
+# Audio Particles - 3D Visualization
 
-For this assignment we will focus on client-side development using popular audio/graphics/visualization technologies. The goal of this assignment is to refine our JavaScript knowledge while exploring the multimedia capabilities of the browser.
+**Live Demo:** https://a4-aanangoyal.onrender.com
 
-- [Three.js Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/master/using.three.md)
-- [WebAudio / Canvas Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.webaudio_and_canvas.md)  
-- [SVG + D3 tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.svg_and_d3.md)  
 
-Baseline Requirements
----
+## Project Overview
 
-Your application is required to implement the following functionalities:
+Audio Particles is a 3D audio-reactive particle visualization built with Three.js and the Web Audio API. The application creates a dynamic particle system that responds to uploaded music in real-time, where particles expand and contract based on the audio's frequency and amplitude.
 
-- A server created using Express. This server can be as simple as needed.
-- A client-side interactive experience using at least one of the following web technologies frameworks.
-  - [Three.js](https://threejs.org/): A library for 3D graphics / VR experiences
-  - [D3.js](https://d3js.org): A library that is primarily used for interactive data visualizations
-  - [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API): A 2D raster drawing API included in all modern browsers
-  - [SVG](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API): A 2D vector drawing framework that enables shapes to be defined via XML.
-  - [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API): An API for audio synthesis, analysis, processing, and file playback.
-- A user interface for interaction with your project, which must expose at least four parameters for user control. [tweakpane](https://cocopon.github.io/tweakpane/) is highly recommended for this, but you can also use regular HTML `<input>` tags (the `range` type is useful to create sliders). You might also explore interaction by tracking mouse movement via the `window.onmousemove` event handler in tandem with the `event.clientX` and `event.clientY` properties. Consider using the [Pointer Events API](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) to ensure that that both mouse and touch events will both be supported in your app.
-- Your application should display basic documentation for the user interface when the application first loads.
+## Goal of the Application
 
-The interactive experience should possess a reasonable level of complexity. Some examples:
-### Three.js
-- A generative algorithm creates simple agents that move through a virtual world. Your interface controls the behavior / appearance of these agents.
-- A simple 3D game. You really want this to be a simple as possible or it will be outside the scope of this assignment.
-- An 3D audio visualization of a song of your choosing. User interaction should control aspects of the visualization. 
-### Canvas
-- Implement a generative algorithm such as [Conway's Game of Life](https://bitstorm.org/gameoflife/) (or 1D cellular automata) and provide interactive controls. Note that the Game of Life has been created by 100s of people using `<canvas>`; we'll be checking to ensure that your implementation is not a copy of these.
-- Design a 2D audio visualizer of a song of your choosing. User interaction should control visual aspects of the experience. 
-### Web Audio API
-- Create a screen-based musical instrument using the Web Audio API. You can use projects such as [Interface.js](http://charlie-roberts.com/interface/) or [Nexus UI](https://nexus-js.github.io/ui/api/#Piano) to provide common musical interface elements, or use dat.GUI in combination with mouse/touch events (use the Pointer Events API). Your GUI should enable users to control aspects of sound synthesis. If you want to use higher-level instruments instead of the raw WebAudio API sounds, consider trying the instruments provided by [Tone.js]() or [Gibber](https://github.com/charlieroberts/gibber.audio.lib).
-### D3.js
-- Create visualizations using the datasets found at [Awesome JSON Datasets](https://github.com/jdorfman/Awesome-JSON-Datasets). Experiment with providing different visualizations of the same data set, and providing users interactive control over visualization parameters and/or data filtering. Alternatively, create a single visualization with using one of the more complicated techniques shown at [d3js.org](d3js.org) and provide meaningful points of interaction for users.
+The goal was to create an engaging visual experience that bridges audio and graphics programming. Users can upload any audio file and watch as thousands of particles move through 3D space, reacting to the music's intensity. The application provides interactive controls to customize the visual experience, allowing users to adjust particle behavior, appearance, and audio sensitivity to create their preferred aesthetic.
 
-Deliverables
----
+## Challenges Faced
 
-Do the following to complete this assignment:
+**Audio Context Initialization**  
+Modern browsers block audio contexts until user interaction occurs. This required implementing a suspended state check and manual resumption when the user clicks play, ensuring the audio context properly initializes only after user engagement.
 
-1. Implement your project with the above requirements.
-1. Test your project to make sure that when someone goes to your main page on Render, etc., it displays correctly.
-1. Ensure that your project has the proper naming scheme `a4-firstname-lastname` so we can find it.
-1. Fork this repository and modify the README to the specifications below. 
-1. Create and submit a Pull Request to the original repo. Name the pull request using the following template: `a4-firstname-lastname`.
+**Performance Optimization**  
+Initially, rendering 5000 particles with audio analysis caused noticeable frame drops. The solution involved using BufferGeometry instead of standard geometry, storing velocities as flat arrays, and minimizing calculations within the animation loop. Setting the default to 2000 particles balanced visual impact with smooth performance.
 
-Grading
----
-Unlike previous assignments, this assignment will be solely graded on whether or not you successfully complete it. Partial credit will be generously given.
+**Audio Reactivity Balance**  
+Finding the right balance for audio-driven particle movement was tricky—particles either barely responded or flew off-screen. Adding a sensitivity control and implementing boundary checks that reset particles to the center created a natural "breathing" effect where the system expands with the music while maintaining visual cohesion.
 
-Sample Readme (delete the above when you're ready to submit, and modify the below so with your links and descriptions)
----
+## How to Use
 
-## Your Web Application Title
+The interface includes controls for:
+- **Audio upload** - accepts MP3 and WAV files
+- **Particle count** - adjusts density (100-5000 particles)
+- **Movement speed** - controls base particle velocity
+- **Audio sensitivity** - determines reaction strength to music
+- **Color scheme** - five different visual themes
 
-your hosting link e.g. http://a4-charlieroberts.glitch.me
+Drag your mouse to rotate the camera and view the particles from different angles. For best results, use music with strong bass and dynamic range.
 
-Include a very brief summary of your project here. Images are encouraged when needed, along with concise, high-level text. Be sure to include the following:
+## Technologies
 
-- the goal of the application
-- challenges you faced in realizing the application
-- the instructions you present in the website should be clear enough to use the application, but if you feel any need to provide additional instructions please do so here.
+- Three.js (r128) for 3D rendering
+- Web Audio API for frequency analysis
+- Express.js for server
+- Pointer Events API for mouse/touch interaction
+
+Note: AI (Claude) was used to help understand audio context initialization issues and understand Three.js BufferGeometry documentation. AI assisted with clarifying Web Audio API concepts and suggesting performance optimization approaches for particle rendering. All code was written and implemented independently.

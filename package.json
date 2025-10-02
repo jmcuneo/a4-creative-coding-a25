@@ -1,0 +1,15 @@
+{
+    "name": "a4-audio-particles",
+    "version": "1.0.0",
+    "description": "3D Audio-Reactive Particle System using Three.js and Web Audio API",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "keywords": ["threejs", "webaudio", "visualization"],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+      "express": "^4.18.2"
+    }
+  }
