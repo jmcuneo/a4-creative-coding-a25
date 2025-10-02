@@ -1,4 +1,3 @@
-// Global variables
 let scene, camera, renderer, particles, particleGeometry, particleMaterial;
 let audioContext, analyser, dataArray, audioSource, audioElement;
 let isPlaying = false;
@@ -21,7 +20,6 @@ const colorSchemes = {
 window.addEventListener('load', init);
 
 function init() {
-    // Show instructions modal
     document.getElementById('closeModal').addEventListener('click', () => {
         document.getElementById('instructionsModal').style.display = 'none';
     });
