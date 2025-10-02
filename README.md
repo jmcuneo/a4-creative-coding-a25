@@ -39,3 +39,5 @@ Drag your mouse to rotate the camera and view the particles from different angle
 - Web Audio API for frequency analysis
 - Express.js for server
 - Pointer Events API for mouse/touch interaction
+
+Note: This readme was created with the help of AI.
