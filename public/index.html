@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Particle System</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #222;
+            font-family: Arial, sans-serif;
+        }
+        
+        canvas {
+            display: block;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 15px;
+            border: 2px solid #333;
+            width: 200px;
+        }
+        
+        .controls h3 {
+            margin-top: 0;
+        }
+        
+        .control-group {
+            margin-bottom: 10px;
+        }
+        
+        label {
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+        }
+        
+        input[type="color"] {
+            width: 40px;
+            height: 25px;
+        }
+        
+        .instructions {
+            position: absolute;
+            top: 100px;
+            left: 50px;
+            background: white;
+            padding: 20px;
+            border: 2px solid #333;
+            max-width: 300px;
+        }
+        
+        .close-btn {
+            background: #ddd;
+            border: 1px solid #999;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div class="controls">
+        <h3>Particle Controls</h3>
+        
+        <div class="control-group">
+            <label for="particleCount">Count: <span id="countValue">50</span></label>
+            <input type="range" id="particleCount" min="10" max="200" value="50">
+        </div>
+        
+        <div class="control-group">
+            <label for="particleSpeed">Speed: <span id="speedValue">2</span></label>
+            <input type="range" id="particleSpeed" min="0.5" max="10" value="2" step="0.5">
+        </div>
+        
+        <div class="control-group">
+            <label for="particleSize">Size: <span id="sizeValue">3</span></label>
+            <input type="range" id="particleSize" min="1" max="10" value="3">
+        </div>
+        
+        <div class="control-group">
+            <label for="particleColor">Color:</label>
+            <input type="color" id="particleColor" value="#ff6600">
+        </div>
+        
+        <div class="control-group">
+            <label for="mouseAttraction">Attraction: <span id="attractionValue">100</span></label>
+            <input type="range" id="mouseAttraction" min="0" max="300" value="100">
+        </div>
+    </div>
+    
+    <div class="instructions" id="instructions">
+        <h3>Particle System</h3>
+        <p>Move your mouse to attract particles.</p>
+        <p>Use the controls on the left to change settings.</p>
+        <button class="close-btn" onclick="closeInstructions()">OK</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // Mouse position
+        let mouse = {
+            x: canvas.width / 2,
+            y: canvas.height / 2
+        };
+        
+        // Control values
+        let particleCount = 50;
+        let particleSpeed = 2;
+        let particleSize = 3;
+        let particleColor = '#ff6600';
+        let mouseAttraction = 100;
+        
+        // Particles array
+        let particles = [];
+        
+        // Particle class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.originalVx = this.vx;
+                this.originalVy = this.vy;
+            }
+            
+            update() {
+                // Calculate distance to mouse
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Apply mouse attraction
+                if (distance < mouseAttraction && distance > 0) {
+                    const force = (mouseAttraction - distance) / mouseAttraction;
+                    this.vx += (dx / distance) * force * 0.1;
+                    this.vy += (dy / distance) * force * 0.1;
+                }
+                
+                // Apply speed multiplier
+                this.x += this.vx * particleSpeed;
+                this.y += this.vy * particleSpeed;
+                
+                // Damping to prevent particles from getting too fast
+                this.vx *= 0.99;
+                this.vy *= 0.99;
+                
+                // Bounce off edges
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.vx *= -0.8;
+                    this.x = Math.max(0, Math.min(canvas.width, this.x));
+                }
+                if (this.y < 0 || this.y > canvas.height) {
+                    this.vy *= -0.8;
+                    this.y = Math.max(0, Math.min(canvas.height, this.y));
+                }
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, particleSize, 0, Math.PI * 2);
+                ctx.fillStyle = particleColor;
+                ctx.fill();
+            }
+        }
+        
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            
+            ctx.fillStyle = '#222';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Update and draw particles
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // Event listeners
+        canvas.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        
+        // Touch support
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        });
+        
+        // Control event listeners
+        document.getElementById('particleCount').addEventListener('input', (e) => {
+            particleCount = parseInt(e.target.value);
+            document.getElementById('countValue').textContent = particleCount;
+            initParticles();
+        });
+        
+        document.getElementById('particleSpeed').addEventListener('input', (e) => {
+            particleSpeed = parseFloat(e.target.value);
+            document.getElementById('speedValue').textContent = particleSpeed;
+        });
+        
+        document.getElementById('particleSize').addEventListener('input', (e) => {
+            particleSize = parseInt(e.target.value);
+            document.getElementById('sizeValue').textContent = particleSize;
+        });
+        
+        document.getElementById('particleColor').addEventListener('input', (e) => {
+            particleColor = e.target.value;
+        });
+        
+        document.getElementById('mouseAttraction').addEventListener('input', (e) => {
+            mouseAttraction = parseInt(e.target.value);
+            document.getElementById('attractionValue').textContent = mouseAttraction;
+        });
+        
+        // Resize the handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // Close instructions function
+        function closeInstructions() {
+            document.getElementById('instructions').classList.add('hidden');
+        }
+        
+        // Start the application
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
