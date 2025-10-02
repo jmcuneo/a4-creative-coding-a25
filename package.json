@@ -1,0 +1,24 @@
+{
+  "name": "a4-aditrithakur",
+  "version": "1.0.0",
+  "description": "Assignment 4 - Creative Coding: Interactive Multimedia Experiences\r ===",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thakura1/a4-AditriThakur.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thakura1/a4-AditriThakur/issues"
+  },
+  "homepage": "https://github.com/thakura1/a4-AditriThakur#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
