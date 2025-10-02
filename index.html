@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Bar Chart</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Budget Bar Chart</h1>
+    </header>
+
+    <div class="documentation">
+      <h2>How to Use</h2>
+      <ul>
+        <li><strong>Add Categories:</strong> Enter the name for your category, budgeted amount, and choose the color you want it to be before clicking the "Add Category" button</li>
+        <li><strong>Edit Category Amounts:</strong> Type in your desired amount, replacing the currently displayed amount or use the up and down arrows on the input box</li>
+        <li><strong>Edit Category Names:</strong> Double click any category name to then rename it</li>
+        <li><strong>Change Category Colors:</strong> Click the color dot to the left of the category and pick a new color</li>
+        <li><strong>Delete Categories:</strong> Click the "X" button to remove a category</li>
+        <li><strong>Toggle Percentages:</strong> Use the checkbox above the categories section to toggle percentage labels on the chart</li>
+      </ul>
+    </div>
+
+    <div class="control-panel">
+      <div class="control-group">
+        <label>
+          <input type="checkbox" id="show-percentages" checked>
+          Show Percentages on Chart
+        </label>
+      </div>
+
+      <div class="total-display">
+        <div>Total Budget: <span id="total-amount">$0</span></div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="panel inputs-panel">
+        <h2>Budget Categories</h2>
+        <div id="categories-container"></div>
+        
+        <div class="add-category-form">
+          <h3>Add New Category</h3>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="new-category-name">Name</label>
+              <input 
+                type="text" 
+                id="new-category-name" 
+                placeholder="e.g., Groceries"
+              >
+            </div>
+            <div class="form-field">
+              <label for="new-category-amount">Amount ($)</label>
+              <input 
+                type="number" 
+                id="new-category-amount" 
+                min="0" 
+                placeholder="0"
+              >
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="new-category-color">Color</label>
+              <input 
+                type="color" 
+                id="new-category-color" 
+                value="#22d3ee"
+              >
+            </div>
+            <button id="add-category-btn">Add Category</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel chart-panel">
+        <h2>Visualization</h2>
+        <div id="chart-container">
+          <svg id="bar-chart"></svg>
+          <div id="empty-state" class="empty-state">
+            Add categories to see the chart
+          </div>
+        </div>
+        <div id="legend"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="barChart.js"></script>
+</body>
+</html>
