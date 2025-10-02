@@ -21,7 +21,7 @@ Mahoney's Game of Life is an interactive 2d cellular automata that resembles Con
 *Dead cells with all 4 diagonal neighbors alive are born.*
 
 ### Random Revival Rule
-![Random Revival Example](images/random_revival.png)  
+![Random Revival Example](images/random-revival.png)  
 *Dead cells with exactly 2 neighbors have a 10% chance of coming alive.*
 
 ### Conga Rule
@@ -31,6 +31,11 @@ Mahoney's Game of Life is an interactive 2d cellular automata that resembles Con
 ## Goal of the Application
 The goal was to allow users to randomize the grid, paint alive cells, step through generations, and adjust simulation speed.
 
+## Challenges
+I had small issues with implementing the rules and the painting feature.
+
 ## References
-https://www.w3schools.com/jsref/jsref_every.asp
+https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
 https://conwaylife.com/
+https://www.w3schools.com/jsref/jsref_every.asp
+https://www.w3schools.com/jsref/event_onmousemove.asp

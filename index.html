@@ -27,6 +27,33 @@
 
     <div id="generation">Generation: 0</div>
 
+    <section id="instructions">
+        <h3>Instructions</h3>
+        <p>
+            Use the <strong>Start</strong>, <strong>Stop</strong>, and <strong>Step</strong> buttons to control the simulation. <strong>Start</strong> begins the animation, <strong>Stop</strong> pauses it, and <strong>Step</strong> advances one generation.
+        </p>
+        <p>
+            The <strong>Randomize</strong> button fills the grid with a random pattern and automatically stops the simulation. The <strong>Clear</strong> button resets all cells to dead.
+        </p>
+        <p>
+            Adjust the simulation speed using the <strong>Speed</strong> slider. Lower values result in faster updates.
+        </p>
+        <p>
+            You can <strong>paint cells</strong> by clicking or dragging over the grid to toggle them alive or dead. Painting resets the generation counter.
+        </p>
+        <p>
+            The simulation follows custom rules:
+            <ul>
+            <li><strong>Overcrowding:</strong> 8 neighbors → death</li>
+            <li><strong>Loneliness:</strong> less than 2 neighbors → death</li>
+            <li><strong>Hysteria:</strong> even neighbors → higher chance of death</li>
+            <li><strong>Summoning:</strong> all 4 corner neighbors alive → birth</li>
+            <li><strong>Random Revival:</strong> 2 neighbors → 10% chance of birth</li>
+            <li><strong>Conga:</strong> 7 neighbors → death & rebirth as a neighboring cell</li>
+            </ul>
+        </p>
+    </section>
+
     <script src="main.js"></script>
 </body>
 </html>
