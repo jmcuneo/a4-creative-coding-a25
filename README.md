@@ -40,4 +40,4 @@ Drag your mouse to rotate the camera and view the particles from different angle
 - Express.js for server
 - Pointer Events API for mouse/touch interaction
 
-Note: This readme was created with the help of AI.
+Note: AI (Claude) was used to help understand audio context initialization issues and understand Three.js BufferGeometry documentation. AI assisted with clarifying Web Audio API concepts and suggesting performance optimization approaches for particle rendering. All code was written and implemented independently.
