@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css"/>
+    <title>My Express App</title>
+</head>
+<body>
+    <h1>Simple Music App</h1>
+    <button id="demoBtn">Play Ode to Joy</button>
+    <br />
+    <br />
+    <span>
+        <label>Select Octave</label>
+        <select id="octave">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </select>
+        <label>Select Oscillator Type</label>
+        <select id="oscType">
+            <option value="sine">Sine</option>
+            <option value="square">Square</option>
+            <option value="sawtooth">Sawtooth</option>
+            <option value="triangle">Triangle</option>
+        </select>
+    </span>
+    <br />
+    <br />
+    <br />
+    <span>
+        <button id="noteC" class="musicButton" data-base-hertz="16.35" data-key="q">C <br /> (q)</button>
+        <button id="noteCSharp" class="musicButton" data-base-hertz="17.32" data-key="w">C# <br /> (w)</button>
+        <button id="noteD" class="musicButton" data-base-hertz="18.35" data-key="e">D <br /> (e)</button>
+        <button id="noteDSharp" class="musicButton" data-base-hertz="19.45" data-key="r">D# <br /> (r)</button>
+        <button id="noteE" class="musicButton" data-base-hertz="20.6" data-key="t">E <br /> (t)</button>
+        <button id="noteF" class="musicButton" data-base-hertz="21.83" data-key="y">F <br /> (y)</button>
+        <button id="noteFSharp" class="musicButton" data-base-hertz="23.12" data-key="u">F# <br /> (u)</button>
+        <button id="noteG" class="musicButton" data-base-hertz="24.5" data-key="i">G <br /> (i)</button>
+        <button id="noteGSharp" class="musicButton" data-base-hertz="25.96" data-key="o">G# <br /> (o)</button>
+        <button id="noteA" class="musicButton" data-base-hertz="27.50" data-key="p">A <br /> (p)</button>
+        <button id="noteASharp" class="musicButton" data-base-hertz="29.14" data-key="[">A# <br /> ([)</button>
+        <button id="noteB" class="musicButton" data-base-hertz="30.87" data-key="]">B <br /> (])</button>
+    </span>
+    <script src="main.js"></script>
+</body>
+</html>
