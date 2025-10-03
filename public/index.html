@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title> Simple Melody Generator</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="wrap nes-container">
+   
+    <h1> <i class="snes-logo"></i>
+        Melody Generator
+    </h1>
+
+    <p>
+
+    <div class="row">
+      <label>BPM: <b id="bpmOut">120</b></label>
+      <input id="bpm" type="range" min="60" max="200" step="1" value="120"/>
+
+    </p>
+
+      <p>
+      
+      <label>Wave</label>
+      <select id="wave" class="nes-select">
+        <option value="square" selected>square</option>
+        <option value="triangle">triangle</option>
+        <option value="sawtooth">sawtooth</option>
+      </select>
+      </p>
+
+      <p>
+      <label>Volume</label>
+      <input id="vol" type="range" min="0" max="1" step="0.01" value="0.9"/>
+      </div>
+
+          <div class="row">
+      <label>Mode</label>
+      <button id="modeDorian" class="nes-btn">Dorian</button>
+      <button id="modeLydian" class="nes-btn">Lydian</button>
+      <button id="modeMixolydian" class="nes-btn">Mixolydian</button>
+      <button id="modePhrygian" class="nes-btn">Phrygian</button>
+      
+    </div>
+
+    <div class="row" style="margin-top:6px">
+      <button id="gen" class="nes-btn is-warning">Generate Melody</button>
+      <button id="playMel" class="nes-btn is-success">Play Melody</button>
+    </div>
+
+    <p>
+      <label>Melody:</label>
+      <span id="melodyOut">—</span>
+    </p>
+
+    <div id="status" class="status">Status: idle</div>
+
+
+
+  </div>
+
+ 
+  <script src="/tone/Tone.js"></script>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
