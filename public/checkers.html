@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkers Game</title>
+  <style>
+    canvas { background:#eee; display:block; margin:20px auto; }
+    #controls { text-align:center; margin:10px; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <select id="modeSelect">
+      <option value="local">Local Hotseat</option>
+      <option value="online">Online (Login Required)</option>
+    </select>
+    <button id="createGame"> Online Game</button>
+    <input id="gameId" placeholder="Enter Game ID to Join">
+    <button id="joinGame">Join Game</button>
+  </div>
+  <canvas id="board" width="640" height="640"></canvas>
+
+  <script src="checkers.js"></script>
+</body>
+</html>
