@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checker Game (Canvas)</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    canvas { background: #eee; display: block; margin: 20px auto; }
+    #score { text-align: center; font-size: 1.2em; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="score" id="score"><br></div>
+  <canvas id="checkerBoard" width="480" height="480"></canvas>
+  <audio id="moveSound">
+    <source src="sounds/move.mp3">
+  </audio>
+  <audio id="winSound">
+    <source src="sounds/win.mp3">
+  </audio>
+  <script>
+    const canvas = document.getElementById('checkerBoard');
+    const ctx = canvas.getContext('2d');
+    const size = 8;
+    const squareSize = canvas.width / size;
+    function drawBoard() {
+      for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+          ctx.fillStyle = (row + col) % 2 === 0 ? '#fff' : '#333';
+          ctx.fillRect(col * squareSize, row * squareSize, squareSize, squareSize);
+        }
+      }
+    }
+    function drawCheckers() {
+      for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+          if (row < 3 && (row + col) % 2 === 1) {
+            drawChecker(col, row, 'white');
+          }
+          if (row > 4 && (row + col) % 2 === 1) {
+            drawChecker(col, row, 'black');
+          }
+        }
+      }
+    }
+
+    function drawChecker(col, row, color) {
+      ctx.beginPath();
+      ctx.arc(
+        col * squareSize + squareSize / 2,
+        row * squareSize + squareSize / 2,
+        squareSize * 0.4,
+        0, Math.PI * 2
+      );
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#888';
+      ctx.stroke();
+    }
+    drawBoard();
+    drawCheckers();
+  </script>
+</body>
+</html>
