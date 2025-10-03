@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+    <title>Nicholas Driscoll — Contact</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<link rel="stylesheet" href="css/main.css">
+<script defer src="js/main.js"></script>
+</head>
+<body>
+<header class="topbar">
+<nav class="nav">
+    <a href="index.html">About</a>
+    <a href="storage.html">Messages</a>
+    <button id="logout" class="nav-logout">Logout</button>
+
+    <a href="project.html">Projects</a>
+
+    <a href="storage.html" class="active">Contact</a>
+</nav>
+</header>
+<!--AI did genrate some of this, but for template then creating-->
+<main class="wrap">
+<section class="card">
+
+<h1>Contact Me</h1>
+<form id="contact-form">
+  <label>Name
+    <input id="name" name="name" type="text" required>
+  </label>
+
+  <label>Email
+    <input id="email" name="email" type="email" required>
+  </label>
+
+  <label>Message
+    <textarea id="message" name="message" rows="3" required></textarea>
+  </label>
+
+  <div>
+    <strong>Priority:</strong>
+    <select name="priority" id="priority">
+      <option value="Low">Low</option>
+      <option value="Mid">Mid</option>
+      <option value="High">High</option>
+    </select>
+  </div>
+
+  <button id="send" type="submit">Send</button>
+</form>
+
+</section>
+
+<section class="card">
+<h2>Logs</h2>
+<table id="items">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Message</th>
+      <th>Priority</th>
+      <th>Response By</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+</section>
+</main>
+</body>
+</html>

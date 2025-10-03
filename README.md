@@ -1,64 +1,58 @@
-Assignment 4 - Creative Coding: Interactive Multimedia Experiences
-===
 
-For this assignment we will focus on client-side development using popular audio/graphics/visualization technologies. The goal of this assignment is to refine our JavaScript knowledge while exploring the multimedia capabilities of the browser.
 
-- [Three.js Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/master/using.three.md)
-- [WebAudio / Canvas Tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.webaudio_and_canvas.md)  
-- [SVG + D3 tutorial](https://github.com/jmcuneo/cs4241-guides/blob/main/using.svg_and_d3.md)  
+Basic Requirements:
 
-Baseline Requirements
----
+I created a server using Express with appropriate routes for login, logout, and CRUD operations. This replaced the basic Node server from Assignment 2 and provided a stronger foundation for future projects. (15 points)
+I implemented a results page (storage.html) where logged-in users can view all their stored data, including name, email, message, and priority. This page only displays data for the authenticated user. (10 points) I built a form for adding, editing, and deleting items. The form collects name, email, message, and priority, and the results can be updated or removed from the table. This fulfills the requirement of having all three actions. (15 point) I connected my project to MongoDB using Mongoose so all data persists between sessions. This was a major improvement over Assignment 2, where everything was stored only in memory. (15 points) I styled the site using Bootstrap, which provided clean layouts, responsive forms, and a consistent navigation bar without much custom CSS.(10 points) For HTML inputs, I used text fields for name and email, a textarea for the message, and a select input for priority. These varied inputs demonstrate my ability to use multiple HTML form field types. (5 points)
 
-Your application is required to implement the following functionalities:
 
-- A server created using Express. This server can be as simple as needed.
-- A client-side interactive experience using at least one of the following web technologies frameworks.
-  - [Three.js](https://threejs.org/): A library for 3D graphics / VR experiences
-  - [D3.js](https://d3js.org): A library that is primarily used for interactive data visualizations
-  - [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API): A 2D raster drawing API included in all modern browsers
-  - [SVG](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API): A 2D vector drawing framework that enables shapes to be defined via XML.
-  - [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API): An API for audio synthesis, analysis, processing, and file playback.
-- A user interface for interaction with your project, which must expose at least four parameters for user control. [tweakpane](https://cocopon.github.io/tweakpane/) is highly recommended for this, but you can also use regular HTML `<input>` tags (the `range` type is useful to create sliders). You might also explore interaction by tracking mouse movement via the `window.onmousemove` event handler in tandem with the `event.clientX` and `event.clientY` properties. Consider using the [Pointer Events API](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) to ensure that that both mouse and touch events will both be supported in your app.
-- Your application should display basic documentation for the user interface when the application first loads.
+Technical Achievements:
 
-The interactive experience should possess a reasonable level of complexity. Some examples:
-### Three.js
-- A generative algorithm creates simple agents that move through a virtual world. Your interface controls the behavior / appearance of these agents.
-- A simple 3D game. You really want this to be a simple as possible or it will be outside the scope of this assignment.
-- An 3D audio visualization of a song of your choosing. User interaction should control aspects of the visualization. 
-### Canvas
-- Implement a generative algorithm such as [Conway's Game of Life](https://bitstorm.org/gameoflife/) (or 1D cellular automata) and provide interactive controls. Note that the Game of Life has been created by 100s of people using `<canvas>`; we'll be checking to ensure that your implementation is not a copy of these.
-- Design a 2D audio visualizer of a song of your choosing. User interaction should control visual aspects of the experience. 
-### Web Audio API
-- Create a screen-based musical instrument using the Web Audio API. You can use projects such as [Interface.js](http://charlie-roberts.com/interface/) or [Nexus UI](https://nexus-js.github.io/ui/api/#Piano) to provide common musical interface elements, or use dat.GUI in combination with mouse/touch events (use the Pointer Events API). Your GUI should enable users to control aspects of sound synthesis. If you want to use higher-level instruments instead of the raw WebAudio API sounds, consider trying the instruments provided by [Tone.js]() or [Gibber](https://github.com/charlieroberts/gibber.audio.lib).
-### D3.js
-- Create visualizations using the datasets found at [Awesome JSON Datasets](https://github.com/jdorfman/Awesome-JSON-Datasets). Experiment with providing different visualizations of the same data set, and providing users interactive control over visualization parameters and/or data filtering. Alternatively, create a single visualization with using one of the more complicated techniques shown at [d3js.org](d3js.org) and provide meaningful points of interaction for users.
+I set up authentication using bcryptjs, so passwords are stored as secure hashes instead of plain text. This was important for practicing good security habits, even though the project only requires simple login functionality. – 5 points
 
-Deliverables
----
+I used connect-mongo to persist sessions in MongoDB. This ensures users stay logged in even if the server restarts, making the app feel more realistic compared to in-memory session management. – 5 points
 
-Do the following to complete this assignment:
+I added Helmet to provide security headers and Morgan to log requests to the console. These were not required for the assignment, but I included them to make the project safer and easier to debug since I plan to reuse it after the term. – 5 points
 
-1. Implement your project with the above requirements.
-1. Test your project to make sure that when someone goes to your main page on Render, etc., it displays correctly.
-1. Ensure that your project has the proper naming scheme `a4-firstname-lastname` so we can find it.
-1. Fork this repository and modify the README to the specifications below. 
-1. Create and submit a Pull Request to the original repo. Name the pull request using the following template: `a4-firstname-lastname`.
+I extended the Item schema by adding a responseBy field, calculated from the item’s priority and creation date. This builds on my Assignment 2 logic and shows how to derive data automatically within the database model. – 5 points
 
-Grading
----
-Unlike previous assignments, this assignment will be solely graded on whether or not you successfully complete it. Partial credit will be generously given.
 
-Sample Readme (delete the above when you're ready to submit, and modify the below so with your links and descriptions)
----
+ CSS rules:
 
-## Your Web Application Title
+I primarily relied on Bootstrap for a professional look and responsiveness. I used its grid system for layout and built-in form styling for inputs and buttons. To personalize it, I added a small main.css file where I adjusted table borders, button spacing, and typography. This helped make the project feel more like a portfolio site instead of just default Bootstrap styles.
 
-your hosting link e.g. http://a4-charlieroberts.glitch.me
 
-Include a very brief summary of your project here. Images are encouraged when needed, along with concise, high-level text. Be sure to include the following:
 
-- the goal of the application
-- challenges you faced in realizing the application
-- the instructions you present in the website should be clear enough to use the application, but if you feel any need to provide additional instructions please do so here.
+
+Design Achievements:
+
+I created a consistent navigation bar across all pages (About, Projects, Storage/Login). This makes the website easier to use since everything stays in the same place. – 5 points
+
+I used Bootstrap’s grid and form system to ensure the site is responsive without much custom CSS. It looks clean and professional on different screen sizes. – 5 points
+
+I paid attention to readability and accessibility by ensuring good spacing and alignment, and relying on Bootstrap’s default color contrast. This makes forms and tables easier to use. – 5 points
+
+I added a small custom CSS file to tweak Bootstrap defaults, such as button spacing, table borders, and fonts. This makes the site feel cohesive and more like a personal portfolio instead of just raw Bootstrap. – 5 points
+
+
+AI Use and Challenges:
+
+This project was mainly developed in VS Code, and the most challenging parts involved getting server.js and main.js to work correctly. The biggest issue came from Helmet, which blocked inline scripts and broke my login attempts. This led me to rewrite and restructure parts of my code multiple times and even create a separate login.js to work around it. Because I struggled with login issues for a long time, I depended more on AI (ChatGPT) for troubleshooting than I initially planned. Many suggested fixes didn’t work immediately, which pushed me to experiment, rewrite, and heavily modify my code until it met my needs. Some of the login and session handling code reflects this process. That said, I plan to revisit and clean up the code to better reflect my personal style and skills instead of just AI solutions. Currently, it works and satisfies the requirements, but I want to understand it fully and make it independent of these tools. Also, Grammarly was used for the writing of this document.
+
+
+Some of the resources used:
+
+https://www.w3schools.com/Html/html_css.asp
+
+https://www.w3schools.com/Html/html_links.asp
+
+https://www.w3schools.com/Html/html_forms.asp
+
+https://www.w3schools.com/Html/html_youtube.asp
+
+https://www.w3schools.com/Html/html5_api_whatis.asp
+
+https://developer.mozilla.org/en-US/
+
+https://docs.npmjs.com/cli/v10/configuring-npm/package-json
+
