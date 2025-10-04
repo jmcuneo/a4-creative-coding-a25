@@ -22,12 +22,17 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import helmet from "helmet";
 import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 await mongoose.connect(process.env.MONGO_URI);
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(helmet());
 app.use(express.json());
@@ -40,6 +45,14 @@ app.use(session({
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   cookie: { secure: process.env.NODE_ENV === "production" }
 }));
+
+// Static file serving
+app.use(express.static(path.join(__dirname, "public")));
+
+// Root route → serve index.html
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // Authenticator 
 function requireAuth(req, res, next) {
@@ -127,19 +140,4 @@ app.post("/api/game/:id/move", requireAuth, async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
-
-
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// serve static files from "public" folder
-app.use(express.static(path.join(__dirname, "public")));
-
-// root route → serve index.html
-app.get("/", (_req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
