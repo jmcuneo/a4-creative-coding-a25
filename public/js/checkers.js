@@ -1,37 +1,61 @@
-const canvas = document.getElementById("board");
-const ctx = canvas.getContext("2d");
-const size = 8;
-const squareSize = canvas.width / size;
+// Canvas-based Checkers Game
+console.log("Checkers.js loading...");
 
-console.log(`Canvas found: ${!!canvas}, Context: ${!!ctx}, Square size: ${squareSize}`);
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("DOM loaded, initializing checkers...");
+  
+  const canvas = document.getElementById("board");
+  const ctx = canvas.getContext("2d");
 
-let board = [];
-let turn = "W";
-let selected = null;
-let mode = "local";
-let gameId = null;
-let validMoves = [];
+  if (!canvas) {
+    console.error("Canvas element not found!");
+    return;
+  } else if (!ctx) {
+    console.error("Canvas context not available!");
+    return;
+  } else {
+    console.log("Canvas and context successfully loaded");
+    console.log(`Canvas size: ${canvas.width}x${canvas.height}`);
+  }
 
-document.getElementById("modeSelect").onchange = e => mode = e.target.value;
+  const size = 8;
+  const squareSize = canvas.width / size;
+  
+  // Test canvas by drawing a simple pattern immediately
+  console.log("Testing canvas drawing...");
+  ctx.fillStyle = "#ff0000";
+  ctx.fillRect(0, 0, 50, 50);
+  ctx.fillStyle = "#00ff00";
+  ctx.fillRect(50, 50, 50, 50);
+  console.log("Test pattern drawn");
 
-document.getElementById("createGame").onclick = async () => {
-  const res = await fetch("/api/game/create", { method: "POST" });
-  const { gameId: id } = await res.json();
-  gameId = id;
-  alert("Game created! Share this ID: " + gameId);
-  pollGame();
-};
+  let board = [];
+  let turn = "W";
+  let selected = null;
+  let mode = "local";
+  let gameId = null;
+  let validMoves = [];
 
-document.getElementById("joinGame").onclick = async () => {
-  const id = document.getElementById("gameId").value.trim();
-  const res = await fetch("/api/game/join/" + id, { method: "POST" });
-  const { gameId: joinedId } = await res.json();
-  gameId = joinedId;
-  alert("Joined game " + gameId);
-  pollGame();
-};
+  document.getElementById("modeSelect").onchange = e => mode = e.target.value;
 
-function initBoard() {
+  document.getElementById("createGame").onclick = async () => {
+    const res = await fetch("/api/game/create", { method: "POST" });
+    const { gameId: id } = await res.json();
+    gameId = id;
+    alert("Game created! Share this ID: " + gameId);
+    pollGame();
+  };
+
+  document.getElementById("joinGame").onclick = async () => {
+    const id = document.getElementById("gameId").value.trim();
+    const res = await fetch("/api/game/join/" + id, { method: "POST" });
+    const { gameId: joinedId } = await res.json();
+    gameId = joinedId;
+    alert("Joined game " + gameId);
+    pollGame();
+  };
+
+  function initBoard() {
   console.log("Initializing board...");
   board = Array.from({ length: size }, (_, r) =>
     Array.from({ length: size }, (_, c) =>
@@ -158,19 +182,20 @@ canvas.onclick = async e => {
   }
 };
 
-function pollGame() {
-  setInterval(async () => {
-    if (mode === "online" && gameId) {
-      const res = await fetch("/api/game/" + gameId);
-      const game = await res.json();
-      board = game.board;
-      turn = game.turn;
-      redraw();
-    }
-  }, 2000);
-}
+  function pollGame() {
+    setInterval(async () => {
+      if (mode === "online" && gameId) {
+        const res = await fetch("/api/game/" + gameId);
+        const game = await res.json();
+        board = game.board;
+        turn = game.turn;
+        redraw();
+      }
+    }, 2000);
+  }
 
-initBoard();
-redraw();
+  initBoard();
+  redraw();
 
-console.log("Checkers game initialized successfully!");
+  console.log("plese work, Glory to God");
+});  
