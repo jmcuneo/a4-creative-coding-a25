@@ -15,6 +15,39 @@
 // https://www.npmjs.com/package/connect-mongo
 // https://mongoosejs.com/docs/models.html
 
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import express from "express";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import helmet from "helmet";
+import morgan from "morgan";
+
+dotenv.config();
+
+await mongoose.connect(process.env.MONGO_URI);
+
+const app = express();
+
+app.use(helmet());
+app.use(express.json());
+app.use(morgan("dev"));
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || "secret",
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+  cookie: { secure: process.env.NODE_ENV === "production" }
+}));
+
+// Authenticator 
+function requireAuth(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+  next();
+}
 
 // 
 const GameSchema = new mongoose.Schema({
@@ -30,10 +63,10 @@ GameSchema.pre("save", function(next) {
 });
 const Game = mongoose.model("Game", GameSchema);
 
-// Reference: https://expressjs.com/en/guide/routing.html
+// https://expressjs.com/en/guide/routing.html
 
 app.post("/api/game/create", requireAuth, async (req, res) => {
-  // Create ther  board
+
   const emptyBoard = Array.from({ length: 8 }, (_, r) =>
     Array.from({ length: 8 }, (_, c) =>
       r < 3 && (r + c) % 2 === 1 ? "W" :
@@ -88,4 +121,10 @@ app.post("/api/game/:id/move", requireAuth, async (req, res) => {
   await game.save();
 
   res.json({ ok: true, game });
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

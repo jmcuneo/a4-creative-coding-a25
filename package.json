@@ -1,8 +1,11 @@
 {
-  "name": "a3-NicholasDriscoll",
+  "name": "a4-nicholasdriscoll",
   "version": "1.0.0",
+  "main": "server.js",
   "type": "module",
-  "scripts": { "start": "node server.js" },
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^5.1.0",
@@ -12,5 +15,8 @@
     "helmet": "^7.0.0",
     "mongoose": "^8.5.1",
     "morgan": "^1.10.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
