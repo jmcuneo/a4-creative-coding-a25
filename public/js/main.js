@@ -98,5 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const out = document.querySelector('#logout');
   if (out) out.addEventListener('click', logout);
 
+  // Handle play checkers button
+  const playCheckersBtn = document.getElementById('playCheckersBtn');
+  if (playCheckersBtn) {
+    playCheckersBtn.addEventListener('click', function() {
+      window.location.href = 'checkers.html';
+    });
+  }
+
   load();
 });
