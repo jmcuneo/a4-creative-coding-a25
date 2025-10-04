@@ -163,10 +163,17 @@ app.post("/api/games", async (req, res) => {
       turn: "W"
     });
 
+    // Generate a more user-friendly 6-character code using only letters/numbers
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed confusing chars like 0, O, I, 1
+    let gameCode = '';
+    for (let i = 0; i < 6; i++) {
+      gameCode += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
     res.json({ 
       ok: true, 
       gameId: game._id,
-      gameCode: game._id.toString().substring(0, 6).toUpperCase()
+      gameCode: gameCode
     });
   } catch (error) {
     console.error('Error creating game:', error);
