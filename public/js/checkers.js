@@ -116,18 +116,45 @@ document.addEventListener('DOMContentLoaded', function() {
       if (rowDiff === 1 && colDiff === 1) {
         if ((currentPlayer === "W" && row > selectedPiece.row) || 
             (currentPlayer === "B" && row < selectedPiece.row)) {
+          
           board[row][col] = board[selectedPiece.row][selectedPiece.col];
           board[selectedPiece.row][selectedPiece.col] = "";
           currentPlayer = currentPlayer === "W" ? "B" : "W";
           selectedPiece = null;
           
-          console.log("Move successful!");
+          console.log("Regular move successful!");
           render();
         } else {
           console.log("Wrong direction!");
         }
-      } else {
-        console.log("Invalid move distance!");
+      }
+      else if (rowDiff === 2 && colDiff === 2) {
+        if ((currentPlayer === "W" && row > selectedPiece.row) || 
+            (currentPlayer === "B" && row < selectedPiece.row)) {
+          
+         const middleRow = selectedPiece.row + (row - selectedPiece.row) / 2;
+          const middleCol = selectedPiece.col + (col - selectedPiece.col) / 2;
+          const middlePiece = board[middleRow][middleCol];
+          
+          if (middlePiece && middlePiece !== currentPlayer) {
+         board[row][col] = board[selectedPiece.row][selectedPiece.col];  // Move piece
+            board[selectedPiece.row][selectedPiece.col] = "";               // Clear origin
+            board[middleRow][middleCol] = "";                               // Remove captured piece
+            
+            currentPlayer = currentPlayer === "W" ? "B" : "W";
+            selectedPiece = null;
+            
+            console.log(`Jump successful! Captured ${middlePiece} at ${middleRow}, ${middleCol}`);
+            render();
+          } else {
+            console.log("No piece to capture or can't capture own piece!");
+          }
+        } else {
+          console.log("Wrong jump direction!");
+        }
+      }
+      else {
+        console.log("Invalid move distance! Must be 1 square (move) or 2 squares (jump)");
       }
     }
     else {
