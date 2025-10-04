@@ -3,6 +3,8 @@ const ctx = canvas.getContext("2d");
 const size = 8;
 const squareSize = canvas.width / size;
 
+console.log(`Canvas found: ${!!canvas}, Context: ${!!ctx}, Square size: ${squareSize}`);
+
 let board = [];
 let turn = "W";
 let selected = null;
@@ -30,15 +32,18 @@ document.getElementById("joinGame").onclick = async () => {
 };
 
 function initBoard() {
+  console.log("Initializing board...");
   board = Array.from({ length: size }, (_, r) =>
     Array.from({ length: size }, (_, c) =>
       r < 3 && (r + c) % 2 === 1 ? "W" :
       r > 4 && (r + c) % 2 === 1 ? "B" : ""
     )
   );
+  console.log("Board initialized:", board);
 }
 
 function drawBoard() {
+  console.log("Drawing board...");
   for (let r = 0; r < size; r++)
     for (let c = 0; c < size; c++) {
       ctx.fillStyle = (r + c) % 2 === 0 ? "#f0f0f0" : "#2d2d2d";
@@ -167,3 +172,5 @@ function pollGame() {
 
 initBoard();
 redraw();
+
+console.log("Checkers game initialized successfully!");
