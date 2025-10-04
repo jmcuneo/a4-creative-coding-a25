@@ -36,12 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (whitePieces === 0 || !whiteCanMove) {
       gameOver = true;
-      gameInfo.textContent = "🎉 BLACK WINS! 🎉";
+      gameInfo.textContent = "BLACK WINS!";
       return true;
     }
     if (blackPieces === 0 || !blackCanMove) {
       gameOver = true;
-      gameInfo.textContent = "🎉 WHITE WINS! 🎉";
+      gameInfo.textContent = "WHITE WINS!";
       return true;
     }
     return false;

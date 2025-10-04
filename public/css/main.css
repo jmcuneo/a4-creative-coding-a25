@@ -151,7 +151,8 @@ canvas:hover {
   box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
 }
 
-#auth {
+/* Online game section */
+#onlineGame {
   background: rgba(50, 50, 50, 0.9);
   padding: 30px;
   border-radius: 15px;
@@ -162,78 +163,28 @@ canvas:hover {
   text-align: center;
 }
 
-#auth h2 {
-  text-align: center;
+#onlineGame h2 {
   color: #ffffff;
+  font-size: 1.4em;
   margin-bottom: 20px;
 }
 
-#auth input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 2px solid #555;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-  background: #333;
-  color: #fff;
-}
-
-#auth input:focus {
-  border-color: #4CAF50;
-  outline: none;
-  background: #3a3a3a;
-}
-
-#auth input::placeholder {
-  color: #aaa;
-}
-
-#auth button {
-  width: 100%;
-  padding: 12px;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  margin-top: 10px;
-}
-
-#auth button:hover {
-  background: #45a049;
-}
-
-#loginMessage {
-  color: #ffffff;
-  text-align: center;
-}
-
-/* Online game section within auth */
-#game {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.2);
-}
-
-#game h2 {
-  color: #ffffff;
-  font-size: 1.4em;
-  margin-bottom: 15px;
-}
-
-#game div {
+.game-controls {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
 }
 
-#game button {
+.join-section {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+#onlineGame button {
   background: #2196F3;
   color: white;
   border: none;
@@ -245,13 +196,12 @@ canvas:hover {
   min-width: 120px;
 }
 
-#game button:hover {
+#onlineGame button:hover {
   background: #1976D2;
 }
 
-#game input {
-  width: 100%;
-  max-width: 200px;
+#gameCode {
+  width: 150px;
   padding: 10px;
   border: 2px solid #555;
   border-radius: 8px;
@@ -259,9 +209,10 @@ canvas:hover {
   background: #333;
   color: #fff;
   text-align: center;
+  text-transform: uppercase;
 }
 
-#game input:focus {
+#gameCode:focus {
   border-color: #2196F3;
   outline: none;
 }

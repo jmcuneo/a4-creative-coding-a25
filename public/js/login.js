@@ -1,48 +1,81 @@
-const urlParams = new URLSearchParams(window.location.search);
-const username = urlParams.get('username');
-const password = urlParams.get('password');
+// Simplified multiplayer game interface - no login required
 
-const usernameInput = document.getElementById('login-username');
-const passwordInput = document.getElementById('login-password');
-const loginForm = document.getElementById('login-form');
-const errorDiv = document.getElementById('login-error');
+// Play local game
+document.getElementById('playLocal').addEventListener('click', () => {
+    window.location.href = '/checkers.html';
+});
 
-if (username) usernameInput.value = username;
-if (password) passwordInput.value = password;
+// Create new online game
+document.getElementById('createGame').addEventListener('click', async () => {
+    try {
+        const response = await fetch('/api/games', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                gameType: 'checkers',
+                creator: 'Player1' // Simple placeholder since no login
+            })
+        });
 
-if (username && password) {
-  console.log('URL parameters detected, auto-submitting login form');
-  setTimeout(() => {
-    loginForm.dispatchEvent(new Event('submit'));
-  }, 500);
-}
-
-loginForm.onsubmit = async (e) => {
-  e.preventDefault();
-  errorDiv.textContent = '';
-
-  const payload = {
-    username: usernameInput.value.trim(),
-    password: passwordInput.value
-  };
-
-  try {
-    const res = await fetch('/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await res.json().catch(() => ({}));
-
-    if (res.ok) {
-      if (data.newAccount) alert('You are now logged in.');
-      location.href = '/storage.html';
-    } else {
-      errorDiv.textContent = data.error || 'Login failed';
+        if (response.ok) {
+            const data = await response.json();
+            // Generate a shorter, more user-friendly game code
+            const gameCode = data.gameId.substring(0, 6).toUpperCase();
+            
+            alert(`Game created! Share this code with your friend: ${gameCode}`);
+            
+            // Redirect to game with the full game ID
+            window.location.href = `/checkers.html?gameId=${data.gameId}&player=white`;
+        } else {
+            const error = await response.json();
+            alert('Failed to create game: ' + (error.message || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error creating game:', error);
+        alert('Network error. Please try again.');
     }
-  } catch (err) {
-    console.error('Login request failed:', err);
-    errorDiv.textContent = 'Network error. Please try again.';
-  }
-};
+});
+
+// Join existing game
+document.getElementById('joinGame').addEventListener('click', async () => {
+    const gameCode = document.getElementById('gameCode').value.trim().toUpperCase();
+    
+    if (!gameCode) {
+        alert('Please enter a game code');
+        return;
+    }
+
+    try {
+        // First, try to find the game by searching for games with matching code
+        const response = await fetch(`/api/games/${gameCode}/join`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                player: 'Player2'
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // Redirect to game as black player
+            window.location.href = `/checkers.html?gameId=${data.gameId}&player=black`;
+        } else {
+            const error = await response.json();
+            alert('Failed to join game: ' + (error.message || 'Game not found'));
+        }
+    } catch (error) {
+        console.error('Error joining game:', error);
+        alert('Network error. Please try again.');
+    }
+});
+
+// Allow Enter key to join game
+document.getElementById('gameCode').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        document.getElementById('joinGame').click();
+    }
+});

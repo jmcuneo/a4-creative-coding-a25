@@ -145,6 +145,117 @@ app.post("/api/game/:id/move", requireAuth, async (req, res) => {
   res.json({ ok: true, game });
 });
 
+// Simplified API endpoints without authentication
+
+// Create new game (no auth required)
+app.post("/api/games", async (req, res) => {
+  try {
+    const emptyBoard = Array.from({ length: 8 }, (_, r) =>
+      Array.from({ length: 8 }, (_, c) =>
+        r < 3 && (r + c) % 2 === 1 ? "W" :
+        r > 4 && (r + c) % 2 === 1 ? "B" : ""
+      )
+    );
+
+    const game = await Game.create({
+      players: ['Player1'], // Simple placeholder
+      board: emptyBoard,
+      turn: "W"
+    });
+
+    res.json({ 
+      ok: true, 
+      gameId: game._id,
+      gameCode: game._id.toString().substring(0, 6).toUpperCase()
+    });
+  } catch (error) {
+    console.error('Error creating game:', error);
+    res.status(500).json({ error: "Failed to create game" });
+  }
+});
+
+// Join game by code (no auth required)
+app.post("/api/games/:code/join", async (req, res) => {
+  try {
+    // Find game where the ID starts with the provided code
+    const games = await Game.find({});
+    const game = games.find(g => 
+      g._id.toString().substring(0, 6).toUpperCase() === req.params.code.toUpperCase()
+    );
+    
+    if (!game) {
+      return res.status(404).json({ error: "Game not found" });
+    }
+    
+    if (game.players.length >= 2) {
+      return res.status(400).json({ error: "Game is full" });
+    }
+
+    if (!game.players.includes('Player2')) {
+      game.players.push('Player2');
+      await game.save();
+    }
+    
+    res.json({ 
+      ok: true, 
+      gameId: game._id,
+      gameCode: req.params.code.toUpperCase()
+    });
+  } catch (error) {
+    console.error('Error joining game:', error);
+    res.status(500).json({ error: "Failed to join game" });
+  }
+});
+
+// Get game state (no auth required)
+app.get("/api/games/:id/state", async (req, res) => {
+  try {
+    const game = await Game.findById(req.params.id);
+    if (!game) {
+      return res.status(404).json({ error: "Game not found" });
+    }
+    res.json(game);
+  } catch (error) {
+    console.error('Error getting game state:', error);
+    res.status(500).json({ error: "Failed to get game state" });
+  }
+});
+
+// Make move (no auth required)
+app.post("/api/games/:id/move", async (req, res) => {
+  try {
+    const { from, to, player } = req.body;
+    const game = await Game.findById(req.params.id);
+    
+    if (!game) {
+      return res.status(404).json({ error: "Game not found" });
+    }
+
+    const piece = game.board[from.row][from.col];
+    if (!piece) {
+      return res.status(400).json({ error: "No piece at start" });
+    }
+
+    // Basic validation - check if it's the player's turn
+    const isWhiteTurn = game.turn === "W";
+    const isWhitePiece = piece.toUpperCase().includes("W");
+    
+    if ((isWhiteTurn && !isWhitePiece) || (!isWhiteTurn && isWhitePiece)) {
+      return res.status(400).json({ error: "Not your turn" });
+    }
+
+    game.board[to.row][to.col] = piece;
+    game.board[from.row][from.col] = "";
+    game.turn = game.turn === "W" ? "B" : "W";
+    await game.save();
+
+    res.json({ ok: true, game });
+  } catch (error) {
+    console.error('Error making move:', error);
+    res.status(500).json({ error: "Failed to make move" });
+  }
+});
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

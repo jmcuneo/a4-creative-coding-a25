@@ -10,23 +10,18 @@
     <h1>Checkers Online</h1>
     <div id="mainMenu">
       <h2>Welcome to Checkers!</h2>
-      <p>Play locally or log in to Play Online</p>
+      <p>Play locally or create/join an online game</p>
       <button id="playCheckersBtn">
         Play Local Checkers Game
       </button>
     </div>
 
-    <div id="auth">
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button>Login & Play Online</button>
-      
-      <div id="game">
-        <h2>Online Game</h2>
-        <div>
-          <button id="createGame">Create Game</button>
-          <input id="gameId" placeholder="Game ID">
+    <div id="onlineGame">
+      <h2>Online Multiplayer</h2>
+      <div class="game-controls">
+        <button id="createGame">Create New Game</button>
+        <div class="join-section">
+          <input id="gameCode" placeholder="Enter Game Code" maxlength="6">
           <button id="joinGame">Join Game</button>
         </div>
       </div>
