@@ -2,15 +2,21 @@ const $ = id => document.getElementById(id);
 
 // Play Checkers button - redirect to checkers.html
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("Index.js loaded, setting up handlers...");
+    
     const playBtn = $("playCheckersBtn");
     const loginForm = $("loginForm");
     const createBtn = $("createGame");
     const joinBtn = $("joinGame");
 
     if (playBtn) {
+        console.log("Play button found, attaching click handler");
         playBtn.onclick = () => {
+            console.log("Play Checkers button clicked - navigating to checkers.html");
             window.location.href = "checkers.html";
         };
+    } else {
+        console.error("Play button NOT found!");
     }
 
     if (loginForm) {
