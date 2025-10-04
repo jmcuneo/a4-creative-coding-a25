@@ -156,9 +156,10 @@ canvas:hover {
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  margin: 20px 0;
+  margin: 20px auto;
   width: 100%;
   max-width: 400px;
+  text-align: center;
 }
 
 #auth h2 {
@@ -210,4 +211,57 @@ canvas:hover {
 #loginMessage {
   color: #ffffff;
   text-align: center;
+}
+
+/* Online game section within auth */
+#game {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+#game h2 {
+  color: #ffffff;
+  font-size: 1.4em;
+  margin-bottom: 15px;
+}
+
+#game div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+#game button {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  min-width: 120px;
+}
+
+#game button:hover {
+  background: #1976D2;
+}
+
+#game input {
+  width: 100%;
+  max-width: 200px;
+  padding: 10px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #333;
+  color: #fff;
+  text-align: center;
+}
+
+#game input:focus {
+  border-color: #2196F3;
+  outline: none;
 }

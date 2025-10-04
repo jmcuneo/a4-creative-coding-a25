@@ -8,13 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const canvas = document.getElementById("board");
   const ctx = canvas.getContext("2d");
 
-if (!canvas || !ctx) {
-  console.error("Canvas or context not found!");
-  alert("Failed to initialize game canvas");
-}
+  if (!canvas || !ctx) {
+    console.error("Canvas or context not found!");
+    alert("Failed to initialize game canvas");
+    return;
+  }
 
-const size = 8;
-const squareSize = canvas.width / size;
+  const size = 8;
+  const squareSize = canvas.width / size;
 
 let board = [];
 let turn = "W";
@@ -64,17 +65,21 @@ joinBtn.onclick = async () => {
 
 // ========== GAME SETUP ==========
 
-function initBoard() {
-  board = Array.from({ length: size }, (_, r) =>
-    Array.from({ length: size }, (_, c) =>
-      r < 3 && (r + c) % 2 === 1 ? "W" :
-      r > 4 && (r + c) % 2 === 1 ? "B" : ""
-    )
-  );
-  redraw();
-}
-
-// ========== DRAWING FUNCTIONS ==========
+  function initBoard() {
+    board = Array.from({ length: size }, (_, r) =>
+      Array.from({ length: size }, (_, c) =>
+        r < 3 && (r + c) % 2 === 1 ? "W" :
+        r > 4 && (r + c) % 2 === 1 ? "B" : ""
+      )
+    );
+    console.log("Board initialized. Current turn:", turn);
+    console.log("Sample pieces:", {
+      "Top-left white": board[0][1],
+      "Bottom-right black": board[7][6],
+      "Middle empty": board[3][3]
+    });
+    redraw();
+  }// ========== DRAWING FUNCTIONS ==========
 
 function drawBoard() {
   for (let r = 0; r < size; r++) {
@@ -199,12 +204,17 @@ canvas.addEventListener("click", async e => {
   const rect = canvas.getBoundingClientRect();
   const c = Math.floor((e.clientX - rect.left) / squareSize);
   const r = Math.floor((e.clientY - rect.top) / squareSize);
+  
+  console.log(`Clicked on square [${r}, ${c}], piece: "${board[r][c]}", turn: "${turn}"`);
 
   if (selected) {
+    console.log(`Selected piece at [${selected.r}, ${selected.c}]`);
     const moves = getValidMoves(selected.r, selected.c);
+    console.log(`Valid moves:`, moves);
     const move = moves.find(m => m.r === r && m.c === c);
     
     if (move) {
+      console.log("Making move!");
       const piece = board[selected.r][selected.c];
       const fromPos = { row: selected.r, col: selected.c }; // Store before clearing
       
@@ -236,21 +246,29 @@ canvas.addEventListener("click", async e => {
         }
       }
     } else {
+      console.log("Invalid move or deselecting");
       // Deselect or select new piece
       if (board[r][c] && board[r][c][0] === turn) {
+        console.log(`Selecting new piece: ${board[r][c]}`);
         selected = { r, c };
         validMoves = getValidMoves(r, c);
+        console.log(`New valid moves:`, validMoves);
         redraw();
       } else {
+        console.log("Deselecting piece");
         selected = null;
         validMoves = [];
         redraw();
       }
     }
   } else if (board[r][c] && board[r][c][0] === turn) {
+    console.log(`Selecting piece: ${board[r][c]}`);
     selected = { r, c };
     validMoves = getValidMoves(r, c);
+    console.log(`Valid moves for selected piece:`, validMoves);
     redraw();
+  } else {
+    console.log(`Cannot select: piece="${board[r][c]}", turn="${turn}"`);
   }
 });
 
