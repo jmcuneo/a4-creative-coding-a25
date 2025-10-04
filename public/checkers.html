@@ -2,24 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Checkers Game</title>
-  <link rel="stylesheet" href="css/main.css">
+  <title>Checkers Online</title>
+  <link rel="stylesheet" href="main.css">
 </head>
-<body>
-  <div class="checkers-container">
-    <div id="controls">
-      <select id="modeSelect">
-        <option value="local">Local Hotseat</option>
-        <option value="online">Online</option>
-      </select>
-      <button id="createGame">Create Online Game</button>
-      <input id="gameId" placeholder="Enter Game ID to Join">
-      <button id="joinGame">Join Game</button>
-    </div>
-    <div id="gameInfo">Current Turn: White</div>
-    <canvas id="board" width="800" height="800"></canvas>
+<body class="checkers-container">
+
+  <h1>Checkers Online</h1>
+  <div id="controls">
+    <select id="modeSelect">
+      <option value="local">Local</option>
+      <option value="online">Online </option>
+    </select>
+    <button id="createGame">Create Online Game</button>
+    <input id="gameId" placeholder="Enter Game ID to Join">
+    <button id="joinGame">Join Game</button>
   </div>
 
-  <script src="js/checkers.js"></script>
+  <div id="gameInfo">Current Turn: White</div>
+  <canvas id="board" width="640" height="640"></canvas>
+
+  <script src="checkers.js"></script>
 </body>
 </html>

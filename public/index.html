@@ -1,42 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Checkers Online</title>
-	<link rel="stylesheet" href="css/main.css">
+  <meta charset="UTF-8">
+  <title>Checkers Online</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-	<div class="main-container">
-		<h1>Checkers Online</h1>
-		
-		<div id="mainMenu">
-			<h2>Welcome to Checkers!</h2>
-			<button id="playCheckersBtn">
-				Play Local Checkers Game
-			</button>
-			<p>Or login below for online multiplayer games</p>
-		</div>
-		
-		<div id="auth">
-			<h2>Login</h2>
-			<form id="loginForm">
-				<input type="text" id="username" placeholder="Username" required>
-				<input type="password" id="password" placeholder="Password" required>
-				<button type="submit">Login & Play Online</button>
-			</form>
-			<p id="loginMessage"></p>
-		</div>
+  <div class="main-container">
+    <h1>Checkers Online</h1>
+    <div id="mainMenu">
+      <h2>Welcome to Checkers!</h2>
+      <p>Play locally or log in to Play Online</p>
+      <button id="playCheckersBtn" onclick="window.location.href='checkers.html'">
+        Play Local Checkers Game
+      </button>
+    </div>
 
-		<div id="game">
-			<h2>Online Game</h2>
-			<button id="createGame">Create Game</button>
-			<input type="text" id="joinGameId" placeholder="Game ID">
-			<button id="joinGame">Join Game</button>
-			<p id="gameStatus"></p>
-			<canvas id="board" width="480" height="480"></canvas>
-		</div>
-	</div>
+    <div id="auth">
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button>Login & Play Online</button>
+    </div>
 
-	<script src="js/index.js"></script>
+    <div id="game">
+      <h2>Online Game</h2>
+      <div>
+        <button id="createGame">Create Game</button>
+        <input id="gameId" placeholder="Game ID">
+        <button id="joinGame">Join Game</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

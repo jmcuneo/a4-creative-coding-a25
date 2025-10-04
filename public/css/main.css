@@ -1,344 +1,106 @@
 html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    transition: background 1s ease-in-out;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 
-    /* Dark checkerboard background pattern */
-    background-image: 
-        linear-gradient(45deg, #2a2a2a 25%, transparent 25%),
-        linear-gradient(-45deg, #2a2a2a 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #2a2a2a 75%),
-        linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
-    background-size: 60px 60px;
-    background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
-    background-color: #1a1a1a;
+  background-image:
+    linear-gradient(45deg, #2a2a2a 25%, transparent 25%),
+    linear-gradient(-45deg, #2a2a2a 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #2a2a2a 75%),
+    linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
+  background-size: 60px 60px;
+  background-color: #1a1a1a;
 
-    /* Center this stuff */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
 }
 
-.table {
-    position: relative;
-    width: 640px;
-    height: 640px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-}
 
-.square {
-    float: left;
-    width: 80px;
-    height: 80px;
-    box-sizing: border-box;
-    transition: background 0.3s;
-}
-
-.white_square {
-    background-color: #fff;
-}
-
-.black_square {
-    background-color: #000;
-}
-
-.clear_float {
-    clear: both;
-}
-
-.score {
-    background: #008000;
-    color: #fff;
-    display: none;
-    font-size: 2.5rem;
-    font-weight: bold;
-    height: 150px;
-    border-radius: 16px;
-    left: 0;
-    letter-spacing: 1px;
-    margin: 0 auto;
-    padding-top: 30px;
-    overflow: hidden;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    top: 15%;
-    width: 200px;
-    z-index: 8;
-    font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;
-    transition: all 0.5s cubic-bezier(.4,0,.2,1);
-    box-shadow: 0 2px 16px rgba(0,128,0,0.15);
-}
-
-.checker {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    border: 4px solid #888;
-    cursor: pointer;
-    transition: box-shadow 0.3s, background 0.3s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-}
-
-.white_checker {
-    background: #fff;
-}
-
-.black_checker {
-    background: #00001F;
-}
-
-.black_background {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.5);
-    z-index: 7;
-    display: none;
-    top: 0;
-    left: 0;
-}
-
-@media (max-width: 640px) {
-    .table {
-        width: 400px;
-        height: 400px;
-    }
-    .square {
-        width: 50px;
-        height: 50px;
-    }
-    .checker {
-        width: 32px;
-        height: 32px;
-        top: 6px;
-        left: 6px;
-    }
-    .score {
-        font-size: 1.5rem;
-        width: 140px;
-        height: 100px;
-        padding-top: 18px;
-    }
-}
-
-/* Index  */
-h1 {
-    color: #ffffff;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    margin-bottom: 30px;
-    font-size: 3rem;
-}
-
-/* Mait */
-.main-container {
-    background: rgba(40, 40, 40, 0.95);
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    padding: 40px;
-    max-width: 800px;
-    width: 100%;
-    margin: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(60,60,60,0.3);
-}
-
-#mainMenu {
-    text-align: center;
-    margin: 30px 0;
-}
-
-#mainMenu h2 {
-    color: #ffffff;
-    margin-bottom: 20px;
-}
-
-#mainMenu p {
-    color: #cccccc;
-}
-
-#playCheckersBtn {
-    padding: 20px 40px;
-    font-size: 20px;
-    background: linear-gradient(45deg, #4CAF50, #45a049);
-    color: white;
-    border: none;
-    border-radius: 10px;
-#playCheckersBtn {
-    padding: 20px 40px;
-    font-size: 20px;
-    background: linear-gradient(45deg, #4CAF50, #45a049);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin: 15px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-    font-weight: bold;
-}
-
-#playCheckersBtn:hover {
-    background: linear-gradient(45deg, #45a049, #3d8b40);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
-}
-
-/* Auth  */
-#auth {
-    background: rgba(50, 50, 50, 0.9);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    margin: 20px 0;
-    width: 100%;
-    max-width: 400px;
-}
-
-#auth h2 {
-    text-align: center;
-    color: #ffffff;
-    margin-bottom: 20px;
-}
-
-#auth input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 2px solid #555;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-    background: #333;
-    color: #fff;
-}
-
-#auth input:focus {
-    border-color: #4CAF50;
-    outline: none;
-    background: #3a3a3a;
-}
-
-#auth input::placeholder {
-    color: #aaa;
-}
-
-#auth button {
-    width: 100%;
-    padding: 12px;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 10px;
-}
-
-#auth button:hover {
-    background: #45a049;
-}
-
-#loginMessage {
-    color: #ffffff;
-    text-align: center;
-}
-
-#game {
-    display: none;
-}
-
-#board {
-    border: 1px solid #333;
-}
-
-/* Checkers page styles */
 .checkers-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
 }
 
-canvas {
-    background: #fff;
-    display: block;
-    margin: 30px auto;
-    border-radius: 10px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+
+h1 {
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  text-align: center;
 }
+
 
 #controls {
-    text-align: center;
-    margin: 30px;
-    background: rgba(50, 50, 50, 0.9);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  margin: 20px;
+  background: rgba(50, 50, 50, 0.9);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-#controls select, #controls input, #controls button {
-    margin: 8px;
-    padding: 12px;
-    border: 2px solid #555;
-    border-radius: 8px;
-    font-size: 16px;
-    background: #333;
-    color: #fff;
-}
-
-#controls select option {
-    background: #333;
-    color: #fff;
-}
-
-#controls input::placeholder {
-    color: #aaa;
+#controls select,
+#controls input,
+#controls button {
+  margin: 8px;
+  padding: 12px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #333;
+  color: #fff;
 }
 
 #controls button {
-    background: #4CAF50;
-    color: white;
-    border: 2px solid #4CAF50;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: bold;
+  background: #4CAF50;
+  border: 2px solid #4CAF50;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 #controls button:hover {
-    background: #45a049;
-    border-color: #45a049;
-    transform: translateY(-1px);
+  background: #45a049;
+  border-color: #45a049;
+  transform: translateY(-1px);
 }
 
 #gameInfo {
-    text-align: center;
-    margin: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #ffffff;
-    background: rgba(50, 50, 50, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    display: inline-block;
-    min-width: 200px;
+  text-align: center;
+  margin: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  background: rgba(50, 50, 50, 0.9);
+  padding: 15px 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
+
+canvas {
+  background: #fff;
+  display: block;
+  margin: 30px auto;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+canvas:hover {
+  transform: scale(1.01);
 }
