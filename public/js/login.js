@@ -10,14 +10,14 @@ document.getElementById('testConnection').addEventListener('click', async () => 
         if (response.ok) {
             const data = await response.json();
             console.log('Test response:', data);
-            alert('✅ Server connection successful!\n' + JSON.stringify(data, null, 2));
+            alert('Server connection successful!\n' + JSON.stringify(data, null, 2));
         } else {
             console.error('Test failed. Status:', response.status);
-            alert('❌ Server test failed. Status: ' + response.status);
+            alert('Server test failed. Status: ' + response.status);
         }
     } catch (error) {
         console.error('Test error:', error);
-        alert('❌ Network error: ' + error.message);
+        alert('Network error: ' + error.message);
     }
 });
 
@@ -46,18 +46,18 @@ document.getElementById('createGame').addEventListener('click', async () => {
 
         if (response.ok) {
             const data = await response.json();
-            console.log('✅ Game created successfully:', data);
+            console.log('Game created successfully:', data);
             
             const gameCode = data.gameCode || data.gameId.substring(0, 6).toUpperCase();
             
-            alert(`🎮 GAME CREATED!\n\nYour game code is: ${gameCode}\n\nShare this code with your friend so they can join your game!`);
+            alert(`GAME CREATED!\n\nYour game code is: ${gameCode}\n\nShare this code with your friend so they can join your game!`);
             
             window.location.href = `/checkers.html?gameId=${data.gameId}&player=white`;
         } else {
-            console.error('❌ Failed to create game. Status:', response.status);
+            console.error('Failed to create game. Status:', response.status);
             const errorText = await response.text();
             console.error('Error response:', errorText);
-            alert('❌ Failed to create game. Check console for details.');
+            alert('Failed to create game. Check console for details.');
         }
     } catch (error) {
         console.error('Error creating game:', error);

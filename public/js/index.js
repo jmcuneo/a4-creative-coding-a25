@@ -6,29 +6,6 @@ console.log("Index.js loaded - Version 2.0, setting up handlers...");
 // Play Checkers button - redirect to checkers.html
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Test server connection
-    const testBtn = $("testConnection");
-    if (testBtn) {
-        testBtn.onclick = async () => {
-            try {
-                console.log('Testing server connection...');
-                const response = await fetch('/api/test?v=' + Date.now());
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Test response:', data);
-                    alert('✅ Server connection successful!\n' + JSON.stringify(data, null, 2));
-                } else {
-                    console.error('Test failed. Status:', response.status);
-                    alert('❌ Server test failed. Status: ' + response.status);
-                }
-            } catch (error) {
-                console.error('Test error:', error);
-                alert('❌ Network error: ' + error.message);
-            }
-        };
-    }
-
     // Play local game button
     const playLocalBtn = $("playLocal");
     if (playLocalBtn) {
@@ -64,22 +41,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('✅ Game created successfully:', data);
+                    console.log('Game created successfully:', data);
                     
                     const gameCode = data.gameCode || data.gameId.substring(0, 6).toUpperCase();
                     
-                    alert(`🎮 GAME CREATED!\n\nYour game code is: ${gameCode}\n\nShare this code with your friend so they can join your game!`);
+                    alert(`GAME CREATED!\n\nYour game code is: ${gameCode}\n\nShare this code with your friend so they can join your game!`);
                     
                     window.location.href = `/checkers.html?gameId=${data.gameId}&player=white`;
                 } else {
-                    console.error('❌ Failed to create game. Status:', response.status);
+                    console.error('Failed to create game. Status:', response.status);
                     const errorText = await response.text();
                     console.error('Error response:', errorText);
-                    alert('❌ Failed to create game. Check console for details.');
+                    alert('Failed to create game. Check console for details.');
                 }
             } catch (error) {
-                console.error('❌ Error creating game:', error);
-                alert('❌ Network error. Please try again.');
+                console.error('Error creating game:', error);
+                alert('Network error. Please try again.');
             }
         };
     } else {
@@ -114,19 +91,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('✅ Joined game successfully:', data);
+                    console.log('Joined game successfully:', data);
                     
-                    alert(`🎮 JOINED GAME!\n\nGame code: ${gameCode}`);
+                    alert(`JOINED GAME!\n\nGame code: ${gameCode}`);
                     
                     window.location.href = `/checkers.html?gameId=${data.gameId}&player=black`;
                 } else {
                     const error = await response.json();
-                    console.error('❌ Failed to join game:', error);
-                    alert('❌ Failed to join game: ' + (error.error || 'Game not found'));
+                    console.error('Failed to join game:', error);
+                    alert('Failed to join game: ' + (error.error || 'Game not found'));
                 }
             } catch (error) {
-                console.error('❌ Error joining game:', error);
-                alert('❌ Network error. Please try again.');
+                console.error('Error joining game:', error);
+                alert('Network error. Please try again.');
             }
         };
     } else {

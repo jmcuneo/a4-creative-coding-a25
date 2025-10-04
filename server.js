@@ -73,7 +73,7 @@ function requireAuth(req, res, next) {
 
 // 
 const GameSchema = new mongoose.Schema({
-  players: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], 
+  players: [{ type: String }], // Changed from ObjectId to String for simplified multiplayer
   board: { type: [[String]], default: [] }, 
   turn: { type: String, default: "W" }, 
   gameCode: { type: String, unique: true }, // Add game code field
@@ -174,6 +174,17 @@ app.post("/api/games", async (req, res) => {
     }
 
     console.log('Generated game code:', gameCode); // Debug log
+
+    // Check if game code already exists and regenerate if needed
+    let existingGame = await Game.findOne({ gameCode: gameCode });
+    while (existingGame) {
+      console.log('Game code collision, regenerating...'); 
+      gameCode = '';
+      for (let i = 0; i < 6; i++) {
+        gameCode += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      existingGame = await Game.findOne({ gameCode: gameCode });
+    }
 
     const game = await Game.create({
       players: ['Player1'], // Simple placeholder
