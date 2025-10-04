@@ -21,10 +21,13 @@ document.getElementById('createGame').addEventListener('click', async () => {
 
         if (response.ok) {
             const data = await response.json();
-            // Generate a shorter, more user-friendly game code
-            const gameCode = data.gameId.substring(0, 6).toUpperCase();
+            console.log('Game created:', data); // Debug log
             
-            alert(`Game created! Share this code with your friend: ${gameCode}`);
+            // Use the gameCode from server or generate one if not provided
+            const gameCode = data.gameCode || data.gameId.substring(0, 6).toUpperCase();
+            
+            // Show a better formatted alert
+            alert(`🎮 GAME CREATED!\n\nYour game code is: ${gameCode}\n\nShare this code with your friend so they can join your game!`);
             
             // Redirect to game with the full game ID
             window.location.href = `/checkers.html?gameId=${data.gameId}&player=white`;
