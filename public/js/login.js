@@ -1,5 +1,25 @@
 // Simplified multiplayer game interface - no login required
 
+// Test server connection
+document.getElementById('testConnection').addEventListener('click', async () => {
+    try {
+        console.log('Testing server connection...');
+        const response = await fetch('/api/test');
+        
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Test response:', data);
+            alert('✅ Server connection successful!\n' + JSON.stringify(data, null, 2));
+        } else {
+            console.error('Test failed. Status:', response.status);
+            alert('❌ Server test failed. Status: ' + response.status);
+        }
+    } catch (error) {
+        console.error('Test error:', error);
+        alert('❌ Network error: ' + error.message);
+    }
+});
+
 // Play local game
 document.getElementById('playLocal').addEventListener('click', () => {
     window.location.href = '/checkers.html';
@@ -8,6 +28,8 @@ document.getElementById('playLocal').addEventListener('click', () => {
 // Create new online game
 document.getElementById('createGame').addEventListener('click', async () => {
     try {
+        console.log('Creating new game...'); // Debug log
+        
         const response = await fetch('/api/games', {
             method: 'POST',
             headers: {
@@ -19,9 +41,12 @@ document.getElementById('createGame').addEventListener('click', async () => {
             })
         });
 
+        console.log('Response status:', response.status); // Debug log
+        console.log('Response headers:', response.headers); // Debug log
+
         if (response.ok) {
             const data = await response.json();
-            console.log('Game created:', data); // Debug log
+            console.log('Game created successfully:', data); // Debug log
             
             // Use the gameCode from server or generate one if not provided
             const gameCode = data.gameCode || data.gameId.substring(0, 6).toUpperCase();
@@ -32,8 +57,10 @@ document.getElementById('createGame').addEventListener('click', async () => {
             // Redirect to game with the full game ID
             window.location.href = `/checkers.html?gameId=${data.gameId}&player=white`;
         } else {
-            const error = await response.json();
-            alert('Failed to create game: ' + (error.message || 'Unknown error'));
+            console.error('Failed to create game. Status:', response.status);
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            alert('Failed to create game. Check console for details.');
         }
     } catch (error) {
         console.error('Error creating game:', error);

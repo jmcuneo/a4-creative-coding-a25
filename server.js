@@ -76,6 +76,7 @@ const GameSchema = new mongoose.Schema({
   players: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], 
   board: { type: [[String]], default: [] }, 
   turn: { type: String, default: "W" }, 
+  gameCode: { type: String, unique: true }, // Add game code field
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date }
 });
@@ -147,8 +148,16 @@ app.post("/api/game/:id/move", requireAuth, async (req, res) => {
 
 // Simplified API endpoints without authentication
 
+// Test endpoint
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Server is working!", timestamp: new Date() });
+});
+
 // Create new game (no auth required)
 app.post("/api/games", async (req, res) => {
+  console.log('POST /api/games called'); // Debug log
+  console.log('Request body:', req.body); // Debug log
+  
   try {
     const emptyBoard = Array.from({ length: 8 }, (_, r) =>
       Array.from({ length: 8 }, (_, c) =>
@@ -157,18 +166,23 @@ app.post("/api/games", async (req, res) => {
       )
     );
 
-    const game = await Game.create({
-      players: ['Player1'], // Simple placeholder
-      board: emptyBoard,
-      turn: "W"
-    });
-
     // Generate a more user-friendly 6-character code using only letters/numbers
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed confusing chars like 0, O, I, 1
     let gameCode = '';
     for (let i = 0; i < 6; i++) {
       gameCode += chars.charAt(Math.floor(Math.random() * chars.length));
     }
+
+    console.log('Generated game code:', gameCode); // Debug log
+
+    const game = await Game.create({
+      players: ['Player1'], // Simple placeholder
+      board: emptyBoard,
+      turn: "W",
+      gameCode: gameCode
+    });
+
+    console.log('Game created with ID:', game._id); // Debug log
 
     res.json({ 
       ok: true, 
@@ -177,18 +191,15 @@ app.post("/api/games", async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating game:', error);
-    res.status(500).json({ error: "Failed to create game" });
+    res.status(500).json({ error: "Failed to create game", details: error.message });
   }
 });
 
 // Join game by code (no auth required)
 app.post("/api/games/:code/join", async (req, res) => {
   try {
-    // Find game where the ID starts with the provided code
-    const games = await Game.find({});
-    const game = games.find(g => 
-      g._id.toString().substring(0, 6).toUpperCase() === req.params.code.toUpperCase()
-    );
+    // Find game by gameCode field
+    const game = await Game.findOne({ gameCode: req.params.code.toUpperCase() });
     
     if (!game) {
       return res.status(404).json({ error: "Game not found" });
@@ -206,7 +217,7 @@ app.post("/api/games/:code/join", async (req, res) => {
     res.json({ 
       ok: true, 
       gameId: game._id,
-      gameCode: req.params.code.toUpperCase()
+      gameCode: game.gameCode
     });
   } catch (error) {
     console.error('Error joining game:', error);
