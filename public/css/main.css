@@ -6,18 +6,18 @@ html, body {
     transition: background 1s ease-in-out;
     box-sizing: border-box;
     font-family: 'Arial', sans-serif;
-    
-    /* Checkerboard background pattern */
+
+    /* Dark checkerboard background pattern */
     background-image: 
-        linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
-        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
-        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
-    background-size: 40px 40px;
-    background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
-    background-color: #ffffff;
-    
-    /* Center all content */
+        linear-gradient(45deg, #2a2a2a 25%, transparent 25%),
+        linear-gradient(-45deg, #2a2a2a 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #2a2a2a 75%),
+        linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
+    background-size: 60px 60px;
+    background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+    background-color: #1a1a1a;
+
+    /* Center this stuff */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -135,25 +135,25 @@ html, body {
     }
 }
 
-/* Index page styles */
+/* Index  */
 h1 {
-    color: #333;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
     margin-bottom: 30px;
     font-size: 3rem;
 }
 
-/* Main container for centered content */
+/* Mait */
 .main-container {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(40, 40, 40, 0.95);
     border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     padding: 40px;
-    max-width: 600px;
+    max-width: 800px;
     width: 100%;
     margin: 20px;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(60,60,60,0.3);
 }
 
 #mainMenu {
@@ -162,8 +162,12 @@ h1 {
 }
 
 #mainMenu h2 {
-    color: #444;
+    color: #ffffff;
     margin-bottom: 20px;
+}
+
+#mainMenu p {
+    color: #cccccc;
 }
 
 #playCheckersBtn {
@@ -173,26 +177,32 @@ h1 {
     color: white;
     border: none;
     border-radius: 10px;
+#playCheckersBtn {
+    padding: 20px 40px;
+    font-size: 20px;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
     border-radius: 10px;
     cursor: pointer;
     margin: 15px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
     font-weight: bold;
 }
 
 #playCheckersBtn:hover {
     background: linear-gradient(45deg, #45a049, #3d8b40);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
 }
 
-/* Auth section styling */
+/* Auth  */
 #auth {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(50, 50, 50, 0.9);
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     margin: 20px 0;
     width: 100%;
     max-width: 400px;
@@ -200,7 +210,7 @@ h1 {
 
 #auth h2 {
     text-align: center;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 20px;
 }
 
@@ -208,16 +218,23 @@ h1 {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
-    border: 2px solid #ddd;
+    border: 2px solid #555;
     border-radius: 8px;
     font-size: 16px;
     transition: border-color 0.3s ease;
     box-sizing: border-box;
+    background: #333;
+    color: #fff;
 }
 
 #auth input:focus {
     border-color: #4CAF50;
     outline: none;
+    background: #3a3a3a;
+}
+
+#auth input::placeholder {
+    color: #aaa;
 }
 
 #auth button {
@@ -237,6 +254,11 @@ h1 {
     background: #45a049;
 }
 
+#loginMessage {
+    color: #ffffff;
+    text-align: center;
+}
+
 #game {
     display: none;
 }
@@ -245,30 +267,41 @@ h1 {
     border: 1px solid #333;
 }
 
-/* Checkers page styles */
+/* Checkers  */
 canvas {
     background: #fff;
     display: block;
-    margin: 20px auto;
+    margin: 30px auto;
     border-radius: 10px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
 }
 
 #controls {
     text-align: center;
-    margin: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin: 30px;
+    background: rgba(50, 50, 50, 0.9);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 #controls select, #controls input, #controls button {
-    margin: 5px;
-    padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+    margin: 8px;
+    padding: 12px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #333;
+    color: #fff;
+}
+
+#controls select option {
+    background: #333;
+    color: #fff;
+}
+
+#controls input::placeholder {
+    color: #aaa;
 }
 
 #controls button {
@@ -277,22 +310,25 @@ canvas {
     border: 2px solid #4CAF50;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-weight: bold;
 }
 
 #controls button:hover {
     background: #45a049;
     border-color: #45a049;
+    transform: translateY(-1px);
 }
 
 #gameInfo {
     text-align: center;
-    margin: 10px;
-    font-size: 20px;
+    margin: 20px;
+    font-size: 24px;
     font-weight: bold;
-    color: #333;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 15px;
+    color: #ffffff;
+    background: rgba(50, 50, 50, 0.9);
+    padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     display: inline-block;
+    min-width: 200px;
 }
