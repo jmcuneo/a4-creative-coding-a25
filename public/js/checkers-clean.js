@@ -2,11 +2,8 @@
 // Supports Local play (hotseat) and Online mode via Express API
 // Author: Nicholas Driscoll (2025)
 
-document.addEventListener('DOMContentLoaded', function() {
-  console.log("DOM loaded, initializing checkers...");
-
-  const canvas = document.getElementById("board");
-  const ctx = canvas.getContext("2d");
+const canvas = document.getElementById("board");
+const ctx = canvas.getContext("2d");
 
 if (!canvas || !ctx) {
   console.error("Canvas or context not found!");
@@ -272,12 +269,11 @@ function pollGame() {
   }, 2000);
 }
 
-  // ========== INITIALIZE ==========
-  if (canvas && ctx) {
-    initBoard();
-    redraw();
-    console.log("Checkers game initialized successfully!");
-  } else {
-    console.error("Failed to initialize checkers game");
-  }
-});
+// ========== INITIALIZE ==========
+if (canvas && ctx) {
+  initBoard();
+  redraw();
+  console.log("Checkers game initialized successfully!");
+} else {
+  console.error("Failed to initialize checkers game");
+}
