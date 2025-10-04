@@ -8,6 +8,7 @@ let turn = "W";
 let selected = null;
 let mode = "local";
 let gameId = null;
+let validMoves = [];
 
 document.getElementById("modeSelect").onchange = e => mode = e.target.value;
 
@@ -42,6 +43,18 @@ function drawBoard() {
         for (let c = 0; c < size; c++) {
             ctx.fillStyle = (r + c) % 2 ? "#704923" : "#EEE";
             ctx.fillRect(c * squareSize, r * squareSize, squareSize, squareSize);
+            
+            // Highlight selected square
+            if (selected && selected.r === r && selected.c === c) {
+                ctx.fillStyle = "rgba(255, 255, 0, 0.5)";
+                ctx.fillRect(c * squareSize, r * squareSize, squareSize, squareSize);
+            }
+            
+            // Highlight valid moves
+            if (validMoves.some(move => move.r === r && move.c === c)) {
+                ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
+                ctx.fillRect(c * squareSize, r * squareSize, squareSize, squareSize);
+            }
         }
 }
 
@@ -50,7 +63,65 @@ function drawChecker(c, r, color, king = false) {
     ctx.arc(c * squareSize + squareSize / 2, r * squareSize + squareSize / 2, squareSize * 0.4, 0, Math.PI * 2);
     ctx.fillStyle = color;
     ctx.fill();
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
     ctx.stroke();
+    
+    if (king) {
+        // Draw a crown or double circle for king pieces in checkers
+        ctx.strokeStyle = "#FFD700";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(c * squareSize + squareSize / 2, r * squareSize + squareSize / 2, squareSize * 0.2, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Add text "K" for king
+        ctx.fillStyle = "#FFD700";
+        ctx.font = `bold ${squareSize * 0.3}px Arial`;
+        ctx.textAlign = "center";
+        ctx.fillText("K", c * squareSize + squareSize / 2, r * squareSize + squareSize / 2 + squareSize * 0.1);
+    }
+}
+
+function getValidMoves(r, c) {
+    const moves = [];
+    const piece = board[r][c];
+    if (!piece) return moves;
+    
+    const isKing = piece.length > 1;
+    const isWhite = piece[0] === "W";
+    
+    // Regular pieces can only move forward, kings can move in all directions
+    const directions = isKing ? [[-1,-1], [-1,1], [1,-1], [1,1]] : 
+                      isWhite ? [[-1,-1], [-1,1]] : [[1,-1], [1,1]];
+    
+    for (const [dr, dc] of directions) {
+        const newR = r + dr;
+        const newC = c + dc;
+        
+        // Check if move is within bounds and to empty dark square
+        if (newR >= 0 && newR < size && newC >= 0 && newC < size && 
+            (newR + newC) % 2 === 1 && !board[newR][newC]) {
+            moves.push({r: newR, c: newC});
+        }
+        
+        // Check for jumps
+        const jumpR = r + dr * 2;
+        const jumpC = c + dc * 2;
+        
+        if (jumpR >= 0 && jumpR < size && jumpC >= 0 && jumpC < size &&
+            (jumpR + jumpC) % 2 === 1 && !board[jumpR][jumpC] &&
+            board[newR][newC] && board[newR][newC][0] !== piece[0]) {
+            moves.push({r: jumpR, c: jumpC, jump: {r: newR, c: newC}});
+        }
+    }
+    
+    return moves;
+}
+
+function isValidMove(fromR, fromC, toR, toC) {
+    const moves = getValidMoves(fromR, fromC);
+    return moves.some(move => move.r === toR && move.c === toC);
 }
 
 function redraw() {
@@ -61,6 +132,13 @@ function redraw() {
                 const piece = board[r][c];
                 drawChecker(c, r, piece[0] === "W" ? "white" : "black", piece.length > 1);
             }
+    
+    // Update turn indicator in HTML
+    const gameInfo = document.getElementById("gameInfo");
+    if (gameInfo) {
+        gameInfo.textContent = `Current Turn: ${turn === "W" ? "White" : "Black"}`;
+        gameInfo.style.color = turn === "W" ? "#333" : "#333";
+    }
 }
 
 canvas.onclick = async e => {
@@ -69,21 +147,64 @@ canvas.onclick = async e => {
     const r = Math.floor((e.clientY - rect.top) / squareSize);
 
     if (selected) {
-        board[r][c] = board[selected.r][selected.c];
-        board[selected.r][selected.c] = "";
-        turn = turn === "W" ? "B" : "W";
-        redraw();
-
-        if (mode === "online" && gameId) {
-            await fetch(`/api/game/${gameId}/move`, {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({from: selected, to: {row: r, col: c}})
-            });
+        // If clicking the same piece, deselect it
+        if (selected.r === r && selected.c === c) {
+            selected = null;
+            validMoves = [];
+            redraw();
+            return;
         }
-        selected = null;
-    } else if (board[r][c]) {
+        
+        // Check if this is a valid move
+        if (isValidMove(selected.r, selected.c, r, c)) {
+            const piece = board[selected.r][selected.c];
+            
+            // Check if this move involves a jump
+            const move = getValidMoves(selected.r, selected.c).find(m => m.r === r && m.c === c);
+            if (move && move.jump) {
+                // Remove the jumped piece
+                board[move.jump.r][move.jump.c] = "";
+            }
+            
+            // Move the piece
+            board[r][c] = piece;
+            board[selected.r][selected.c] = "";
+            
+            // Check for king promotion
+            if ((piece[0] === "W" && r === 0) || (piece[0] === "B" && r === 7)) {
+                board[r][c] = piece[0] + "K";
+            }
+            
+            turn = turn === "W" ? "B" : "W";
+            selected = null;
+            validMoves = [];
+            redraw();
+
+            if (mode === "online" && gameId) {
+                await fetch(`/api/game/${gameId}/move`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({from: {row: selected.r, col: selected.c}, to: {row: r, col: c}})
+                });
+            }
+        } else {
+            // Invalid move - check if clicking on own piece
+            if (board[r][c] && board[r][c][0] === turn) {
+                selected = {r, c};
+                validMoves = getValidMoves(r, c);
+                redraw();
+            } else {
+                // Invalid move, deselect
+                selected = null;
+                validMoves = [];
+                redraw();
+            }
+        }
+    } else if (board[r][c] && board[r][c][0] === turn) {
+        // Select piece if it belongs to current player
         selected = {r, c};
+        validMoves = getValidMoves(r, c);
+        redraw();
     }
 };
 

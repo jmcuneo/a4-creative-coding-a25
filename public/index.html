@@ -3,10 +3,18 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Checkers Online</title>
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 	<h1>Checkers Online</h1>
+	
+	<div id="mainMenu" style="text-align: center; margin: 20px;">
+		<h2>Welcome to Checkers!</h2>
+		<button id="playCheckersBtn" style="padding: 15px 30px; font-size: 18px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px;">
+			🔥 Play Checkers Now
+		</button>
+		<p>Or login below for online multiplayer games</p>
+	</div>
 	
 	<div id="auth">
 		<h2>Login</h2>
@@ -30,6 +38,11 @@
 	<script>
 		const $ = id => document.getElementById(id);
 
+		// Play Checkers button - redirect to checkers.html
+		$("playCheckersBtn").onclick = () => {
+			window.location.href = "checkers.html";
+		};
+
 		$("loginForm").onsubmit = async e => {
 			e.preventDefault();
 			const username = $("username").value;
@@ -41,10 +54,12 @@
 					body: JSON.stringify({ username, password })
 				});
 				const data = await res.json();
-				$("loginMessage").textContent = res.ok ? "Login successful!" : (data.error || "Login failed");
+				$("loginMessage").textContent = res.ok ? "Login successful! Redirecting to checkers..." : (data.error || "Login failed");
 				if (res.ok) {
-					$("auth").style.display = "none";
-					$("game").style.display = "block";
+					// Redirect to checkers page after successful login
+					setTimeout(() => {
+						window.location.href = "checkers.html";
+					}, 1500);
 				}
 			} catch {
 				$("loginMessage").textContent = "Server error";
