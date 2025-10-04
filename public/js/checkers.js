@@ -13,6 +13,62 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentPlayer = "W"; 
   let selectedPiece = null;
   let mustJump = false;
+  let gameOver = false;
+
+  function checkWinCondition() {
+    let whitePieces = 0;
+    let blackPieces = 0;
+    let whiteCanMove = false;
+    let blackCanMove = false;
+    
+    for (let row = 0; row < BOARD_SIZE; row++) {
+      for (let col = 0; col < BOARD_SIZE; col++) {
+        const piece = board[row][col];
+        if (piece.includes("W")) {
+          whitePieces++;
+          if (!whiteCanMove && canMove(row, col, piece)) whiteCanMove = true;
+        } else if (piece.includes("B")) {
+          blackPieces++;
+          if (!blackCanMove && canMove(row, col, piece)) blackCanMove = true;
+        }
+      }
+    }
+    
+    if (whitePieces === 0 || !whiteCanMove) {
+      gameOver = true;
+      gameInfo.textContent = "🎉 BLACK WINS! 🎉";
+      return true;
+    }
+    if (blackPieces === 0 || !blackCanMove) {
+      gameOver = true;
+      gameInfo.textContent = "🎉 WHITE WINS! 🎉";
+      return true;
+    }
+    return false;
+  }
+
+  function canMove(row, col, piece) {
+    const isKing = piece.includes("K");
+    const directions = isKing ? 
+      [[-1,-1], [-1,1], [1,-1], [1,1]] : 
+      piece.includes("W") ? [[1,-1], [1,1]] : [[-1,-1], [-1,1]];
+    
+    for (const [dr, dc] of directions) {
+      const newRow = row + dr;
+      const newCol = col + dc;
+      if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {
+        if (!board[newRow][newCol]) return true;
+        
+        const jumpRow = row + dr * 2;
+        const jumpCol = col + dc * 2;
+        if (jumpRow >= 0 && jumpRow < BOARD_SIZE && jumpCol >= 0 && jumpCol < BOARD_SIZE &&
+            !board[newRow][newCol].includes(piece[0]) && !board[jumpRow][jumpCol]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   function canJump(row, col, player) {
     const directions = player.includes("K") ? 
@@ -57,6 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
     selectedPiece = null;
     mustJump = false;
     currentPlayer = currentPlayer[0] === "W" ? "B" : "W";
+    
+    if (checkWinCondition()) {
+      return true;
+    }
+    
     return true;
   }
 
@@ -112,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
           
           ctx.beginPath();
           ctx.arc(x, y, radius, 0, Math.PI * 2);
-          ctx.fillStyle = piece.includes("W") ? "white" : "#dc2626";
+          ctx.fillStyle = piece.includes("W") ? "white" : "#1a1a1a";
           ctx.fill();
           ctx.strokeStyle = piece.includes("W") ? "#333" : "#fff";
           ctx.lineWidth = 3;
@@ -138,10 +199,14 @@ document.addEventListener('DOMContentLoaded', function() {
   function render() {
     drawBoard();
     drawPieces();
-    gameInfo.textContent = `Current Player: ${currentPlayer.includes("W") ? "White" : "Black"}`;
+    if (!gameOver) {
+      gameInfo.textContent = `Current Player: ${currentPlayer.includes("W") ? "White" : "Black"}${mustJump ? " - Must Jump!" : ""}`;
+    }
   }
 
   canvas.addEventListener('click', function(e) {
+    if (gameOver) return;
+    
     const rect = canvas.getBoundingClientRect();
     const col = Math.floor((e.clientX - rect.left) / SQUARE_SIZE);
     const row = Math.floor((e.clientY - rect.top) / SQUARE_SIZE);
@@ -184,6 +249,20 @@ document.addEventListener('DOMContentLoaded', function() {
       render();
     }
   });
+
+  function resetGame() {
+    currentPlayer = "W";
+    selectedPiece = null;
+    mustJump = false;
+    gameOver = false;
+    setupBoard();
+    render();
+  }
+
+  const resetBtn = document.getElementById("resetGame");
+  if (resetBtn) {
+    resetBtn.addEventListener('click', resetGame);
+  }
 
   setupBoard();
   render();
