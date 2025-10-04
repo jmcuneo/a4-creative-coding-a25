@@ -1,5 +1,6 @@
-// Canvas AP https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
-// https://en.wikipedia.org/wiki/Checkers
+// Checkers Game - Enhanced with dark theme, larger squares, and visual feedback
+// Canvas API: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
+// Checkers rules: https://en.wikipedia.org/wiki/Checkers
 
 const canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
@@ -183,6 +184,7 @@ canvas.onclick = async e => {
         
         if (isValidMove(selected.r, selected.c, r, c)) {
             const piece = board[selected.r][selected.c];
+            const fromPos = {row: selected.r, col: selected.c};
             
             const move = getValidMoves(selected.r, selected.c).find(m => m.r === r && m.c === c);
             if (move && move.jump) {
@@ -205,7 +207,7 @@ canvas.onclick = async e => {
                 await fetch(`/api/game/${gameId}/move`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({from: {row: selected.r, col: selected.c}, to: {row: r, col: c}})
+                    body: JSON.stringify({from: fromPos, to: {row: r, col: c}})
                 });
             }
         } else {
