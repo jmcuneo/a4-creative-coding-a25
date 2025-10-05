@@ -7,17 +7,24 @@
 </head>
 <body>
 	<div class="main-container">
-    <h1>Interactive Multimedia Checkers</h1>
+    <h1>Checkers Online</h1>
     <div id="mainMenu">
-      <h2>Welcome to Enhanced Checkers!</h2>
-      <p>Play with sound effects, glowing king pieces, and smooth animations</p>
+      <h2>Welcome to Checkers!</h2>
+      <p>Play locally or log in to Play Online</p>
       <button id="playCheckersBtn" class="play-button">
-        Play Enhanced Checkers Game
+        Play Local Checkers Game
       </button>
     </div>
 
-    <div id="onlineGame">
-      <h2>Online Multiplayer</h2>
+    <div id="auth">
+      <h2>Login</h2>
+      <input id="username" placeholder="Username" type="text">
+      <input id="password" placeholder="Password" type="password">
+      <button id="loginBtn">Login & Play Online</button>
+    </div>
+
+    <div id="onlineGame" style="display: none;">
+      <h2>Online Game</h2>
       <div class="game-controls">
         <button id="createGame">Create New Game</button>
         <div class="join-section">
@@ -28,6 +35,18 @@
     </div>
   </div>
 
-  <script src="js/index.js"></script>
+  <script>
+    // Simple navigation - like the working version
+    document.getElementById('playCheckersBtn').addEventListener('click', () => {
+      console.log('Play Local button clicked - navigating to checkers.html');
+      window.location.href = '/checkers.html';
+    });
+
+    // Basic login functionality
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      document.getElementById('auth').style.display = 'none';
+      document.getElementById('onlineGame').style.display = 'block';
+    });
+  </script>
 </body>
 </html>

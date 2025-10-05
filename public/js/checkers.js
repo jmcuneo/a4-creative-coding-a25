@@ -328,7 +328,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function render() {
     drawBoard();
-    drawPieces();
+    if (board && board.length > 0) { // Safety check
+      drawPieces();
+    }
     if (!gameOver) {
       gameInfo.textContent = `Current Player: ${currentPlayer.includes("W") ? "White" : "Black"}${mustJump ? " - Must Jump!" : ""}`;
     }
@@ -340,8 +342,16 @@ document.addEventListener('DOMContentLoaded', function() {
     requestAnimationFrame(animate);
   }
 
-  // Start the animation loop
-  animate();
+  // Initialize everything in the right order
+  function initGame() {
+    console.log('Initializing game...');
+    setupBoard();
+    console.log('Board setup complete, starting render...');
+    animate(); // Start animation loop instead of single render
+  }
+
+  // Start the game
+  initGame();
 
   canvas.addEventListener('click', function(e) {
     if (gameOver) return;
@@ -414,7 +424,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  setupBoard();
-  render();
-
+  // Game is already initialized by initGame() above
 });
