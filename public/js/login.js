@@ -1,11 +1,10 @@
 
-// UPDATED VERSION - Clear browser cache if you see old behavior!
 console.log('Login.js loaded - Version 2.0');
 
 document.getElementById('testConnection').addEventListener('click', async () => {
     try {
         console.log('Testing server connection...');
-        const response = await fetch('/api/test?v=' + Date.now()); // Cache busting
+        const response = await fetch('/api/test?v=' + Date.now()); 
         
         if (response.ok) {
             const data = await response.json();

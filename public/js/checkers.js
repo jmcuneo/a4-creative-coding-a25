@@ -211,7 +211,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function setupBoard() {
-    console.log('Setting up board...'); // Debug log
     board = [];
     let whiteCount = 0, blackCount = 0;
     
@@ -233,8 +232,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     }
-    
-    console.log(`Board setup complete. White pieces: ${whiteCount}, Black pieces: ${blackCount}`); // Debug log
   }
 
   function drawBoard() {
@@ -259,7 +256,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function drawPieces() {
-    console.log('Drawing pieces...'); // Debug log
     let pieceCount = 0;
     
     for (let row = 0; row < BOARD_SIZE; row++) {
@@ -267,7 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const piece = board[row][col];
         if (piece) {
           pieceCount++;
-          console.log(`Drawing piece ${piece} at ${row},${col}`); // Debug log
           
           const x = col * SQUARE_SIZE + SQUARE_SIZE / 2;
           const y = row * SQUARE_SIZE + SQUARE_SIZE / 2;
@@ -322,8 +317,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     }
-    
-    console.log(`Total pieces drawn: ${pieceCount}`); // Debug log
   }
 
   function render() {
@@ -344,9 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize everything in the right order
   function initGame() {
-    console.log('Initializing game...');
     setupBoard();
-    console.log('Board setup complete, starting render...');
     animate(); // Start animation loop instead of single render
   }
 

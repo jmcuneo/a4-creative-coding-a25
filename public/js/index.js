@@ -1,12 +1,9 @@
 const $ = id => document.getElementById(id);
 
-// UPDATED VERSION - Clear browser cache if you see old behavior!
 console.log("Index.js loaded - Version 2.0, setting up handlers...");
 
-// Play Checkers button - redirect to checkers.html
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Play local game button
     const playLocalBtn = $("playLocal");
     if (playLocalBtn) {
         console.log("Play Local button found, attaching click handler");
@@ -16,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Create game button - NEW SIMPLIFIED VERSION
     const createBtn = $("createGame");
     if (createBtn) {
         console.log("Create Game button found, attaching NEW click handler");
@@ -63,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Create Game button NOT found!");
     }
 
-    // Join game button - NEW SIMPLIFIED VERSION
     const joinBtn = $("joinGame");
     if (joinBtn) {
         console.log("Join Game button found, attaching NEW click handler");

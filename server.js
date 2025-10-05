@@ -55,15 +55,12 @@ app.use(session({
   cookie: { secure: process.env.NODE_ENV === "production" }
 }));
 
-// Static file serving
 app.use(express.static(path.join(__dirname, "public")));
 
-// Root route → serve index.html
 app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Authenticator 
 function requireAuth(req, res, next) {
   if (!req.session.userId) {
     return res.status(401).json({ error: "Authentication required" });
@@ -71,12 +68,12 @@ function requireAuth(req, res, next) {
   next();
 }
 
-// 
+// Game schema
 const GameSchema = new mongoose.Schema({
-  players: [{ type: String }], // Changed from ObjectId to String for simplified multiplayer
-  board: { type: [[String]], default: [] }, 
-  turn: { type: String, default: "W" }, 
-  gameCode: { type: String, unique: true }, // Add game code field
+  players: [{ type: String }], 
+  board: { type: [[String]], default: [] },
+  turn: { type: String, default: "W" },
+  gameCode: { type: String, unique: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date }
 });
@@ -107,7 +104,6 @@ app.post("/api/game/create", requireAuth, async (req, res) => {
 });
 
 
-// joint the game
 app.post("/api/game/join/:id", requireAuth, async (req, res) => {
   const game = await Game.findById(req.params.id);
   if (!game) return res.status(404).json({ error: "Game not found" });
@@ -121,15 +117,14 @@ app.post("/api/game/join/:id", requireAuth, async (req, res) => {
 });
 
 
-// thisb will return the game state
+// Return game state
 app.get("/api/game/:id", requireAuth, async (req, res) => {
   const game = await Game.findById(req.params.id);
   if (!game) return res.status(404).json({ error: "Game not found" });
   res.json(game);
 });
 
-
-// makes the movbe on the board
+// Make move on board
 app.post("/api/game/:id/move", requireAuth, async (req, res) => {
   const { from, to } = req.body;
   const game = await Game.findById(req.params.id);
@@ -146,9 +141,7 @@ app.post("/api/game/:id/move", requireAuth, async (req, res) => {
   res.json({ ok: true, game });
 });
 
-// Simplified API endpoints without authentication
 
-// Test endpoint
 app.get("/api/test", (req, res) => {
   res.json({ 
     message: "Server is working!", 
@@ -157,7 +150,7 @@ app.get("/api/test", (req, res) => {
   });
 });
 
-// Health check endpoint
+
 app.get("/api/health", (req, res) => {
   res.json({ 
     status: "ok", 
@@ -167,11 +160,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Create new game (no auth required)
 app.post("/api/games", async (req, res) => {
-  console.log('POST /api/games called'); // Debug log
-  console.log('Request body:', req.body); // Debug log
-  
   try {
     const { player1 } = req.body;
     const creatorName = player1 || 'Player1';
@@ -183,19 +172,15 @@ app.post("/api/games", async (req, res) => {
       )
     );
 
-    // Generate a more user-friendly 6-character code using only letters/numbers
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed confusing chars like 0, O, I, 1
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let gameCode = '';
     for (let i = 0; i < 6; i++) {
       gameCode += chars.charAt(Math.floor(Math.random() * chars.length));
     }
 
-    console.log('Generated game code:', gameCode); // Debug log
-
-    // Check if game code already exists and regenerate if needed
+    // Ensure unique game code
     let existingGame = await Game.findOne({ gameCode: gameCode });
     while (existingGame) {
-      console.log('Game code collision, regenerating...'); 
       gameCode = '';
       for (let i = 0; i < 6; i++) {
         gameCode += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -204,14 +189,11 @@ app.post("/api/games", async (req, res) => {
     }
 
     const game = await Game.create({
-      players: [creatorName], // Add the creator as the first player
+      players: [creatorName],
       board: emptyBoard,
       turn: "W",
       gameCode: gameCode
     });
-
-    console.log('Game created with ID:', game._id); // Debug log
-    console.log('Players in game:', game.players); // Debug log
 
     res.json({ 
       ok: true, 
@@ -225,38 +207,25 @@ app.post("/api/games", async (req, res) => {
   }
 });
 
-// Join game by code (no auth required)
+// Join game by code
 app.post("/api/games/:code/join", async (req, res) => {
   try {
     const { player2 } = req.body;
     const playerName = player2 || 'Player2';
     
-    console.log('Joining game with code:', req.params.code); // Debug log
-    console.log('Player trying to join:', playerName); // Debug log
-    
-    // Find game by gameCode field
     const game = await Game.findOne({ gameCode: req.params.code.toUpperCase() });
     
     if (!game) {
-      console.log('Game not found with code:', req.params.code); // Debug log
       return res.status(404).json({ error: "Game not found" });
     }
     
-    console.log('Found game with players:', game.players); // Debug log
-    console.log('Current player count:', game.players.length); // Debug log
-    
     if (game.players.length >= 2) {
-      console.log('Game is already full'); // Debug log
       return res.status(400).json({ error: "Game is full" });
     }
 
-    // Add player if not already in the game and not the same as first player
     if (!game.players.includes(playerName)) {
       game.players.push(playerName);
       await game.save();
-      console.log('Player added. New player list:', game.players); // Debug log
-    } else {
-      console.log('Player already in game'); // Debug log
     }
     
     res.json({ 
@@ -272,7 +241,7 @@ app.post("/api/games/:code/join", async (req, res) => {
   }
 });
 
-// Get game state (no auth required)
+// Get game state
 app.get("/api/games/:id/state", async (req, res) => {
   try {
     const game = await Game.findById(req.params.id);
@@ -286,7 +255,7 @@ app.get("/api/games/:id/state", async (req, res) => {
   }
 });
 
-// Make move (no auth required)
+// Make move
 app.post("/api/games/:id/move", async (req, res) => {
   try {
     const { from, to, player } = req.body;
@@ -301,7 +270,6 @@ app.post("/api/games/:id/move", async (req, res) => {
       return res.status(400).json({ error: "No piece at start" });
     }
 
-    // Basic validation - check if it's the player's turn
     const isWhiteTurn = game.turn === "W";
     const isWhitePiece = piece.toUpperCase().includes("W");
     
@@ -321,7 +289,7 @@ app.post("/api/games/:id/move", async (req, res) => {
   }
 });
 
-// Start server
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
