@@ -7,7 +7,79 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const BOARD_SIZE = 8;
   const SQUARE_SIZE = canvas.width / BOARD_SIZE;
-  
+
+  // Web Audio API setup for sound effects
+  let audioContext;
+  let soundEnabled = true;
+
+  function initAudio() {
+    try {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+      console.log('Web Audio API not supported');
+      soundEnabled = false;
+    }
+  }
+
+  function playSound(frequency, duration, type = 'sine') {
+    if (!soundEnabled || !audioContext) return;
+    
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+    oscillator.type = type;
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);
+  }
+
+  // Sound effects
+  function playMoveSound() {
+    playSound(400, 0.1, 'triangle'); // Soft triangle wave for moves
+  }
+
+  function playCaptureSound() {
+    playSound(200, 0.2, 'square'); // Lower square wave for captures
+  }
+
+  function playKingSound() {
+    // Ascending notes for king promotion
+    playSound(500, 0.15, 'sine');
+    setTimeout(() => playSound(600, 0.15, 'sine'), 100);
+    setTimeout(() => playSound(700, 0.15, 'sine'), 200);
+  }
+
+  function playGameOverSound(winner) {
+    if (winner === 'W') {
+      // Victory fanfare - ascending notes
+      playSound(523, 0.2, 'sine'); // C
+      setTimeout(() => playSound(659, 0.2, 'sine'), 200); // E
+      setTimeout(() => playSound(784, 0.3, 'sine'), 400); // G
+    } else {
+      // Different tone for black wins
+      playSound(440, 0.2, 'sine'); // A
+      setTimeout(() => playSound(554, 0.2, 'sine'), 200); // C#
+      setTimeout(() => playSound(659, 0.3, 'sine'), 400); // E
+    }
+  }
+
+  // Initialize audio on first user interaction
+  function enableAudio() {
+    if (!audioContext) {
+      initAudio();
+      document.removeEventListener('click', enableAudio);
+      document.removeEventListener('keydown', enableAudio);
+    }
+  }
+  document.addEventListener('click', enableAudio);
+  document.addEventListener('keydown', enableAudio);
 
   let board = [];
   let currentPlayer = "W"; 
@@ -37,11 +109,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (whitePieces === 0 || !whiteCanMove) {
       gameOver = true;
       gameInfo.textContent = "BLACK WINS!";
+      playGameOverSound('B');
       return true;
     }
     if (blackPieces === 0 || !blackCanMove) {
       gameOver = true;
       gameInfo.textContent = "WHITE WINS!";
+      playGameOverSound('W');
       return true;
     }
     return false;
@@ -89,25 +163,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function makeMove(fromRow, fromCol, toRow, toCol) {
     const piece = board[fromRow][fromCol];
+    const wasKing = piece.includes("K");
+    
     board[toRow][toCol] = piece;
     board[fromRow][fromCol] = "";
     
+    // Check for king promotion
+    let becameKing = false;
     if ((piece.includes("W") && toRow === BOARD_SIZE - 1) || 
         (piece.includes("B") && toRow === 0)) {
       board[toRow][toCol] = piece[0] + "K";
+      becameKing = !wasKing; // Only play sound if just became king
+      if (becameKing) {
+        playKingSound();
+      }
     }
     
+    // Check for capture
     const rowDiff = Math.abs(toRow - fromRow);
+    let wasCaptured = false;
     if (rowDiff === 2) {
       const captureRow = fromRow + (toRow - fromRow) / 2;
       const captureCol = fromCol + (toCol - fromCol) / 2;
       board[captureRow][captureCol] = "";
+      wasCaptured = true;
+      playCaptureSound();
       
       if (canJump(toRow, toCol, board[toRow][toCol])) {
         selectedPiece = { row: toRow, col: toCol };
         mustJump = true;
         return false;
       }
+    } else if (!becameKing) {
+      // Play move sound only if no capture and no king promotion
+      playMoveSound();
     }
     
     selectedPiece = null;
@@ -171,6 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const y = row * SQUARE_SIZE + SQUARE_SIZE / 2;
           const radius = SQUARE_SIZE * 0.35;
           
+          // Draw piece base
           ctx.beginPath();
           ctx.arc(x, y, radius, 0, Math.PI * 2);
           ctx.fillStyle = piece.includes("W") ? "white" : "#1a1a1a";
@@ -179,17 +269,42 @@ document.addEventListener('DOMContentLoaded', function() {
           ctx.lineWidth = 3;
           ctx.stroke();
 
+          // Enhanced king rendering with glowing "K"
           if (piece.includes("K")) {
-            ctx.strokeStyle = "#FFD700";
+            const time = Date.now() * 0.003; // For glow animation
+            const glowIntensity = 0.5 + 0.5 * Math.sin(time);
+            
+            // Create glowing effect with multiple shadows
+            ctx.save();
+            
+            // Outer glow
+            ctx.shadowColor = '#FFD700';
+            ctx.shadowBlur = 15 * glowIntensity;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Draw glowing ring
+            ctx.strokeStyle = `rgba(255, 215, 0, ${0.8 + 0.2 * glowIntensity})`;
             ctx.lineWidth = 4;
             ctx.beginPath();
-            ctx.arc(x, y, radius * 0.5, 0, Math.PI * 2);
+            ctx.arc(x, y, radius * 0.7, 0, Math.PI * 2);
             ctx.stroke();
-            ctx.fillStyle = "#FFD700";
-            ctx.font = `bold ${SQUARE_SIZE * 0.2}px Arial`;
+            
+            // Draw large glowing "K"
+            ctx.fillStyle = `rgba(255, 215, 0, ${0.9 + 0.1 * glowIntensity})`;
+            ctx.font = `bold ${SQUARE_SIZE * 0.4}px Arial`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText("♔", x, y);
+            ctx.fillText("K", x, y);
+            
+            // Add inner shadow for depth
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+            ctx.shadowBlur = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.fillStyle = piece.includes("W") ? "#B8860B" : "#DAA520";
+            ctx.fillText("K", x, y);
+            
+            ctx.restore();
           }
         }
       }
@@ -203,6 +318,15 @@ document.addEventListener('DOMContentLoaded', function() {
       gameInfo.textContent = `Current Player: ${currentPlayer.includes("W") ? "White" : "Black"}${mustJump ? " - Must Jump!" : ""}`;
     }
   }
+
+  // Animation loop for glowing effects
+  function animate() {
+    render();
+    requestAnimationFrame(animate);
+  }
+
+  // Start the animation loop
+  animate();
 
   canvas.addEventListener('click', function(e) {
     if (gameOver) return;
@@ -262,6 +386,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const resetBtn = document.getElementById("resetGame");
   if (resetBtn) {
     resetBtn.addEventListener('click', resetGame);
+  }
+
+  const soundBtn = document.getElementById("toggleSound");
+  if (soundBtn) {
+    soundBtn.addEventListener('click', function() {
+      soundEnabled = !soundEnabled;
+      soundBtn.textContent = `Sound: ${soundEnabled ? 'ON' : 'OFF'}`;
+      if (soundEnabled && !audioContext) {
+        initAudio();
+      }
+    });
   }
 
   setupBoard();

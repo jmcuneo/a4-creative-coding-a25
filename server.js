@@ -150,7 +150,21 @@ app.post("/api/game/:id/move", requireAuth, async (req, res) => {
 
 // Test endpoint
 app.get("/api/test", (req, res) => {
-  res.json({ message: "Server is working!", timestamp: new Date() });
+  res.json({ 
+    message: "Server is working!", 
+    timestamp: new Date(),
+    mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected"
+  });
+});
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({ 
+    status: "ok", 
+    server: "running",
+    database: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    timestamp: new Date()
+  });
 });
 
 // Create new game (no auth required)
@@ -288,5 +302,8 @@ app.post("/api/games/:id/move", async (req, res) => {
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📂 Serving static files from: ${path.join(__dirname, "public")}`);
+  console.log(`🌐 Local URL: http://localhost:${PORT}`);
+  console.log(`🎮 Ready for checkers games!`);
 });

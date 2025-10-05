@@ -2,20 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Checkers Game</title>
+  <title>Interactive Multimedia Checkers</title>
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
   <div class="checkers-container">
+    <h1>Interactive Multimedia Checkers</h1>
     <div id="controls">
-      <select id="modeSelect">
-        <option value="local">Local Hotseat</option>
-        <option value="online">Online</option>
-      </select>
-      <button id="createGame">Create Online Game</button>
-      <input id="gameId" placeholder="Enter Game ID to Join">
-      <button id="joinGame">Join Game</button>
       <button id="resetGame">Reset Game</button>
+      <button id="toggleSound">Sound: ON</button>
+      <button id="backToMenu" onclick="window.location.href='/'">Back to Menu</button>
+      <div id="gameStatus" style="margin: 10px; color: #fff;"></div>
     </div>
     <div id="gameInfo">Current Turn: White</div>
     <canvas id="board" width="800" height="800"></canvas>
