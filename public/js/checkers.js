@@ -1,3 +1,10 @@
+// References:
+// https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
+// https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
+// https://developer.mozilla.org/en-US/docs/Web/API/requestAnimationFrame
+// https://www.w3schools.com/jsref/jsref_obj_array.asp
+// https://en.wikipedia.org/wiki/Draughts
+
 document.addEventListener('DOMContentLoaded', function() {
   const canvas = document.getElementById("board");
   const ctx = canvas.getContext("2d");
@@ -8,9 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const BOARD_SIZE = 8;
   const SQUARE_SIZE = canvas.width / BOARD_SIZE;
 
+  // Web
+  
   let audioContext;
   let soundEnabled = true;
 
+  // Audio 
+  
   function initAudio() {
     try {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -39,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
     oscillator.stop(audioContext.currentTime + duration);
   }
 
+  // Sound effectts
   function playMoveSound() {
     playSound(400, 0.1, 'triangle'); 
   }
@@ -65,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // Audio 
   function enableAudio() {
     if (!audioContext) {
       initAudio();
@@ -75,12 +88,14 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('click', enableAudio);
   document.addEventListener('keydown', enableAudio);
 
+  // Game 
   let board = [];
   let currentPlayer = "W"; 
   let selectedPiece = null;
   let mustJump = false;
   let gameOver = false;
 
+  // Win 
   function checkWinCondition() {
     let whitePieces = 0;
     let blackPieces = 0;
@@ -138,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return false;
   }
 
+  // Movement stuff
   function canJump(row, col, player) {
     const directions = player.includes("K") ? 
       [[-1,-1], [-1,1], [1,-1], [1,1]] : 
@@ -155,6 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return false;
   }
 
+  // Movement upfdates
   function makeMove(fromRow, fromCol, toRow, toCol) {
     const piece = board[fromRow][fromCol];
     const wasKing = piece.includes("K");
@@ -201,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return true;
   }
 
+  // Board stufdf
   function setupBoard() {
     board = [];
     let whiteCount = 0, blackCount = 0;
@@ -225,29 +243,36 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // Canvas drawing
   function drawBoard() {
+    const isLightTheme = document.body.classList.contains('light-theme');
+    
     for (let row = 0; row < BOARD_SIZE; row++) {
       for (let col = 0; col < BOARD_SIZE; col++) {
         const x = col * SQUARE_SIZE;
         const y = row * SQUARE_SIZE;
         
         if ((row + col) % 2 === 0) {
-          ctx.fillStyle = "#f0f0f0";  
+          // Light squares
+          ctx.fillStyle = isLightTheme ? "#ffffff" : "#f0f0f0";  
         } else {
-          ctx.fillStyle = "#2d2d2d";  
+          // Dark squares
+          ctx.fillStyle = isLightTheme ? "#8B4513" : "#2d2d2d";  
         }
         ctx.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
 
         if (selectedPiece && selectedPiece.row === row && selectedPiece.col === col) {
-          ctx.fillStyle = "rgba(255, 255, 0, 0.7)";
+          ctx.fillStyle = isLightTheme ? "rgba(255, 165, 0, 0.7)" : "rgba(255, 255, 0, 0.7)";
           ctx.fillRect(x + 2, y + 2, SQUARE_SIZE - 4, SQUARE_SIZE - 4);
         }
       }
     }
   }
 
+  // Piece rendering with visual effects
   function drawPieces() {
     let pieceCount = 0;
+    const isLightTheme = document.body.classList.contains('light-theme');
     
     for (let row = 0; row < BOARD_SIZE; row++) {
       for (let col = 0; col < BOARD_SIZE; col++) {
@@ -261,9 +286,17 @@ document.addEventListener('DOMContentLoaded', function() {
           
           ctx.beginPath();
           ctx.arc(x, y, radius, 0, Math.PI * 2);
-          ctx.fillStyle = piece.includes("W") ? "white" : "#1a1a1a";
+          
+          // Adjust piece colors based on theme
+          if (piece.includes("W")) {
+            ctx.fillStyle = isLightTheme ? "#f8f8f8" : "white";
+            ctx.strokeStyle = isLightTheme ? "#444" : "#333";
+          } else {
+            ctx.fillStyle = isLightTheme ? "#2c2c2c" : "#1a1a1a";
+            ctx.strokeStyle = isLightTheme ? "#ddd" : "#fff";
+          }
+          
           ctx.fill();
-          ctx.strokeStyle = piece.includes("W") ? "#333" : "#fff";
           ctx.lineWidth = 3;
           ctx.stroke();
 
@@ -312,11 +345,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // Animation
   function animate() {
     render();
     requestAnimationFrame(animate);
   }
 
+  // Game startup
   function initGame() {
     setupBoard();
     animate();
@@ -325,6 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   initGame();
 
+  // Click suff
   canvas.addEventListener('click', function(e) {
     if (gameOver) return;
     
@@ -371,6 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // restert the game
   function resetGame() {
     currentPlayer = "W";
     selectedPiece = null;
@@ -380,6 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
     render();
   }
 
+  // UI shit
   const resetBtn = document.getElementById("resetGame");
   if (resetBtn) {
     resetBtn.addEventListener('click', resetGame);
@@ -393,6 +431,31 @@ document.addEventListener('DOMContentLoaded', function() {
       if (soundEnabled && !audioContext) {
         initAudio();
       }
+    });
+  }
+
+  // Theme toggle functionality
+  const themeBtn = document.getElementById("toggleTheme");
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      const body = document.body;
+      const isLightTheme = body.classList.contains('light-theme');
+      
+      if (isLightTheme) {
+        body.classList.remove('light-theme');
+        themeBtn.textContent = '🌞 Light Theme';
+      } else {
+        body.classList.add('light-theme');
+        themeBtn.textContent = '🌙 Dark Theme';
+      }
+    });
+  }
+
+  // Back to menu functionality
+  const backBtn = document.getElementById("backToMenu");
+  if (backBtn) {
+    backBtn.addEventListener('click', function() {
+      window.location.href = '/';
     });
   }
 

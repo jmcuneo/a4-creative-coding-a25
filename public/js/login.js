@@ -24,6 +24,8 @@ document.getElementById('playLocal').addEventListener('click', () => {
     window.location.href = '/checkers.html';
 });
 
+
+// New code for creating and joining games, HAD HGELP AI A LITTLE WITH IT
 document.getElementById('createGame').addEventListener('click', async () => {
     try {
         console.log('=== CREATING NEW GAME ===');
@@ -64,6 +66,8 @@ document.getElementById('createGame').addEventListener('click', async () => {
     }
 });
 
+
+// THIS IS NEW CODE FOR JOINING A GAME, HAD HELP AI A LOT ON THIS SEGMENRTT
 document.getElementById('joinGame').addEventListener('click', async () => {
     const gameCode = document.getElementById('gameCode').value.trim().toUpperCase();
     

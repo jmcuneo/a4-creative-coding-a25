@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+
+    // BUILT THE TEMPLATE HAD AI SMOOTHING OUT
     const createBtn = $("createGame");
     if (createBtn) {
         console.log("Create Game button found, attaching NEW click handler");
@@ -59,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Create Game button NOT found!");
     }
 
+
+    // BUILT THE TEMPLATE HAD AI SMOOTHING OUT A LIITTLE
     const joinBtn = $("joinGame");
     if (joinBtn) {
         console.log("Join Game button found, attaching NEW click handler");
