@@ -1,58 +1,49 @@
-
-
 Basic Requirements:
-
-I created a server using Express with appropriate routes for login, logout, and CRUD operations. This replaced the basic Node server from Assignment 2 and provided a stronger foundation for future projects. (15 points)
-I implemented a results page (storage.html) where logged-in users can view all their stored data, including name, email, message, and priority. This page only displays data for the authenticated user. (10 points) I built a form for adding, editing, and deleting items. The form collects name, email, message, and priority, and the results can be updated or removed from the table. This fulfills the requirement of having all three actions. (15 point) I connected my project to MongoDB using Mongoose so all data persists between sessions. This was a major improvement over Assignment 2, where everything was stored only in memory. (15 points) I styled the site using Bootstrap, which provided clean layouts, responsive forms, and a consistent navigation bar without much custom CSS.(10 points) For HTML inputs, I used text fields for name and email, a textarea for the message, and a select input for priority. These varied inputs demonstrate my ability to use multiple HTML form field types. (5 points)
-
+So to start off, I created a Checkers base game that I’m going to be using later for a different assignment in RBE 3001, where I’ll have a robot arm physically moving the checker pieces. I needed a way to manipulate the game board digitally so that I had something functional for that project setup. That’s why I spent extra time structuring this properly. I believe I hit all the requirements: it has an Express server, a complete client-side implementation, and it uses both the Canvas API and the Web Audio API to give a better experience for the user.
+I added four UI controls, resetting the game, turning sound on and off, changing between dark and light themes, and returning to the main menu. This project was honestly challenging to make. I used a lot of online resources and examples from existing Checkers and Chess games, which are listed below. Originally, I planned to make this using only web APIs and CSS, but as I began researching how I’d integrate it with the robot arm later, I realized Canvas would make it much more flexible.
+I documented where AI was used, mostly for the server-side setup. The HTML didn’t need much AI help, and the CSS was inspired by other Checkers designs I found online.
+60/60 hit all base requirements
 
 Technical Achievements:
-
-I set up authentication using bcryptjs, so passwords are stored as secure hashes instead of plain text. This was important for practicing good security habits, even though the project only requires simple login functionality. – 5 points
-
-I used connect-mongo to persist sessions in MongoDB. This ensures users stay logged in even if the server restarts, making the app feel more realistic compared to in-memory session management. – 5 points
-
-I added Helmet to provide security headers and Morgan to log requests to the console. These were not required for the assignment, but I included them to make the project safer and easier to debug since I plan to reuse it after the term. – 5 points
-
-I extended the Item schema by adding a responseBy field, calculated from the item’s priority and creation date. This builds on my Assignment 2 logic and shows how to derive data automatically within the database model. – 5 points
-
-
- CSS rules:
-
-I primarily relied on Bootstrap for a professional look and responsiveness. I used its grid system for layout and built-in form styling for inputs and buttons. To personalize it, I added a small main.css file where I adjusted table borders, button spacing, and typography. This helped make the project feel more like a portfolio site instead of just default Bootstrap styles.
-
-
-
+For my technical achievements, I included several interactive and visual features that make the game more polished and functional.
+Audio feedback is implemented through the Web Audio API, giving sound effects for specific events,  capturing pieces, winning the game, and promoting a checker piece to a king. I also added a glowing animation for the king piece using Canvas animations. Another achievement was adding theme changing between light and dark, which helps create visual variety and improves user experience.
+Lastly, I implemented a basic multiplayer system. It’s not true online play, but more like a peer-to-peer setup where two players can share the same board state, similar in idea to local multiplayer.
+Audio implementation - 10
+ Multiplayer - 10
+ Using Canvas to build board - 5
+ Theme light/dark - 5
+30/30
+For my CSS rules:
+For CSS, I changed my usual style and took inspiration from the Checkers and Chess projects I referenced below. I wanted two themes,  a dark theme and a light theme,  that users can toggle by pressing a button.
+A lot of this design work came from looking at other websites’ HTML/CSS structures using browser developer tools and learning from how they built their layouts. I used those as references but customized them to fit my own setup.
 
 Design Achievements:
-
-I created a consistent navigation bar across all pages (About, Projects, Storage/Login). This makes the website easier to use since everything stays in the same place. – 5 points
-
-I used Bootstrap’s grid and form system to ensure the site is responsive without much custom CSS. It looks clean and professional on different screen sizes. – 5 points
-
-I paid attention to readability and accessibility by ensuring good spacing and alignment, and relying on Bootstrap’s default color contrast. This makes forms and tables easier to use. – 5 points
-
-I added a small custom CSS file to tweak Bootstrap defaults, such as button spacing, table borders, and fonts. This makes the site feel cohesive and more like a personal portfolio instead of just raw Bootstrap. – 5 points
+I think the website looks really good and consistent. It supports both dark and light themes that switch smoothly, and the overall layout stays stable during play. The game highlights selected pieces, gives sound feedback, and provides visual clarity for the player’s current state. It’s responsive, organized, and visually clean.
+UI look - 5
+ Layout and theme consistency - 10
+ Canvas not looking bad - 5
+ Informing player of current status - 10
+ Animation for King - 5
+ Multiple HTML pages - 5
+40/40
 
 
 AI Use and Challenges:
+Honestly, I didn’t heavily use or manipulate AI in the Index and Login files. Most of that code was just simple one-liners that I filled in while working on other parts of the project. The main use of AI was in the checker.js file,  especially when setting up the game, handling basic functionality, and programming piece movement. I learned a lot from different websites and YouTube videos, but I started getting lost when it came to writing the movement rules. That’s when I turned to AI for help learning and implementing them.
+This was the most complex website I’ve ever built. The API and Android Studio projects I worked on before didn’t require anywhere near this level of logic or structure. To be transparent, a lot of the rule logic came from me trying to replicate what others had done, failing repeatedly, breaking my code, and then using VS Code and AI to troubleshoot. I often used AI to generate debugging functions and modifiers because I ran into so many errors, especially around move validation. Those debugging tools helped me catch and log errors in real time while testing.
+I clearly marked where AI was used in my code,  it’s most prominent in checker.js. Honestly, I think I relied on it a bit too much there since I don’t have much experience with JavaScript and underestimated how much work it would take. I’ve been trying to move away from relying on AI and make more of the logic my own, and I plan to revisit and improve this assignment as my skills grow.
+Before Dickman’s class, I didn’t have a solid grasp of implementing game rules, so AI was a helpful crutch to get the Checkers logic working. It helped the game recognize valid moves and handle rules like promoting to king. Outside of checker.js, AI was mostly used for boilerplate code, quick function creation, or completing variable and function names when I was working quickly. It usually provided good default suggestions, so I used them as a base to build on.
+Aside from what I’ve described in the Checkers functions, there wasn’t much AI involvement elsewhere. The server setup was basically the same as my previous assignments. I reused the same cluster setup and just modified it to fit this project. I want to be upfront that a lot of my setup came from my earlier work, and I think that’s worth noting.
+Lastly, Grammarly was used for writing this README. I wrote it in Google Docs, and since I always have Grammarly installed, it helped me polish my writing. 
 
-This project was mainly developed in VS Code, and the most challenging parts involved getting server.js and main.js to work correctly. The biggest issue came from Helmet, which blocked inline scripts and broke my login attempts. This led me to rewrite and restructure parts of my code multiple times and even create a separate login.js to work around it. Because I struggled with login issues for a long time, I depended more on AI (ChatGPT) for troubleshooting than I initially planned. Many suggested fixes didn’t work immediately, which pushed me to experiment, rewrite, and heavily modify my code until it met my needs. Some of the login and session handling code reflects this process. That said, I plan to revisit and clean up the code to better reflect my personal style and skills instead of just AI solutions. Currently, it works and satisfies the requirements, but I want to understand it fully and make it independent of these tools. Also, Grammarly was used for the writing of this document.
 
+---
 
-Some of the resources used:
+resources used:
 
-https://www.w3schools.com/Html/html_css.asp
-
-https://www.w3schools.com/Html/html_links.asp
-
-https://www.w3schools.com/Html/html_forms.asp
-
-https://www.w3schools.com/Html/html_youtube.asp
-
-https://www.w3schools.com/Html/html5_api_whatis.asp
-
-https://developer.mozilla.org/en-US/
-
-https://docs.npmjs.com/cli/v10/configuring-npm/package-json
-
+https://stackoverflow.com/questions/26432492/chessboard-html5-only?__cf_chl_tk=jsH80_y9FPRXvXkAUVbZMa_RXlpab6eozeXH8pe3S24-1759513109-1.0.1.1-fnm9oxOZQI2YF2tuCqNae.5mO7Ba_f3J44FQlUoI_O0 
+https://dev.to/hira_zaira/create-a-chessboard-using-css-grid-3iil 
+https://cardgames.io/checkers/ 
+https://levelup.gitconnected.com/creating-a-board-game-checkers-with-javascript-ecd562f985c2 - stolle how it should look kinda from here 
+https://levelup.gitconnected.com/creating-a-board-game-checkers-with-javascript-ecd562f985c2 
+https://www.youtube.com/watch?v=moCWc_p9gig   

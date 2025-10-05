@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let mustJump = false;
   let gameOver = false;
 
-  // Win 
+  // Win cond
   function checkWinCondition() {
     let whitePieces = 0;
     let blackPieces = 0;
@@ -253,10 +253,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const y = row * SQUARE_SIZE;
         
         if ((row + col) % 2 === 0) {
-          // Light squares
           ctx.fillStyle = isLightTheme ? "#ffffff" : "#f0f0f0";  
         } else {
-          // Dark squares
           ctx.fillStyle = isLightTheme ? "#8B4513" : "#2d2d2d";  
         }
         ctx.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
@@ -269,7 +267,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Piece rendering with visual effects
   function drawPieces() {
     let pieceCount = 0;
     const isLightTheme = document.body.classList.contains('light-theme');
@@ -287,7 +284,6 @@ document.addEventListener('DOMContentLoaded', function() {
           ctx.beginPath();
           ctx.arc(x, y, radius, 0, Math.PI * 2);
           
-          // Adjust piece colors based on theme
           if (piece.includes("W")) {
             ctx.fillStyle = isLightTheme ? "#f8f8f8" : "white";
             ctx.strokeStyle = isLightTheme ? "#444" : "#333";
