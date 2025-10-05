@@ -173,6 +173,9 @@ app.post("/api/games", async (req, res) => {
   console.log('Request body:', req.body); // Debug log
   
   try {
+    const { player1 } = req.body;
+    const creatorName = player1 || 'Player1';
+    
     const emptyBoard = Array.from({ length: 8 }, (_, r) =>
       Array.from({ length: 8 }, (_, c) =>
         r < 3 && (r + c) % 2 === 1 ? "W" :
@@ -201,18 +204,20 @@ app.post("/api/games", async (req, res) => {
     }
 
     const game = await Game.create({
-      players: ['Player1'], // Simple placeholder
+      players: [creatorName], // Add the creator as the first player
       board: emptyBoard,
       turn: "W",
       gameCode: gameCode
     });
 
     console.log('Game created with ID:', game._id); // Debug log
+    console.log('Players in game:', game.players); // Debug log
 
     res.json({ 
       ok: true, 
       gameId: game._id,
-      gameCode: gameCode
+      gameCode: gameCode,
+      playersInGame: game.players.length
     });
   } catch (error) {
     console.error('Error creating game:', error);
@@ -223,30 +228,47 @@ app.post("/api/games", async (req, res) => {
 // Join game by code (no auth required)
 app.post("/api/games/:code/join", async (req, res) => {
   try {
+    const { player2 } = req.body;
+    const playerName = player2 || 'Player2';
+    
+    console.log('Joining game with code:', req.params.code); // Debug log
+    console.log('Player trying to join:', playerName); // Debug log
+    
     // Find game by gameCode field
     const game = await Game.findOne({ gameCode: req.params.code.toUpperCase() });
     
     if (!game) {
+      console.log('Game not found with code:', req.params.code); // Debug log
       return res.status(404).json({ error: "Game not found" });
     }
     
+    console.log('Found game with players:', game.players); // Debug log
+    console.log('Current player count:', game.players.length); // Debug log
+    
     if (game.players.length >= 2) {
+      console.log('Game is already full'); // Debug log
       return res.status(400).json({ error: "Game is full" });
     }
 
-    if (!game.players.includes('Player2')) {
-      game.players.push('Player2');
+    // Add player if not already in the game and not the same as first player
+    if (!game.players.includes(playerName)) {
+      game.players.push(playerName);
       await game.save();
+      console.log('Player added. New player list:', game.players); // Debug log
+    } else {
+      console.log('Player already in game'); // Debug log
     }
     
     res.json({ 
       ok: true, 
       gameId: game._id,
-      gameCode: game.gameCode
+      gameCode: game.gameCode,
+      playersInGame: game.players.length,
+      players: game.players
     });
   } catch (error) {
     console.error('Error joining game:', error);
-    res.status(500).json({ error: "Failed to join game" });
+    res.status(500).json({ error: "Failed to join game", details: error.message });
   }
 });
 

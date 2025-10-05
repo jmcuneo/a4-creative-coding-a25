@@ -105,7 +105,6 @@
         if (response.ok) {
           const game = await response.json();
           alert(`Successfully joined game ${gameCode}! Starting multiplayer checkers...`);
-          // Navigate to checkers with game code
           window.location.href = `/checkers.html?gameCode=${gameCode}`;
         } else {
           const error = await response.text();
