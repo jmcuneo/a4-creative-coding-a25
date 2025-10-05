@@ -443,10 +443,10 @@ document.addEventListener('DOMContentLoaded', function() {
       
       if (isLightTheme) {
         body.classList.remove('light-theme');
-        themeBtn.textContent = '🌞 Light Theme';
+        themeBtn.textContent = 'Light Theme';
       } else {
         body.classList.add('light-theme');
-        themeBtn.textContent = '🌙 Dark Theme';
+        themeBtn.textContent = 'Dark Theme';
       }
     });
   }
