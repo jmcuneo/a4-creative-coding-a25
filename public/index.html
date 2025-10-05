@@ -36,16 +36,85 @@
   </div>
 
   <script>
-    // Simple navigation - like the working version
     document.getElementById('playCheckersBtn').addEventListener('click', () => {
       console.log('Play Local button clicked - navigating to checkers.html');
       window.location.href = '/checkers.html';
     });
 
-    // Basic login functionality
     document.getElementById('loginBtn').addEventListener('click', () => {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (!username || !password) {
+        alert('Please enter both username and password!');
+        return;
+      }
+      
+      alert(`Welcome ${username}! You can now create or join online games.`);
       document.getElementById('auth').style.display = 'none';
       document.getElementById('onlineGame').style.display = 'block';
+    });
+
+    document.getElementById('createGame').addEventListener('click', async () => {
+      try {
+        alert('Creating new game...');
+        const response = await fetch('/api/games', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            player1: document.getElementById('username').value || 'Player1'
+          })
+        });
+
+        if (response.ok) {
+          const game = await response.json();
+          alert(`Game created successfully! Game Code: ${game.gameCode}\nShare this code with your opponent!`);
+          document.getElementById('gameCode').value = game.gameCode;
+        } else {
+          alert('Failed to create game. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error creating game:', error);
+        alert('Error creating game. Please check your connection.');
+      }
+    });
+
+    document.getElementById('joinGame').addEventListener('click', async () => {
+      const gameCode = document.getElementById('gameCode').value.toUpperCase();
+      const username = document.getElementById('username').value || 'Player2';
+      
+      if (!gameCode) {
+        alert('Please enter a game code!');
+        return;
+      }
+
+      try {
+        alert(`Joining game ${gameCode}...`);
+        const response = await fetch(`/api/games/${gameCode}/join`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            player2: username
+          })
+        });
+
+        if (response.ok) {
+          const game = await response.json();
+          alert(`Successfully joined game ${gameCode}! Starting multiplayer checkers...`);
+          // Navigate to checkers with game code
+          window.location.href = `/checkers.html?gameCode=${gameCode}`;
+        } else {
+          const error = await response.text();
+          alert(`Failed to join game: ${error}`);
+        }
+      } catch (error) {
+        console.error('Error joining game:', error);
+        alert('Error joining game. Please check your connection and game code.');
+      }
     });
   </script>
 </body>
