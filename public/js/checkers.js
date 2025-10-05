@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const BOARD_SIZE = 8;
   const SQUARE_SIZE = canvas.width / BOARD_SIZE;
 
-  // Web Audio API setup for sound effects
   let audioContext;
   let soundEnabled = true;
 
@@ -40,17 +39,15 @@ document.addEventListener('DOMContentLoaded', function() {
     oscillator.stop(audioContext.currentTime + duration);
   }
 
-  // Sound effects
   function playMoveSound() {
-    playSound(400, 0.1, 'triangle'); // Soft triangle wave for moves
+    playSound(400, 0.1, 'triangle'); 
   }
 
   function playCaptureSound() {
-    playSound(200, 0.2, 'square'); // Lower square wave for captures
+    playSound(200, 0.2, 'square'); 
   }
 
   function playKingSound() {
-    // Ascending notes for king promotion
     playSound(500, 0.15, 'sine');
     setTimeout(() => playSound(600, 0.15, 'sine'), 100);
     setTimeout(() => playSound(700, 0.15, 'sine'), 200);
@@ -58,19 +55,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function playGameOverSound(winner) {
     if (winner === 'W') {
-      // Victory fanfare - ascending notes
-      playSound(523, 0.2, 'sine'); // C
-      setTimeout(() => playSound(659, 0.2, 'sine'), 200); // E
-      setTimeout(() => playSound(784, 0.3, 'sine'), 400); // G
+      playSound(523, 0.2, 'sine'); 
+      setTimeout(() => playSound(659, 0.2, 'sine'), 200); 
+      setTimeout(() => playSound(784, 0.3, 'sine'), 400); 
     } else {
-      // Different tone for black wins
       playSound(440, 0.2, 'sine'); // A
-      setTimeout(() => playSound(554, 0.2, 'sine'), 200); // C#
-      setTimeout(() => playSound(659, 0.3, 'sine'), 400); // E
+      setTimeout(() => playSound(554, 0.2, 'sine'), 200); 
+      setTimeout(() => playSound(659, 0.3, 'sine'), 400); 
     }
   }
 
-  // Initialize audio on first user interaction
   function enableAudio() {
     if (!audioContext) {
       initAudio();
@@ -168,18 +162,16 @@ document.addEventListener('DOMContentLoaded', function() {
     board[toRow][toCol] = piece;
     board[fromRow][fromCol] = "";
     
-    // Check for king promotion
     let becameKing = false;
     if ((piece.includes("W") && toRow === BOARD_SIZE - 1) || 
         (piece.includes("B") && toRow === 0)) {
       board[toRow][toCol] = piece[0] + "K";
-      becameKing = !wasKing; // Only play sound if just became king
+      becameKing = !wasKing;
       if (becameKing) {
         playKingSound();
       }
     }
     
-    // Check for capture
     const rowDiff = Math.abs(toRow - fromRow);
     let wasCaptured = false;
     if (rowDiff === 2) {
@@ -195,7 +187,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return false;
       }
     } else if (!becameKing) {
-      // Play move sound only if no capture and no king promotion
       playMoveSound();
     }
     
@@ -243,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if ((row + col) % 2 === 0) {
           ctx.fillStyle = "#f0f0f0";  
         } else {
-          ctx.fillStyle = "#2d2d2d";  // Dark theme
+          ctx.fillStyle = "#2d2d2d";  
         }
         ctx.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
 
@@ -268,7 +259,6 @@ document.addEventListener('DOMContentLoaded', function() {
           const y = row * SQUARE_SIZE + SQUARE_SIZE / 2;
           const radius = SQUARE_SIZE * 0.35;
           
-          // Draw piece base
           ctx.beginPath();
           ctx.arc(x, y, radius, 0, Math.PI * 2);
           ctx.fillStyle = piece.includes("W") ? "white" : "#1a1a1a";
@@ -277,35 +267,28 @@ document.addEventListener('DOMContentLoaded', function() {
           ctx.lineWidth = 3;
           ctx.stroke();
 
-          // Enhanced king rendering with glowing "K"
           if (piece.includes("K")) {
-            const time = Date.now() * 0.003; // For glow animation
+            const time = Date.now() * 0.003; 
             const glowIntensity = 0.5 + 0.5 * Math.sin(time);
             
-            // Create glowing effect with multiple shadows
             ctx.save();
-            
-            // Outer glow
             ctx.shadowColor = '#FFD700';
             ctx.shadowBlur = 15 * glowIntensity;
             ctx.shadowOffsetX = 0;
             ctx.shadowOffsetY = 0;
             
-            // Draw glowing ring
             ctx.strokeStyle = `rgba(255, 215, 0, ${0.8 + 0.2 * glowIntensity})`;
             ctx.lineWidth = 4;
             ctx.beginPath();
             ctx.arc(x, y, radius * 0.7, 0, Math.PI * 2);
             ctx.stroke();
             
-            // Draw large glowing "K"
             ctx.fillStyle = `rgba(255, 215, 0, ${0.9 + 0.1 * glowIntensity})`;
             ctx.font = `bold ${SQUARE_SIZE * 0.4}px Arial`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText("K", x, y);
             
-            // Add inner shadow for depth
             ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
             ctx.shadowBlur = 2;
             ctx.shadowOffsetY = 2;
@@ -321,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function render() {
     drawBoard();
-    if (board && board.length > 0) { // Safety check
+    if (board && board.length > 0) { 
       drawPieces();
     }
     if (!gameOver) {
@@ -329,19 +312,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Animation loop for glowing effects
   function animate() {
     render();
     requestAnimationFrame(animate);
   }
 
-  // Initialize everything in the right order
   function initGame() {
     setupBoard();
-    animate(); // Start animation loop instead of single render
+    animate();
   }
 
-  // Start the game
+  
   initGame();
 
   canvas.addEventListener('click', function(e) {
@@ -415,5 +396,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Game is already initialized by initGame() above
 });

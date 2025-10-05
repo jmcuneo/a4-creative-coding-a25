@@ -99,7 +99,6 @@ canvas:hover {
   transform: scale(1.01);
 }
 
-/* Index page styles */
 .main-container {
   background: rgba(40, 40, 40, 0.95);
   border-radius: 15px;
@@ -146,7 +145,6 @@ canvas:hover {
   box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
 }
 
-/* Auth section */
 #auth {
   background: rgba(50, 50, 50, 0.9);
   padding: 30px;
@@ -197,7 +195,6 @@ canvas:hover {
   background: #45a049;
 }
 
-/* Online game section */
 #onlineGame {
   background: rgba(50, 50, 50, 0.9);
   padding: 30px;
