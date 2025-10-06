@@ -1,3 +1,5 @@
+https://a4-nicholasdriscoll.onrender.com/ 
+
 Basic Requirements:
 So to start off, I created a Checkers base game that I’m going to be using later for a different assignment in RBE 3001, where I’ll have a robot arm physically moving the checker pieces. I needed a way to manipulate the game board digitally so that I had something functional for that project setup. That’s why I spent extra time structuring this properly. I believe I hit all the requirements: it has an Express server, a complete client-side implementation, and it uses both the Canvas API and the Web Audio API to give a better experience for the user.
 I added four UI controls, resetting the game, turning sound on and off, changing between dark and light themes, and returning to the main menu. This project was honestly challenging to make. I used a lot of online resources and examples from existing Checkers and Chess games, which are listed below. Originally, I planned to make this using only web APIs and CSS, but as I began researching how I’d integrate it with the robot arm later, I realized Canvas would make it much more flexible.
