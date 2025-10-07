@@ -292,8 +292,8 @@ app.post("/api/games/:id/move", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📂 Serving static files from: ${path.join(__dirname, "public")}`);
-  console.log(`🌐 Local URL: http://localhost:${PORT}`);
-  console.log(`🎮 Ready for checkers games!`);
+  console.log(` Server running on port ${PORT}`);
+  console.log(` Serving static files from: ${path.join(__dirname, "public")}`);
+  console.log(` Local URL: http://localhost:${PORT}`);
+  console.log(` Ready for checkers games!`);
 });
