@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkers</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="checkers-container">
+    <h1>Checkers</h1>
+    <div id="controls">
+      <button id="resetGame">Reset Game</button>
+      <button id="toggleSound">Sound: ON</button>
+      <button id="toggleTheme">Light Theme</button>
+      <button id="backToMenu">Back to Menu</button>
+      <div id="gameStatus" style="margin: 10px; color: #fff;"></div>
+    </div>
+    <div id="gameInfo">Current Turn: White</div>
+    <canvas id="board" width="800" height="800"></canvas>
+  </div>
+
+  <script src="bridge.js"></script>
+  <script src="js/checkers.js"></script>
+</body>
+</html>

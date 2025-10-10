@@ -1,0 +1,350 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+
+  background: linear-gradient(45deg, #2a2a2a 25%, #1a1a1a 25%);
+  background-size: 30px 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+
+.checkers-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+
+h1 {
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+
+#controls {
+  text-align: center;
+  margin: 20px;
+  background: rgba(50, 50, 50, 0.9);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+#controls select,
+#controls input,
+#controls button {
+  margin: 8px;
+  padding: 12px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #333;
+  color: #fff;
+}
+
+#controls button {
+  background: #4CAF50;
+  border: 2px solid #4CAF50;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+#controls button:hover {
+  background: #45a049;
+  border-color: #45a049;
+  transform: translateY(-1px);
+}
+
+#gameInfo {
+  text-align: center;
+  margin: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  background: rgba(50, 50, 50, 0.9);
+  padding: 15px 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+canvas {
+  display: block;
+  margin: 30px auto;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+canvas:hover {
+  transform: scale(1.01);
+}
+
+.main-container {
+  background: rgba(40, 40, 40, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  padding: 40px;
+  max-width: 800px;
+  width: 100%;
+  margin: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(60,60,60,0.3);
+}
+
+#mainMenu {
+  text-align: center;
+  margin: 30px 0;
+}
+
+#mainMenu h2 {
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+#mainMenu p {
+  color: #cccccc;
+}
+
+#playCheckersBtn {
+  padding: 20px 40px;
+  font-size: 20px;
+  background: linear-gradient(45deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+  font-weight: bold;
+}
+
+#playCheckersBtn:hover {
+  background: linear-gradient(45deg, #45a049, #3d8b40);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+}
+
+#auth {
+  background: rgba(50, 50, 50, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  margin: 20px auto;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+#auth h2 {
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+#auth input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 2px solid #555;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #333;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+#auth input:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+#auth button {
+  width: 100%;
+  padding: 12px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 10px;
+}
+
+#auth button:hover {
+  background: #45a049;
+}
+
+#onlineGame {
+  background: rgba(50, 50, 50, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  margin: 20px auto;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+#onlineGame h2 {
+  color: #ffffff;
+  font-size: 1.4em;
+  margin-bottom: 20px;
+}
+
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.join-section {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+#onlineGame button {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  min-width: 120px;
+}
+
+#onlineGame button:hover {
+  background: #1976D2;
+}
+
+#gameCode {
+  width: 150px;
+  padding: 10px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #333;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#gameCode:focus {
+  border-color: #2196F3;
+  outline: none;
+}
+
+body.light-theme {
+  background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 25%);
+  background-size: 30px 30px;
+}
+
+body.light-theme h1 {
+  color: #333333;
+  text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+}
+
+body.light-theme #controls {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+body.light-theme #controls select,
+body.light-theme #controls input,
+body.light-theme #controls button {
+  border: 2px solid #ccc;
+  background: #f9f9f9;
+  color: #333;
+}
+
+body.light-theme #controls button {
+  background: #4CAF50;
+  color: white;
+  border: 2px solid #4CAF50;
+}
+
+body.light-theme #controls button:hover {
+  background: #45a049;
+  border-color: #45a049;
+}
+
+body.light-theme #gameInfo {
+  color: #333333;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+body.light-theme canvas {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+body.light-theme #gameStatus {
+  color: #333 !important;
+}
+
+body.light-theme .main-container {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(200,200,200,0.3);
+}
+
+body.light-theme #auth {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+body.light-theme #auth h2 {
+  color: #333333;
+}
+
+body.light-theme #auth input {
+  background: #f9f9f9;
+  color: #333;
+  border: 2px solid #ccc;
+}
+
+body.light-theme #auth input:focus {
+  border-color: #4CAF50;
+}
+
+body.light-theme #onlineGame {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+body.light-theme #onlineGame h2 {
+  color: #333333;
+}
+
+body.light-theme #gameCode {
+  background: #f9f9f9;
+  color: #333;
+  border: 2px solid #ccc;
+}
+
+body.light-theme #gameCode:focus {
+  border-color: #2196F3;
+}
