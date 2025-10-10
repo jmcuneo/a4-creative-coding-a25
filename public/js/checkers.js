@@ -95,6 +95,13 @@ document.addEventListener('DOMContentLoaded', function() {
   let mustJump = false;
   let gameOver = false;
 
+  // Coordinate conversion helper
+  function rowColToSquare(row, col) {
+    const files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    const rank = (8 - row).toString();
+    return files[col] + rank;
+  }
+
   // Win cond
   function checkWinCondition() {
     let whitePieces = 0;
@@ -205,6 +212,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     } else if (!becameKing) {
       playMoveSound();
+    }
+
+    // Report the move after validation
+    const fromSquare = rowColToSquare(fromRow, fromCol);
+    const toSquare = rowColToSquare(toRow, toCol);
+    const side = currentPlayer === "W" ? "red" : "yellow";
+    
+    if (window.reportMove) {
+      window.reportMove(fromSquare, toSquare, { game: "checkers", side: side });
     }
     
     selectedPiece = null;
